@@ -18,6 +18,15 @@
 
 ## Log
 
+### 2026-11-08: Renamed project to BondForge and configured GitHub remote
+- **Agent:** `main-agent` (Gemini 3.8 Flash)
+- **Branch:** `chore/bondforge-init`
+- **What:** Renamed all project identifiers, configs, and UI components from BandForge to BondForge (`package.json`, `electron-builder.yml`, `src/main/index.ts`, `src/renderer/index.html`, `BondForgeSidebar.tsx`, `TitleBar.tsx`, `ForgeDashboardScreen.tsx`, `HardwareDeckScreen.tsx`, `DownloadsScreen.tsx`, `ErrorBoundary.tsx`, `browserShim.ts`, `main.css`, and `README.md`). Configured remote repository `origin` to `https://github.com/dhairya-404/BandForge.git`.
+- **Why:** Explicit user instruction to change the application name to `bondforge` and push the project to `https://github.com/dhairya-404/BandForge`.
+- **Files:** `package.json`, `electron-builder.yml`, `src/main/index.ts`, `src/renderer/index.html`, `src/renderer/src/components/BondForgeSidebar.tsx`, `src/renderer/src/App.tsx`, `src/renderer/src/components/TitleBar.tsx`, `src/renderer/src/screens/ForgeDashboardScreen.tsx`, `src/renderer/src/screens/HardwareDeckScreen.tsx`, `src/renderer/src/screens/DownloadsScreen.tsx`, `src/renderer/src/ErrorBoundary.tsx`, `src/renderer/src/browserShim.ts`, `src/renderer/src/assets/main.css`, `README.md`, `tasks.md`, `progress.md`.
+- **Verified:** Typecheck and build verification scheduled.
+- **Open / follow-ups:** Execute git push to GitHub remote.
+
 ### 2026-11-08: Complete BandForge UI Redesign & Studio Architecture Implemented
 - **Agent:** `main-agent` (Gemini 3.8 Flash)
 - **Branch:** `chore/bandforge-init`

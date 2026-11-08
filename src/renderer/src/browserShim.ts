@@ -50,7 +50,7 @@ export function initBrowserShim(): void {
   if (typeof window === 'undefined') return
 
   if (!window.plexo) {
-    console.info('[BandForge] Initializing dynamic multi-network browser engine shim.')
+    console.info('[BondForge] Initializing dynamic multi-network browser engine shim.')
     const totalBytes = 1024 * 1024 * 1024 * 1.5
 
     const baseShim: Record<string, any> = {

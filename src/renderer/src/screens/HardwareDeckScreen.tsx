@@ -206,7 +206,7 @@ export function HardwareDeckScreen(): React.JSX.Element {
         <div className="space-y-1">
           <h4 className="text-[13.5px] font-bold text-white">Hardware C FFI Socket Binding Active</h4>
           <p className="text-[12.5px] text-[var(--text-secondary)] leading-relaxed">
-            BandForge binds each parallel TCP stream directly to physical Windows adapter interface IP addresses
+            BondForge binds each parallel TCP stream directly to physical Windows adapter interface IP addresses
             using native C FFI (<code className="text-cyan-300">koffi</code>) and winsock2 routing. This guarantees true
             multi-network aggregation without needing an expensive cloud VPN or remote server.
           </p>

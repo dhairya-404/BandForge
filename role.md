@@ -15,4 +15,4 @@
 | `main-agent` | Lead Systems Architect | Architecture, workspace config, branding, dependency verification, and builds | All files, git branching, verification runs | Force pushes to remote | Dhairya / 2026-11-08 |
 
 ## Role changes
-- 2026-11-08: `main-agent`: Assigned Lead Systems Architect role for BandForge.
+- 2026-11-08: `main-agent`: Assigned Lead Systems Architect role for BondForge.

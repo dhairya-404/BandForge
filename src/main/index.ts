@@ -22,7 +22,7 @@ import type { DownloadManager } from './download/downloadManager'
 // In dev mode the app runs as the raw `electron` binary, which otherwise shows "Electron" in
 // the Dock tooltip/menu bar — must be set before the app is ready. Packaged builds already get
 // this from electron-builder's productName, but setting it here keeps dev and packaged in sync.
-app.setName('BandForge')
+app.setName('BondForge')
 
 // Each e2e test runs against its own throwaway userData folder (downloads, manifests, settings).
 if (testKnobs.userDataDir) app.setPath('userData', testKnobs.userDataDir)
@@ -41,15 +41,15 @@ let hasShownTrayNotification = false
 function ensureTray(): Tray {
   if (tray && !tray.isDestroyed()) return tray
   tray = new Tray(nativeImage.createFromPath(icon).resize({ width: 16, height: 16 }))
-  tray.setToolTip('BandForge')
+  tray.setToolTip('BondForge')
   tray.on('click', () => bringForward(ensureWindow()))
   tray.on('double-click', () => bringForward(ensureWindow()))
   tray.setContextMenu(
     Menu.buildFromTemplate([
-      { label: 'Open BandForge', click: () => bringForward(ensureWindow()) },
+      { label: 'Open BondForge', click: () => bringForward(ensureWindow()) },
       { type: 'separator' },
       {
-        label: 'Quit BandForge',
+        label: 'Quit BondForge',
         click: () => {
           isQuitting = true
           app.quit()
@@ -114,7 +114,7 @@ function createWindow(): void {
     center: true,
     show: true,
     autoHideMenuBar: false,
-    title: 'BandForge',
+    title: 'BondForge',
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#1c1c1e' : '#ffffff',
     ...(process.platform !== 'darwin' ? { icon } : {}),
     webPreferences: {
@@ -125,7 +125,7 @@ function createWindow(): void {
   })
 
   mainWindow.on('ready-to-show', () => {
-    console.log('[BandForge] Window ready-to-show event received.')
+    console.log('[BondForge] Window ready-to-show event received.')
     if (!testKnobs.hideWindow) {
       mainWindow?.show()
       mainWindow?.focus()
@@ -135,14 +135,14 @@ function createWindow(): void {
   // Safety fallback for dev mode to ensure window displays
   setTimeout(() => {
     if (mainWindow && !mainWindow.isDestroyed() && !mainWindow.isVisible()) {
-      console.log('[BandForge] Showing window via dev safety timer.')
+      console.log('[BondForge] Showing window via dev safety timer.')
       mainWindow.show()
       mainWindow.focus()
     }
   }, 1200)
 
   mainWindow.webContents.on('did-fail-load', (_event, errorCode, errorDescription) => {
-    console.error('[BandForge] Failed to load renderer:', errorCode, errorDescription)
+    console.error('[BondForge] Failed to load renderer:', errorCode, errorDescription)
   })
 
   mainWindow.on('session-end', () => {
@@ -211,7 +211,7 @@ function createWindow(): void {
 }
 
 app.whenReady().then(async () => {
-  electronApp.setAppUserModelId('com.bandforge.app')
+  electronApp.setAppUserModelId('com.bondforge.app')
 
   // A failed move keeps the old file, to retry next launch — it must never stop the window opening.
   await migrateLegacyNetworkPreferences().catch((error) =>

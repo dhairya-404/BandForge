@@ -56,7 +56,7 @@ export function ForgeDashboardScreen({
               </span>
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-              <span>BandForge Engine Console</span>
+              <span>BondForge Engine Console</span>
               <Sparkles className="size-5 text-cyan-400 inline" />
             </h1>
             <p className="text-[13.5px] text-[var(--text-secondary)] max-w-xl leading-relaxed">

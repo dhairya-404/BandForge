@@ -23,7 +23,7 @@ export function TitleBar(): React.JSX.Element {
       {/* Left: Brand Badge */}
       <div className="flex items-center gap-2 font-mono [-webkit-app-region:no-drag]">
         <Flame className="size-3.5 text-cyan-400" />
-        <span className="font-bold text-white tracking-wider">BANDFORGE</span>
+        <span className="font-bold text-white tracking-wider">BONDFORGE</span>
         <span className="text-[10px] text-cyan-400/80 bg-cyan-950/60 px-1.5 py-0.5 rounded border border-cyan-500/20">
           MULTI-WAN v1.0
         </span>

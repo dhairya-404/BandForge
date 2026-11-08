@@ -19,7 +19,7 @@
 :root {
   color-scheme: dark;
 
-  /* BandForge Core Cyber-Slate Palette */
+  /* BondForge Core Cyber-Slate Palette */
   --bg: #090d16;
   --bg-secondary: #0f1626;
   --bg-tertiary: #162035;
@@ -82,7 +82,7 @@
   --radius: 10px;
 }
 
-/* Maps shadcn/Base UI's expected semantic tokens onto BandForge's palette */
+/* Maps shadcn/Base UI's expected semantic tokens onto BondForge's palette */
 @theme inline {
   --font-sans: 'Manrope', -apple-system, 'SF Pro Text', 'Helvetica Neue', Helvetica, sans-serif;
   --font-mono: 'Roboto Mono', 'SF Mono', ui-monospace, Menlo, monospace;

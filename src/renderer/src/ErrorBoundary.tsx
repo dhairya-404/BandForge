@@ -16,7 +16,7 @@ export class ErrorBoundary extends React.Component<{ children: React.ReactNode }
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
-    console.error('[BandForge Crash Caught]:', error, errorInfo)
+    console.error('[BondForge Crash Caught]:', error, errorInfo)
   }
 
   render(): React.ReactNode {
@@ -34,7 +34,7 @@ export class ErrorBoundary extends React.Component<{ children: React.ReactNode }
             }}
             className="px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm font-medium hover:opacity-90"
           >
-            Reload BandForge
+            Reload BondForge
           </button>
         </div>
       )

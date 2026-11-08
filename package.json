@@ -1,7 +1,7 @@
 {
-  "name": "bandforge",
+  "name": "bondforge",
   "version": "1.0.0",
-  "description": "BandForge: High-performance multi-network bonding & download acceleration engine",
+  "description": "BondForge: High-performance multi-network bonding & download acceleration engine",
   "main": "./out/main/index.js",
   "author": "Dhairya",
   "homepage": "https://github.com/anmolkapil/plexo",

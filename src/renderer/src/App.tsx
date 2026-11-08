@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { TitleBar } from './components/TitleBar'
-import { BandForgeSidebar, StudioTab } from './components/BandForgeSidebar'
+import { BondForgeSidebar, StudioTab } from './components/BondForgeSidebar'
 import { ForgeDashboardScreen } from './screens/ForgeDashboardScreen'
 import { TransfersScreen } from './screens/TransfersScreen'
 import { HardwareDeckScreen } from './screens/HardwareDeckScreen'
@@ -29,7 +29,7 @@ function App(): React.JSX.Element {
       {/* Main Studio Two-Pane Layout */}
       <div className="flex flex-1 min-h-0 overflow-hidden">
         {/* Left Studio Sidebar Navigation */}
-        <BandForgeSidebar
+        <BondForgeSidebar
           activeTab={activeTab}
           onSelectTab={setActiveTab}
           onOpenNewDownload={() => openNewDownload()}

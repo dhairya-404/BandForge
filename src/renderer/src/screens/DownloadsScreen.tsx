@@ -481,7 +481,7 @@ function EmptyState(): React.JSX.Element {
         <>
           <div className="font-sans text-[16px] leading-[1.2] font-bold">No networks connected</div>
           <div className="max-w-[380px] text-[12.5px] leading-[1.6] text-[var(--text-secondary)]">
-            BandForge needs at least one active network. Join a Wi-Fi network, plug in Ethernet, or
+            BondForge needs at least one active network. Join a Wi-Fi network, plug in Ethernet, or
             connect your phone using USB tethering.
           </div>
           <div className="mt-1 flex gap-2">

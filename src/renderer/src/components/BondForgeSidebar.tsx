@@ -14,17 +14,17 @@ import { useAppStore } from '../store/useAppStore'
 
 export type StudioTab = 'dashboard' | 'transfers' | 'adapters' | 'settings'
 
-interface BandForgeSidebarProps {
+interface BondForgeSidebarProps {
   activeTab: StudioTab
   onSelectTab: (tab: StudioTab) => void
   onOpenNewDownload: () => void
 }
 
-export function BandForgeSidebar({
+export function BondForgeSidebar({
   activeTab,
   onSelectTab,
   onOpenNewDownload
-}: BandForgeSidebarProps): React.JSX.Element {
+}: BondForgeSidebarProps): React.JSX.Element {
   const interfaces = useAppStore((state) => state.interfaces)
   const downloads = useAppStore((state) => state.downloads)
   const destinationDir = useAppStore((state) => state.destinationDir)
@@ -46,7 +46,7 @@ export function BandForgeSidebar({
         </div>
         <div className="flex flex-col">
           <div className="flex items-center gap-1.5 font-bold tracking-wider text-[15px] text-white">
-            <span>BAND</span>
+            <span>BOND</span>
             <span className="text-cyan-400">FORGE</span>
           </div>
           <span className="font-mono text-[10px] text-[var(--text-tertiary)] tracking-widest uppercase">

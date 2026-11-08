@@ -4,7 +4,7 @@
 > Created: 2026-11-08
 
 ## 1. What this project is
-- **Name:** BandForge
+- **Name:** BondForge
 - **Purpose / problem it solves:** High-performance multi-network bonding & download acceleration engine. Combines multiple internet connections (Wi-Fi, Ethernet, USB 4G/5G mobile tethering, secondary dongles) simultaneously to accelerate downloads without requiring expensive remote VPS servers or VPN drivers.
 - **Who uses it:** Dhairya & power users looking to combine multiple internet connections for maximum download speed with zero server infrastructure costs.
 - **Client / owner:** Dhairya
@@ -69,7 +69,7 @@
 - Windows requires proper adapter classification (handled via PowerShell `Get-NetAdapter`).
 
 ## 10. Glossary
-- **BandForge:** The multi-network bonding & download acceleration engine.
+- **BondForge:** The multi-network bonding & download acceleration engine.
 - **Socket Binding:** Pinning an outbound TCP socket to a specific local IP address / network interface.
 - **Chunk Racing:** Dynamically launching duplicate requests for lagging tail-end chunks across faster links to prevent Head-of-Line blocking.
 
