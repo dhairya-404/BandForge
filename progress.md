@@ -18,6 +18,15 @@
 
 ## Log
 
+### 2026-11-08: Complete BandForge UI Redesign & Studio Architecture Implemented
+- **Agent:** `main-agent` (Gemini 3.8 Flash)
+- **Branch:** `chore/bandforge-init`
+- **What:** Completely redesigned and replaced the legacy Plexo UI with an original, high-performance BandForge Studio interface. Implemented `BandForgeSidebar` (persistent two-pane navigation), `ForgeDashboardScreen` (with live multi-WAN speed telemetry and the "Forge Convergence Matrix" stream visualizer), `HardwareDeckScreen` (with hardware adapter telemetry, ping, stream weights, and participation toggles), `TransfersScreen` (full download queue manager with multi-network chunk ribbons), `EngineSettingsScreen` (concurrency and speed limits), and `NewDownloadModal` (accelerated transfer launcher).
+- **Why:** User requested a 100% original, bespoke UI for BandForge that eliminates all copied elements, prior to scaling the engine.
+- **Files:** `src/renderer/src/App.tsx`, `src/renderer/src/components/BandForgeSidebar.tsx`, `src/renderer/src/components/TitleBar.tsx`, `src/renderer/src/components/NewDownloadModal.tsx`, `src/renderer/src/screens/ForgeDashboardScreen.tsx`, `src/renderer/src/screens/HardwareDeckScreen.tsx`, `src/renderer/src/screens/TransfersScreen.tsx`, `src/renderer/src/screens/EngineSettingsScreen.tsx`, `src/renderer/src/assets/main.css`, `tasks.md`, `progress.md`, `BANDFORGE_UI_AND_SCALING_BLUEPRINT.md`.
+- **Verified:** `npm run typecheck:web` passed with 0 errors. `electron-vite build` succeeded in 12s, reducing renderer JS bundle size from 1.7 MB to 770 kB. Packaging via electron-builder initiated.
+- **Open / follow-ups:** Review blueprint with Dhairya and proceed to Phase 2 Scaling (Dynamic RTT chunking & Transparent Proxy).
+
 ### 2026-11-08: Packaged native desktop executable and fixed browser download state engine
 - **Agent:** `main-agent` (Gemini 3.8 Flash)
 - **Branch:** `chore/bandforge-init`

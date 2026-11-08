@@ -22,7 +22,7 @@ import type { DownloadManager } from './download/downloadManager'
 // In dev mode the app runs as the raw `electron` binary, which otherwise shows "Electron" in
 // the Dock tooltip/menu bar — must be set before the app is ready. Packaged builds already get
 // this from electron-builder's productName, but setting it here keeps dev and packaged in sync.
-app.setName('Plexo')
+app.setName('BandForge')
 
 // Each e2e test runs against its own throwaway userData folder (downloads, manifests, settings).
 if (testKnobs.userDataDir) app.setPath('userData', testKnobs.userDataDir)
@@ -41,15 +41,15 @@ let hasShownTrayNotification = false
 function ensureTray(): Tray {
   if (tray && !tray.isDestroyed()) return tray
   tray = new Tray(nativeImage.createFromPath(icon).resize({ width: 16, height: 16 }))
-  tray.setToolTip('Plexo')
+  tray.setToolTip('BandForge')
   tray.on('click', () => bringForward(ensureWindow()))
   tray.on('double-click', () => bringForward(ensureWindow()))
   tray.setContextMenu(
     Menu.buildFromTemplate([
-      { label: 'Open Plexo', click: () => bringForward(ensureWindow()) },
+      { label: 'Open BandForge', click: () => bringForward(ensureWindow()) },
       { type: 'separator' },
       {
-        label: 'Quit Plexo',
+        label: 'Quit BandForge',
         click: () => {
           isQuitting = true
           app.quit()
@@ -111,21 +111,12 @@ function createWindow(): void {
     minWidth: 720,
     // Room under the download screen's pinned block grid for a network row and a few of its rows.
     minHeight: 620,
-    show: false,
-    autoHideMenuBar: true,
-    title: 'Plexo',
-    // Matches the renderer's dark-mode background so a live window resize
-    // (which briefly exposes the raw window background) doesn't flash white.
+    center: true,
+    show: true,
+    autoHideMenuBar: false,
+    title: 'BandForge',
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#1c1c1e' : '#ffffff',
     ...(process.platform !== 'darwin' ? { icon } : {}),
-    // One title bar on every OS: the renderer's own strip (see TitleBar.tsx), with the OS's
-    // window controls over it — macOS's traffic lights, or the minimize/maximize/close that
-    // Windows and Linux draw over the strip's right end.
-    titleBarStyle: 'hidden',
-    ...(process.platform === 'darwin'
-      ? // Center the 14px native buttons in the renderer’s 32px macOS title bar.
-        { trafficLightPosition: { x: 16, y: 9 } }
-      : { titleBarOverlay: titleBarOverlay() }),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       // A hidden e2e window would otherwise have its timers throttled.
@@ -134,7 +125,24 @@ function createWindow(): void {
   })
 
   mainWindow.on('ready-to-show', () => {
-    if (!testKnobs.hideWindow) mainWindow?.show()
+    console.log('[BandForge] Window ready-to-show event received.')
+    if (!testKnobs.hideWindow) {
+      mainWindow?.show()
+      mainWindow?.focus()
+    }
+  })
+
+  // Safety fallback for dev mode to ensure window displays
+  setTimeout(() => {
+    if (mainWindow && !mainWindow.isDestroyed() && !mainWindow.isVisible()) {
+      console.log('[BandForge] Showing window via dev safety timer.')
+      mainWindow.show()
+      mainWindow.focus()
+    }
+  }, 1200)
+
+  mainWindow.webContents.on('did-fail-load', (_event, errorCode, errorDescription) => {
+    console.error('[BandForge] Failed to load renderer:', errorCode, errorDescription)
   })
 
   mainWindow.on('session-end', () => {
@@ -203,7 +211,7 @@ function createWindow(): void {
 }
 
 app.whenReady().then(async () => {
-  electronApp.setAppUserModelId('com.plexo.app')
+  electronApp.setAppUserModelId('com.bandforge.app')
 
   // A failed move keeps the old file, to retry next launch — it must never stop the window opening.
   await migrateLegacyNetworkPreferences().catch((error) =>

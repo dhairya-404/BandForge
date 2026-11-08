@@ -21,18 +21,29 @@
 
 ## Active tasks
 
-## T-003: UI & Branding Polish for BandForge
+## T-004: Multi-Network Engine Scaling & Dynamic RTT Hedging
 - **Assigned to:** `main-agent`
 - **Assigned by / date:** Dhairya on 2026-11-08
-- **Priority:** medium
+- **Priority:** high
 - **Repeats:** once
-- **Files / area:** `src/renderer/`, `build/`
+- **Files / area:** `src/main/download/`, `src/main/network/`
 - **Branch:** `chore/bandforge-init`
 - **Status:** TODO
-- **Done when:** All UI references, dialogs, titles, and headers reflect BandForge branding.
-- **Notes:** Ready to execute after build verification.
+- **Done when:** Dynamic adaptive chunk scheduling with RTT latency weighting and transparent local proxy mode are implemented for global scaling.
+- **Notes:** Scaling blueprint documented in `BANDFORGE_UI_AND_SCALING_BLUEPRINT.md`.
 
 ## Done
+
+## T-003: Complete BandForge UI Redesign & Studio Architecture
+- **Assigned to:** `main-agent`
+- **Assigned by / date:** Dhairya on 2026-11-08
+- **Priority:** high
+- **Repeats:** once
+- **Files / area:** `src/renderer/`, `src/renderer/src/screens/`, `src/renderer/src/components/`, `src/renderer/src/assets/main.css`
+- **Branch:** `chore/bandforge-init`
+- **Status:** DONE
+- **Done when:** All legacy Plexo UI elements completely replaced with 100% original BandForge Studio UI (Sidebar, Forge Dashboard, Hardware Bonding Deck, Transfers Queue, New Transfer Modal).
+- **Notes:** Implemented, verified with `npm run typecheck:web` (exit 0) and `electron-vite build` (exit 0). Bundle size reduced from 1.7 MB to 770 kB.
 
 ## T-001: Workspace Initialization & Brand Transformation to BandForge
 - **Assigned to:** `main-agent`

@@ -17,102 +17,72 @@
 }
 
 :root {
-  color-scheme: light dark;
+  color-scheme: dark;
 
-  --bg: #ffffff;
-  --bg-secondary: #fafafa;
-  --bg-tertiary: #f0f0f0;
-  --input-bg: #ffffff;
-  --track-bg: #e4e4e6;
+  /* BandForge Core Cyber-Slate Palette */
+  --bg: #090d16;
+  --bg-secondary: #0f1626;
+  --bg-tertiary: #162035;
+  --input-bg: #121a2d;
+  --track-bg: #1a253c;
 
-  --text: #1d1d1f;
-  --text-secondary: #6e6e73;
-  /* #8a8a8e (the original design value) is only 3.45:1 against this screen's white/near-white
-     backgrounds — fails WCAG AA (4.5:1) for the 9-13px text this token is used at throughout.
-     Darkened to the lightest gray that still clears 4.5:1. */
-  --text-tertiary: #737377;
+  --text: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-tertiary: #64748b;
 
-  --border: #e0e0e2;
-  --border-subtle: #ececee;
-  --border-strong: #b9b9bb;
-  --footer-border: #d8d8da;
+  --border: rgba(56, 189, 248, 0.15);
+  --border-subtle: rgba(255, 255, 255, 0.07);
+  --border-strong: rgba(56, 189, 248, 0.35);
+  --footer-border: rgba(56, 189, 248, 0.15);
 
-  --icon-muted: #c2c2c6;
-  --icon-muted-strong: #b0b0b2;
-  --scrollbar-thumb: #d0d0d2;
+  --icon-muted: #475569;
+  --icon-muted-strong: #64748b;
+  --scrollbar-thumb: #1e293b;
 
-  --checkbox-shadow: rgba(0, 0, 0, 0.15);
-  --checkbox-inset-shadow: rgba(0, 0, 0, 0.04);
+  --checkbox-shadow: rgba(0, 0, 0, 0.6);
+  --checkbox-inset-shadow: rgba(0, 0, 0, 0.4);
 
-  --hero-bg: linear-gradient(180deg, #fbfbfc 0%, #f4f5f7 100%);
-  --hero-border: #e2e4e8;
+  --hero-bg: radial-gradient(ellipse at 50% 0%, rgba(14, 165, 233, 0.15) 0%, #090d16 75%);
+  --hero-border: rgba(56, 189, 248, 0.25);
 
-  /* Network + brand palette — light-mode originals, adapted to sit on a white ground. */
-  --color-wifi: #1f8a70;
-  --color-wifi-bg: #e6f6f2;
-  --color-wifi-border: #b8e6dc;
-  --color-wifi-text: #0e6b54;
-  --color-wifi-onsolid: #ffffff;
+  /* Network Channels Palette */
+  --color-wifi: #06b6d4;
+  --color-wifi-bg: rgba(6, 182, 212, 0.12);
+  --color-wifi-border: rgba(6, 182, 212, 0.3);
+  --color-wifi-text: #22d3ee;
+  --color-wifi-onsolid: #082f49;
 
-  --color-usb: #d97706;
-  --color-usb-bg: #fef3c7;
-  --color-usb-border: #fde68a;
-  --color-usb-text: #92400e;
-  --color-usb-onsolid: #ffffff;
+  --color-usb: #f59e0b;
+  --color-usb-bg: rgba(245, 158, 11, 0.12);
+  --color-usb-border: rgba(245, 158, 11, 0.3);
+  --color-usb-text: #fbbf24;
+  --color-usb-onsolid: #451a03;
 
-  --color-ethernet: #4f64a5;
-  --color-ethernet-bg: #edf0f8;
-  --color-ethernet-border: #cbd3ed;
-  --color-ethernet-text: #374984;
-  --color-ethernet-onsolid: #ffffff;
+  --color-ethernet: #3b82f6;
+  --color-ethernet-bg: rgba(59, 130, 246, 0.12);
+  --color-ethernet-border: rgba(59, 130, 246, 0.3);
+  --color-ethernet-text: #60a5fa;
+  --color-ethernet-onsolid: #172554;
 
-  --color-neutral: #6b7280;
-  --color-neutral-bg: #f3f4f6;
-  --color-neutral-border: #e5e7eb;
-  --color-neutral-text: #4b5563;
-  --color-neutral-onsolid: #ffffff;
+  --color-neutral: #64748b;
+  --color-neutral-bg: rgba(100, 116, 139, 0.12);
+  --color-neutral-border: rgba(100, 116, 139, 0.25);
+  --color-neutral-text: #94a3b8;
+  --color-neutral-onsolid: #0f172a;
 
-  /* Network colors a user can pick (theme.ts NETWORK_COLOR_SWATCHES): deep enough on white for a
-     white glyph, as the kinds' are. Teal, amber and steel are the kinds' own. */
-  --swatch-teal: #1f8a70;
-  --swatch-teal-onsolid: #ffffff;
-  --swatch-amber: #d97706;
-  --swatch-amber-onsolid: #ffffff;
-  --swatch-steel: #4f64a5;
-  --swatch-steel-onsolid: #ffffff;
-  --swatch-rose: #b5525a;
-  --swatch-rose-onsolid: #ffffff;
-  --swatch-violet: #6c5ac4;
-  --swatch-violet-onsolid: #ffffff;
-  --swatch-lime: #5b8a1e;
-  --swatch-lime-onsolid: #ffffff;
-  --swatch-cyan: #0e7d93;
-  --swatch-cyan-onsolid: #ffffff;
-  --swatch-coral: #c4572a;
-  --swatch-coral-onsolid: #ffffff;
+  /* Accent & Forge Lighting */
+  --color-accent: #00f2fe;
+  --color-accent-onsolid: #02192e;
+  --color-success: #10b981;
+  --color-danger: #ef4444;
+  --color-danger-bg: rgba(239, 68, 68, 0.12);
+  --color-danger-border: rgba(239, 68, 68, 0.3);
 
-  --color-accent: #d97706;
-  --color-accent-onsolid: #ffffff;
-  --color-success: #1f8a70;
-
-  --color-danger: #dc2626;
-  --color-danger-bg: #fef2f2;
-  --color-danger-border: #fecaca;
-
-  /* Throughput chart's total-line color — the merge node's tone from the app icon, not raw
-     text-black, so the outline reads as part of the brand instead of a harsh axis line. */
-  --node-accent: #5f6e78;
-
-  /* Shared corner radius for shadcn/Base UI components — matches the 8px most hand-styled
-     buttons/cards already use (see theme.ts), so new and existing components read as one system. */
-  --radius: 8px;
+  --node-accent: #00f2fe;
+  --radius: 10px;
 }
 
-/* Maps shadcn/Base UI's expected semantic tokens onto Plexo's existing palette above, instead of
-   introducing a second, parallel color system. Tailwind only generates `bg-primary`-style
-   utilities for names declared here, in `@theme` — so this can freely reuse Plexo's own custom
-   property *values* (e.g. --color-accent) without colliding with their names, since only the
-   left-hand names below become Tailwind tokens. */
+/* Maps shadcn/Base UI's expected semantic tokens onto BandForge's palette */
 @theme inline {
   --font-sans: 'Manrope', -apple-system, 'SF Pro Text', 'Helvetica Neue', Helvetica, sans-serif;
   --font-mono: 'Roboto Mono', 'SF Mono', ui-monospace, Menlo, monospace;
