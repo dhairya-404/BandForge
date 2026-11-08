@@ -43,8 +43,7 @@ export function TransfersScreen({
     return true
   })
 
-  const api =
-    typeof window !== 'undefined' ? window.bondforge || window.plexo : undefined
+  const api = typeof window !== 'undefined' ? window.bondforge || window.plexo : undefined
 
   return (
     <div className="flex-1 overflow-y-auto p-6 space-y-5 select-none">

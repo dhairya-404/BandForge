@@ -20,6 +20,7 @@
 ## Log
 
 ### 2026-11-08: Complete visual polish: bespoke BondForge vector logo, clean typography & 100% dynamic live telemetry
+
 - **Agent:** main-agent (Gemini 3.8 Flash)
 - **Branch:** chore/bondforge-init
 - **What:** Replaced the generic flame icon with a bespoke, razor-sharp BondForge Nexus vector mark (3 converging physical network paths fusing into a high-velocity forward diamond node). Overhauled wordmark from awkward all-caps 'BOND FORGE' into clean, refined 'BondForge' with 'v1.0' badge and 'Multi-WAN Aggregator' subtitle. Completely eliminated hardcoded static demo metrics: Aggregated Speed now truthfully reads '0 B/s (Standby)', Multiplier reads '1.0x', Data Processed reads actual completed history bytes, and the Interface Convergence Deck dynamically displays real detected hardware adapters and their real live per-interface throughput. Upgraded action buttons and cards to a high-contrast dark palette (slate/sky blue/emerald) inspired by Linear and Warp.

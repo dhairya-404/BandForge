@@ -12,8 +12,7 @@ export function EngineSettingsScreen(): React.JSX.Element {
   const destinationDir = useAppStore((state) => state.destinationDir)
   const setDestinationDir = useAppStore((state) => state.setDestinationDir)
 
-  const api =
-    typeof window !== 'undefined' ? window.bondforge || window.plexo : undefined
+  const api = typeof window !== 'undefined' ? window.bondforge || window.plexo : undefined
 
   const handleBrowse = async (): Promise<void> => {
     const chosen = await api?.chooseDestinationFolder?.(destinationDir)

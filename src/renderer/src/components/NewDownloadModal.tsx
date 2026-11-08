@@ -28,8 +28,7 @@ function NewDownloadModalContent(): React.JSX.Element {
   const [error, setError] = useState<string | null>(null)
   const [selectedAdapters, setSelectedAdapters] = useState<string[]>(['wifi0', 'usb0', 'eth0'])
 
-  const api =
-    typeof window !== 'undefined' ? window.bondforge || window.plexo : undefined
+  const api = typeof window !== 'undefined' ? window.bondforge || window.plexo : undefined
 
   const handleProbe = useCallback(
     async (link: string): Promise<void> => {
