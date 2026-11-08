@@ -19,6 +19,16 @@
 
 ## Log
 
+### 2026-11-08: Fix E2E smoke test 153 failure across window titleBarOverlay and relaunch dialog teardown
+
+- **Agent:** main-agent (Gemini 3.8 Flash)
+- **Branch:** main
+- **What:** Restored `titleBarStyle: 'hidden'` and `titleBarOverlay: titleBarOverlay()` on `createWindow()` in `src/main/index.ts`, honored `testKnobs.hideWindow` during test execution, safeguarded `nativeTheme.on('updated')` with try/catch, marked `e2e/ui.spec.ts:294` with `test.slow()` for full Electron relaunches, and synchronized New Download dialog closing with `not.toBeVisible()` to prevent dialog backdrop click interception.
+- **Why:** Smoke test 153 (`settings @smoke > every choice survives a reload and a restart, even made right before`) failed with a 30s timeout on themeToggle click and a 60s timeout during teardown due to native window frame deadlocks and dialog animation overlay contention.
+- **Files:** `src/main/index.ts`, `e2e/ui.spec.ts`, `AGENTS.md`, `progress.md`.
+- **Verified:** `npx playwright test e2e/ui.spec.ts:294` passed cleanly (1 passed). `npm run typecheck` passed (exit 0 across node, web, e2e, extension), `npm run lint` passed (exit 0), and `npm run format:check` passed (exit 0).
+- **Open / follow-ups:** Commit and push to GitHub remote.
+
 ### 2026-11-08: Complete visual polish: bespoke BondForge vector logo, clean typography & 100% dynamic live telemetry
 
 - **Agent:** main-agent (Gemini 3.8 Flash)

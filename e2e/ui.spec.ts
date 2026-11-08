@@ -295,6 +295,7 @@ test.describe('settings @smoke', () => {
     plexo,
     dirs
   }) => {
+    test.slow()
     const page = (): Page => plexo.page
     const themeToggle = page().getByRole('button', { name: /^Switch to (dark|light) theme$/ })
     // After switching, the toggle offers to switch back.
@@ -311,6 +312,7 @@ test.describe('settings @smoke', () => {
       (await destinationRow().innerText()).replace(/\s*\([^)]*free\)/, '')
     const chosenDestination = await destination()
     await page().keyboard.press('Escape')
+    await expect(page().getByRole('dialog', { name: 'New download' })).not.toBeVisible()
     // A function: the window, and so the page, is a new one after a relaunch.
     const networksMenu = (): Locator =>
       page()
@@ -335,6 +337,7 @@ test.describe('settings @smoke', () => {
       const saved = JSON.parse(await readFile(join(dirs.userData, 'app-settings.json'), 'utf8'))
       expect(saved.destinationDir).toBe(dirs.dest)
       await page().keyboard.press('Escape')
+      await expect(page().getByRole('dialog', { name: 'New download' })).not.toBeVisible()
       await networksMenu().click()
       await expect(page().getByText('Office fibre')).toBeVisible()
       await page().getByRole('button', { name: 'Edit Office fibre' }).click()

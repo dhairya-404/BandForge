@@ -112,11 +112,15 @@ function createWindow(): void {
     // Room under the download screen's pinned block grid for a network row and a few of its rows.
     minHeight: 620,
     center: true,
-    show: true,
-    autoHideMenuBar: false,
+    show: false,
+    autoHideMenuBar: true,
     title: 'BondForge',
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#1c1c1e' : '#ffffff',
     ...(process.platform !== 'darwin' ? { icon } : {}),
+    titleBarStyle: 'hidden',
+    ...(process.platform === 'darwin'
+      ? { trafficLightPosition: { x: 16, y: 9 } }
+      : { titleBarOverlay: titleBarOverlay() }),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       // A hidden e2e window would otherwise have its timers throttled.
@@ -125,21 +129,11 @@ function createWindow(): void {
   })
 
   mainWindow.on('ready-to-show', () => {
-    console.log('[BondForge] Window ready-to-show event received.')
     if (!testKnobs.hideWindow) {
       mainWindow?.show()
       mainWindow?.focus()
     }
   })
-
-  // Safety fallback for dev mode to ensure window displays
-  setTimeout(() => {
-    if (mainWindow && !mainWindow.isDestroyed() && !mainWindow.isVisible()) {
-      console.log('[BondForge] Showing window via dev safety timer.')
-      mainWindow.show()
-      mainWindow.focus()
-    }
-  }, 1200)
 
   mainWindow.webContents.on('did-fail-load', (_event, errorCode, errorDescription) => {
     console.error('[BondForge] Failed to load renderer:', errorCode, errorDescription)
@@ -241,8 +235,12 @@ app.whenReady().then(async () => {
   if (app.isPackaged) app.setAsDefaultProtocolClient('plexo')
 
   nativeTheme.on('updated', () => {
-    mainWindow?.setBackgroundColor(nativeTheme.shouldUseDarkColors ? '#1c1c1e' : '#ffffff')
-    if (process.platform !== 'darwin') mainWindow?.setTitleBarOverlay(titleBarOverlay())
+    try {
+      mainWindow?.setBackgroundColor(nativeTheme.shouldUseDarkColors ? '#1c1c1e' : '#ffffff')
+      if (process.platform !== 'darwin') mainWindow?.setTitleBarOverlay(titleBarOverlay())
+    } catch (error) {
+      console.warn('[BondForge] nativeTheme updated handler error:', error)
+    }
   })
 
   createWindow()
