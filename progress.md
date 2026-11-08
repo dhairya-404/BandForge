@@ -18,6 +18,15 @@
 
 ## Log
 
+### 2026-11-08: Packaged native desktop executable and fixed browser download state engine
+- **Agent:** `main-agent` (Gemini 3.8 Flash)
+- **Branch:** `chore/bandforge-init`
+- **What:** Completed full packaging of native Windows application `dist/win-unpacked/bandforge.exe` (245 MB). Fixed download state shape and stream/block simulation in `src/renderer/src/browserShim.ts` to prevent blank UI crashes during new download initiation. Started persistent Vite dev server and native Electron background processes.
+- **Why:** User reported static behavior and crash to black screen when clicking "+ New download" in browser preview mode.
+- **Files:** `src/renderer/src/browserShim.ts`, `dist/win-unpacked/bandforge.exe`, `progress.md`.
+- **Verified:** `npm run typecheck:web` exited 0. `dist/win-unpacked/bandforge.exe` verified present on disk. Vite dev server active on `http://localhost:5173/`.
+- **Open / follow-ups:** Test live multi-adapter download aggregation on actual hardware (Wi-Fi + USB tether).
+
 ### 2026-11-08: Dependencies installed and production build verified
 - **Agent:** `main-agent` (Gemini 3.8 Flash)
 - **Branch:** `chore/bandforge-init`
