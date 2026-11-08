@@ -30,3 +30,4 @@
 - 2026-11-08 19:10: `main-agent`: Renamed project to BondForge, implemented bespoke Studio UI, configured GitHub remote.
 - 2026-11-08 20:00: `main-agent`: Fixed browser blank screen issue & documented full system architecture with Mermaid in README.
 - 2026-11-08 20:45: `main-agent`: Replaced flame icon with bespoke BondForge Nexus mark, refined typography, and purged static mock values for 100% dynamic telemetry.
+- 2026-11-08 21:38: `main-agent`: Fixed test 153 e2e/ui.spec.ts timeout by restoring hidden titleBarOverlay configuration and dialog exit animation synchronization.
