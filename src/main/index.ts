@@ -166,8 +166,8 @@ function createWindow(): void {
         hasShownTrayNotification = true
         if (!testKnobs.userDataDir && Notification.isSupported()) {
           new Notification({
-            title: 'Plexo is still downloading',
-            body: 'Downloads will continue in the background. Open Plexo again, or use its tray icon, to quit.'
+            title: 'BondForge is still downloading',
+            body: 'Downloads will continue in the background. Open BondForge again, or use its tray icon, to quit.'
           }).show()
         }
       }

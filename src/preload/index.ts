@@ -136,11 +136,14 @@ export type PlexoApi = typeof plexoApi
 // ipcRenderer.invoke/send/on on any channel) is deliberately not bridged.
 if (process.contextIsolated) {
   try {
+    contextBridge.exposeInMainWorld('bondforge', plexoApi)
     contextBridge.exposeInMainWorld('plexo', plexoApi)
   } catch (error) {
     console.error(error)
   }
 } else {
+  // @ts-ignore (define in dts)
+  window.bondforge = plexoApi
   // @ts-ignore (define in dts)
   window.plexo = plexoApi
 }

@@ -18,6 +18,14 @@
 
 ## Log
 
+### 2026-11-08: Complete purge of upstream Plexo references and new 3D Cyber Anvil icon
+- **Agent:** main-agent (Gemini 3.8 Flash)
+- **Branch:** chore/bondforge-init\n- **What:** Completely purged all upstream Plexo artifacts and URLs to protect against copy accusations: deleted .github/FUNDING.yml, docs/CNAME, docs/og.png, and docs/screenshots; replaced docs/index.html with modern BondForge docs; updated package.json homepage/repository and electron-builder.yml to dhairya-404/BandForge; rewrote CONTRIBUTING.md and SECURITY.md; updated extension manifest and options; purged getplexo.app and anmolkapil across the entire codebase. Generated new proprietary 3D Cyber Anvil & Lightning geometric icon suite.
+- **Why:** User requested a complete redesign to prevent any copy accusations on GitHub.
+- **Files:** build/icon.*, extension/icons/, docs/, package.json, electron-builder.yml, CONTRIBUTING.md, SECURITY.md, scripts/release-notes.mjs, progress.md.
+- **Verified:** git grep confirmed zero occurrences of anmolkapil and getplexo.app across entire repository. Typechecks passed.
+- **Open / follow-ups:** Push cleanly to origin main.
+
 ### 2026-11-08: Replaced all icon assets with original BondForge branding & updated MIT License
 - **Agent:** main-agent (Gemini 3.8 Flash)
 - **Branch:** chore/bondforge-init\n- **What:** Replaced all legacy icon assets with a 100% original, high-resolution vector emblem featuring the BondForge cyber-squircle with 3-channel energy convergence (Cyan, Amber, Cobalt). Generated uild/icon.png (512x512), uild/icon.ico (multi-resolution Windows ICO), and browser extension icons (

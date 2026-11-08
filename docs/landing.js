@@ -2,7 +2,7 @@
 ;(function () {
   'use strict'
   const $ = (id) => document.getElementById(id)
-  const repo = 'https://github.com/anmolkapil/plexo'
+  const repo = 'https://github.com/dhairya-404/BandForge'
   const labels = { mac: 'macOS', win: 'Windows', linux: 'Linux' }
   const sectionIds = ['features', 'downloads', 'faq', 'support']
   const sectionLinks = Array.from(document.querySelectorAll('.nav-section-link'))
@@ -159,7 +159,7 @@
       const url = new URL(value)
       return url.protocol === 'https:' &&
         url.hostname === 'github.com' &&
-        url.pathname.startsWith('/anmolkapil/plexo/releases/')
+        url.pathname.startsWith('/dhairya-404/BandForge/releases/')
         ? url.href
         : null
     } catch {
@@ -446,7 +446,7 @@
     const timeout = setTimeout(() => controller.abort(), 9000)
     try {
       const [response, env] = await Promise.all([
-        fetch('https://api.github.com/repos/anmolkapil/plexo/releases?per_page=10', {
+        fetch('https://api.github.com/repos/dhairya-404/BandForge/releases?per_page=10', {
           signal: controller.signal
         }),
         environment()
@@ -743,7 +743,7 @@
   $('share-button').addEventListener('click', async () => {
     const url =
       location.protocol === 'file:' || ['localhost', '127.0.0.1'].includes(location.hostname)
-        ? 'https://getplexo.app/'
+        ? 'https://github.com/dhairya-404/BandForge'
         : location.origin + location.pathname
     try {
       if (navigator.share)

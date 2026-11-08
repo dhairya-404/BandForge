@@ -1,140 +1,144 @@
 import fs from 'fs'
-import path from 'path'
 import sharp from 'sharp'
 
-// Create a modern, iconic vector emblem for BondForge
+// Completely original, bold 3D Cyber Anvil & Lightning Nexus emblem for BondForge
 const svgContent = `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <!-- Squircle Gradient -->
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0a0f1d"/>
-      <stop offset="50%" stop-color="#0f172a"/>
-      <stop offset="100%" stop-color="#070a13"/>
+    <!-- Background Gradient -->
+    <radialGradient id="hexBg" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#111827"/>
+      <stop offset="60%" stop-color="#0a0f1d"/>
+      <stop offset="100%" stop-color="#030712"/>
+    </radialGradient>
+
+    <!-- Metallic Shield Rim Gradient -->
+    <linearGradient id="shieldRim" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f2fe"/>
+      <stop offset="25%" stop-color="#3b82f6"/>
+      <stop offset="70%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#ff6b00"/>
     </linearGradient>
 
-    <!-- Outer Rim Laser Glow -->
-    <linearGradient id="rimGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00f2fe" stop-opacity="0.8"/>
-      <stop offset="50%" stop-color="#3b82f6" stop-opacity="0.3"/>
-      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.7"/>
-    </linearGradient>
-
-    <!-- Central Core Energy Glow -->
-    <radialGradient id="coreGlow" cx="52%" cy="50%" r="45%">
-      <stop offset="0%" stop-color="#00f2fe" stop-opacity="0.35"/>
-      <stop offset="50%" stop-color="#3b82f6" stop-opacity="0.12"/>
+    <!-- Core Plasma Ambient Glow -->
+    <radialGradient id="corePlasma" cx="50%" cy="50%" r="40%">
+      <stop offset="0%" stop-color="#00f2fe" stop-opacity="0.4"/>
+      <stop offset="50%" stop-color="#ff6b00" stop-opacity="0.15"/>
       <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
     </radialGradient>
 
-    <!-- Wi-Fi Channel Cyan -->
-    <linearGradient id="cyanStream" x1="0%" y1="0%" x2="100%" y2="50%">
-      <stop offset="0%" stop-color="#06b6d4"/>
-      <stop offset="100%" stop-color="#00f2fe"/>
+    <!-- Left Wing (Cyan) -->
+    <linearGradient id="cyanFacet" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="50%" stop-color="#00f2fe"/>
+      <stop offset="100%" stop-color="#0284c7"/>
     </linearGradient>
 
-    <!-- 5G Mobile Channel Amber -->
-    <linearGradient id="amberStream" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#f59e0b"/>
-      <stop offset="100%" stop-color="#fbbf24"/>
+    <!-- Center Lightning Spear (Amber / Fire) -->
+    <linearGradient id="fireFacet" x1="0%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="30%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#dc2626"/>
     </linearGradient>
 
-    <!-- Ethernet Channel Cobalt -->
-    <linearGradient id="blueStream" x1="0%" y1="100%" x2="100%" y2="50%">
-      <stop offset="0%" stop-color="#3b82f6"/>
-      <stop offset="100%" stop-color="#60a5fa"/>
+    <!-- Right Wing (Royal Cobalt) -->
+    <linearGradient id="cobaltFacet" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="60%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
     </linearGradient>
 
-    <!-- Forged Output Beam -->
-    <linearGradient id="forgeBeam" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#00f2fe"/>
-      <stop offset="70%" stop-color="#ffffff"/>
-      <stop offset="100%" stop-color="#38bdf8"/>
+    <!-- Anvil Base (Dark Titanium) -->
+    <linearGradient id="titaniumFacet" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
     </linearGradient>
 
-    <filter id="laserGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="6" result="blur"/>
+    <filter id="hyperGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
       <feComposite in="SourceGraphic" in2="blur" operator="over"/>
     </filter>
   </defs>
 
-  <!-- Deep Obsidian Rounded Squircle Container -->
-  <rect x="24" y="24" width="464" height="464" rx="112" fill="url(#bgGrad)" stroke="url(#rimGrad)" stroke-width="4"/>
-  <rect x="24" y="24" width="464" height="464" rx="112" fill="url(#coreGlow)"/>
+  <!-- 1. Geometric Hexagonal Cyber Shield -->
+  <polygon points="256,20 452,132 452,380 256,492 60,380 60,132" fill="url(#hexBg)" stroke="url(#shieldRim)" stroke-width="6"/>
+  <polygon points="256,36 438,142 438,370 256,476 74,370 74,142" fill="url(#corePlasma)"/>
 
-  <!-- Subtle Internal Grid Pattern -->
-  <g opacity="0.12" stroke="#38bdf8" stroke-width="1">
-    <line x1="80" y1="180" x2="432" y2="180"/>
-    <line x1="80" y1="256" x2="432" y2="256"/>
-    <line x1="80" y1="332" x2="432" y2="332"/>
-    <line x1="160" y1="80" x2="160" y2="432"/>
-    <line x1="256" y1="80" x2="256" y2="432"/>
-    <line x1="352" y1="80" x2="352" y2="432"/>
+  <!-- Inner Bevel Rim -->
+  <polygon points="256,52 424,150 424,362 256,460 88,362 88,150" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="2"/>
+
+  <!-- 2. THE CYBER ANVIL BASE (Forge Foundation) -->
+  <g id="anvil-base">
+    <!-- Anvil bottom plate -->
+    <polygon points="170,395 342,395 372,425 140,425" fill="url(#titaniumFacet)" stroke="#38bdf8" stroke-width="2" stroke-opacity="0.4"/>
+    <!-- Anvil waist -->
+    <polygon points="200,345 312,345 330,395 182,395" fill="#0f172a" stroke="#00f2fe" stroke-width="2" stroke-opacity="0.5"/>
   </g>
 
-  <!-- EMBLEM: THE FORGE NEXUS (3 Multi-WAN Channels Converging into a Super-Charged Stream) -->
-  <g filter="url(#laserGlow)">
-    <!-- Pathway 1: Top Wi-Fi 5GHz Stream (Cyan) -->
-    <path d="M 108 164 C 180 164, 210 236, 260 256" fill="none" stroke="url(#cyanStream)" stroke-width="18" stroke-linecap="round"/>
-    <circle cx="108" cy="164" r="9" fill="#00f2fe"/>
+  <!-- 3. THE "BF" GEOMETRIC LIGHTNING FORGE NEXUS -->
+  <g filter="url(#hyperGlow)">
+    <!-- Left Wing / "B" Contour (Electric Cyan) -->
+    <polygon points="124,160 236,160 216,230 154,230" fill="url(#cyanFacet)"/>
+    <polygon points="150,240 220,240 196,335 120,335" fill="url(#cyanFacet)"/>
+    <!-- Wing highlight line -->
+    <line x1="124" y1="160" x2="236" y2="160" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
 
-    <!-- Pathway 2: Center 5G Mobile Cellular Stream (Amber) -->
-    <path d="M 96 256 L 260 256" fill="none" stroke="url(#amberStream)" stroke-width="18" stroke-linecap="round"/>
-    <circle cx="96" cy="256" r="9" fill="#fbbf24"/>
+    <!-- Central High-Velocity Lightning Spear (Molten Amber to Fire) -->
+    <polygon points="280,105 204,260 264,260 220,380 340,225 272,225" fill="url(#fireFacet)"/>
+    <!-- Center white-hot spark -->
+    <polygon points="274,125 218,250 260,250 234,350 320,235 270,235" fill="#ffffff" opacity="0.85"/>
 
-    <!-- Pathway 3: Bottom Ethernet Gigabit Stream (Cobalt Blue) -->
-    <path d="M 108 348 C 180 348, 210 276, 260 256" fill="none" stroke="url(#blueStream)" stroke-width="18" stroke-linecap="round"/>
-    <circle cx="108" cy="348" r="9" fill="#60a5fa"/>
-
-    <!-- Central Fusion Core (The Anvil / Hex Core) -->
-    <polygon points="260,224 290,256 260,288 230,256" fill="#ffffff" stroke="#00f2fe" stroke-width="6"/>
-
-    <!-- Accelerated Output Spearhead (Forged Aggregated Beam) -->
-    <path d="M 276 256 L 396 256" stroke="url(#forgeBeam)" stroke-width="26" stroke-linecap="round"/>
-    <!-- Supersonic Speed Chevrons -->
-    <polygon points="384,232 424,256 384,280 398,256" fill="#ffffff"/>
-    <polygon points="340,240 366,256 340,272 350,256" fill="#00f2fe" opacity="0.9"/>
+    <!-- Right Wing / "F" Contour (Royal Cobalt) -->
+    <polygon points="296,160 388,160 376,198 304,198" fill="url(#cobaltFacet)"/>
+    <polygon points="286,220 360,220 348,256 280,256" fill="url(#cobaltFacet)"/>
+    <!-- Top edge spark -->
+    <line x1="296" y1="160" x2="388" y2="160" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
   </g>
 
-  <!-- Sparkle Accents -->
-  <circle cx="260" cy="256" r="5" fill="#ffffff"/>
-  <circle cx="430" cy="256" r="3" fill="#ffffff"/>
-  <polygon points="290,200 293,208 301,211 293,214 290,222 287,214 279,211 287,208" fill="#00f2fe" opacity="0.7"/>
-  <polygon points="380,310 382,316 388,318 382,320 380,326 378,320 372,318 378,316" fill="#fbbf24" opacity="0.7"/>
+  <!-- 4. Acceleration Spark Nodes (3 Multi-Network Ports) -->
+  <circle cx="124" cy="160" r="7" fill="#00f2fe" stroke="#ffffff" stroke-width="2"/>
+  <circle cx="280" cy="105" r="8" fill="#fef08a" stroke="#ff6b00" stroke-width="2.5"/>
+  <circle cx="388" cy="160" r="7" fill="#60a5fa" stroke="#ffffff" stroke-width="2"/>
+  <circle cx="220" cy="380" r="6" fill="#f59e0b" stroke="#ffffff" stroke-width="2"/>
+
+  <!-- Energy Wave Lines -->
+  <path d="M 90 248 C 110 240, 120 265, 140 256" fill="none" stroke="#00f2fe" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+  <path d="M 370 248 C 390 240, 400 265, 420 256" fill="none" stroke="#3b82f6" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
 </svg>
 `
 
 // Greyscale version for extension off state
 const svgOffContent = svgContent
   .replace(/#00f2fe/gi, '#64748b')
-  .replace(/#06b6d4/gi, '#475569')
-  .replace(/#38bdf8/gi, '#94a3b8')
+  .replace(/#22d3ee/gi, '#475569')
+  .replace(/#0284c7/gi, '#334155')
+  .replace(/#fef08a/gi, '#94a3b8')
   .replace(/#f59e0b/gi, '#475569')
-  .replace(/#fbbf24/gi, '#64748b')
-  .replace(/#3b82f6/gi, '#334155')
-  .replace(/#60a5fa/gi, '#475569')
+  .replace(/#ff6b00/gi, '#334155')
+  .replace(/#dc2626/gi, '#1e293b')
+  .replace(/#60a5fa/gi, '#64748b')
+  .replace(/#3b82f6/gi, '#475569')
+  .replace(/#1d4ed8/gi, '#1e293b')
 
 function buildIco(pngBuffers) {
-  // ICO header: 6 bytes
   const header = Buffer.alloc(6)
-  header.writeUInt16LE(0, 0) // Reserved
-  header.writeUInt16LE(1, 2) // Image type: 1 = ICO
-  header.writeUInt16LE(pngBuffers.length, 4) // Count of images
+  header.writeUInt16LE(0, 0)
+  header.writeUInt16LE(1, 2)
+  header.writeUInt16LE(pngBuffers.length, 4)
 
-  // Directory entries: 16 bytes per image
   const entries = []
   let offset = 6 + pngBuffers.length * 16
 
   for (const { buffer, size } of pngBuffers) {
     const entry = Buffer.alloc(16)
-    entry.writeUInt8(size >= 256 ? 0 : size, 0) // Width (0 means 256)
-    entry.writeUInt8(size >= 256 ? 0 : size, 1) // Height (0 means 256)
-    entry.writeUInt8(0, 2) // Color palette: 0 for 256+ colors
-    entry.writeUInt8(0, 3) // Reserved
-    entry.writeUInt16LE(1, 4) // Color planes: 1
-    entry.writeUInt16LE(32, 6) // Bits per pixel: 32
-    entry.writeUInt32LE(buffer.length, 8) // Image size in bytes
-    entry.writeUInt32LE(offset, 12) // Offset to image data
+    entry.writeUInt8(size >= 256 ? 0 : size, 0)
+    entry.writeUInt8(size >= 256 ? 0 : size, 1)
+    entry.writeUInt8(0, 2)
+    entry.writeUInt8(0, 3)
+    entry.writeUInt16LE(1, 4)
+    entry.writeUInt16LE(32, 6)
+    entry.writeUInt32LE(buffer.length, 8)
+    entry.writeUInt32LE(offset, 12)
     entries.push(entry)
     offset += buffer.length
   }
@@ -143,7 +147,7 @@ function buildIco(pngBuffers) {
 }
 
 async function run() {
-  console.log('[BondForge] Generating original pixel-perfect branding icons...')
+  console.log('[BondForge] Generating revolutionary 3D Cyber Anvil & Lightning icon suite...')
 
   // 1. build/icon.png (512x512)
   const icon512 = await sharp(Buffer.from(svgContent)).resize(512, 512).png().toBuffer()
@@ -176,7 +180,7 @@ async function run() {
     console.log(`✓ Created extension/icons/icon-off-${size}.png`)
   }
 
-  console.log('[BondForge] All icons generated successfully!')
+  console.log('[BondForge] Completely original icon suite created successfully!')
 }
 
 run().catch((err) => {

@@ -4,7 +4,7 @@
   "description": "BondForge: High-performance multi-network bonding & download acceleration engine",
   "main": "./out/main/index.js",
   "author": "Dhairya",
-  "homepage": "https://github.com/anmolkapil/plexo",
+  "homepage": "https://github.com/dhairya-404/BandForge",
   "scripts": {
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -84,5 +84,12 @@
     "fsevents@2.3.3": true,
     "koffi@2.16.3": true,
     "node-datachannel@0.32.3": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dhairya-404/BandForge.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dhairya-404/BandForge/issues"
   }
 }

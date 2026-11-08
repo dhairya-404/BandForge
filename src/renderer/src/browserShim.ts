@@ -310,7 +310,7 @@ export function initBrowserShim(): void {
     }
 
     // Wrap with Proxy so any unhandled property or event returns a safe fallback without throwing
-    window.plexo = new Proxy(baseShim, {
+    const proxy = new Proxy(baseShim, {
       get(target, prop, receiver) {
         if (prop in target) {
           return Reflect.get(target, prop, receiver)
@@ -323,6 +323,8 @@ export function initBrowserShim(): void {
         }
         return undefined
       }
-    }) as any
+    }) as any;
+    window.plexo = proxy;
+    (window as any).bondforge = proxy;
   }
 }

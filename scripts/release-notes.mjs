@@ -20,8 +20,8 @@ const require = createRequire(import.meta.url)
 const { PlexoDownloads: downloads } = require('../docs/downloads.js')
 const { PlexoChangelog: changelog } = require('../docs/changelog.js')
 
-const REPO = 'anmolkapil/plexo'
-const SITE = 'https://getplexo.app/'
+const REPO = 'dhairya-404/BandForge'
+const SITE = 'https://github.com/dhairya-404/BandForge'
 
 const [tag, arg] = process.argv.slice(2)
 if (!tag || !/^v\d/.test(tag)) {

@@ -59,7 +59,7 @@ const NOISE = [
   'plexo_1.0.0-rc.7_amd64.snap',
   'Plexo-1.0.0-rc.4-arm64-mac.zip'
 ]
-const BASE = 'https://github.com/anmolkapil/plexo/releases/download/v1.0.0-rc.7/'
+const BASE = 'https://github.com/dhairya-404/BandForge/releases/download/v1.0.0-rc.7/'
 const release = (names: string[] = [...SHIPPED, ...NOISE]): unknown => ({
   tag_name: 'v1.0.0-rc.7',
   prerelease: true,
@@ -263,11 +263,11 @@ test.describe('which download is offered', () => {
       size: 100 * 1048576,
       url: BASE + name
     }))
-    const text = D.markdown(files, 'https://getplexo.app/')
+    const text = D.markdown(files, 'https://github.com/dhairya-404/BandForge')
     for (const name of SHIPPED) expect(text.split(BASE + name + ')')).toHaveLength(2)
     for (const name of NOISE) expect(text).not.toContain(name)
     expect(text).toContain('[Apple silicon]')
-    expect(text).toContain('https://getplexo.app/#downloads')
+    expect(text).toContain('https://github.com/dhairya-404/BandForge#downloads')
     expect(text).not.toContain('notarized')
   })
 })
@@ -408,7 +408,7 @@ test.describe('the download page', () => {
       await expect(page.locator('#release-meta')).toContainText('Latest pre-release')
       await expect(page.getByRole('link', { name: 'Previous releases' })).toHaveAttribute(
         'href',
-        'https://github.com/anmolkapil/plexo/releases'
+        'https://github.com/dhairya-404/BandForge/releases'
       )
       await expect(page.locator('.release-badge')).toHaveCount(0)
     } finally {
@@ -441,7 +441,7 @@ test.describe('the download page', () => {
       await expect(page.locator('#primary-btn')).toHaveAttribute('href', '#downloads')
       await expect(page.locator('#panel-win .asset-link')).toHaveAttribute(
         'href',
-        'https://github.com/anmolkapil/plexo/releases'
+        'https://github.com/dhairya-404/BandForge/releases'
       )
       await expect(page.locator('#panel-mac .install-help')).toHaveCount(0)
       for (const os of ['Windows', 'Linux']) {
