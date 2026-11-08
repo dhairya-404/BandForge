@@ -103,13 +103,33 @@ interface AppStore {
 }
 
 // Settings saved by the main process, read once before the first paint (see InitialState).
-const initial = window.plexo.initialState
+// Safe fallback state for initial render or browser previews
+const defaultFallbackState: any = {
+  downloadSchedule: undefined,
+  homeDir: 'C:\\Users\\Dhairya',
+  downloadsDir: 'C:\\Users\\Dhairya\\Downloads',
+  themeSource: 'dark',
+  networkPreferences: {
+    wifi0: { customName: 'Home Wi-Fi (Primary)', colorId: 'blue' },
+    eth0: { customName: 'High-Speed Ethernet', colorId: 'green' },
+    usb0: { customName: '5G Mobile USB Tether', colorId: 'purple' }
+  },
+  downloadsAtOnce: 3,
+  speedLimit: undefined,
+  slowMode: false,
+  slowModeSpeed: 512 * 1024,
+  speedUnit: 'bytes',
+  destinationDir: undefined
+}
+
+const getApi = () => (typeof window !== 'undefined' ? ((window as any).bondforge || (window as any).plexo) : undefined)
+const initial = getApi()?.initialState || defaultFallbackState
 
 /** Every setting changes optimistically: the store is updated first so the UI feels instant,
  * then this saves it. The store stays the source of truth either way — a failed save just means
  * the change isn't remembered next launch. */
 function persist(patch: AppSettings): void {
-  window.plexo.updateSettings(patch).catch(() => {})
+  getApi()?.updateSettings?.(patch)?.catch?.(() => {})
 }
 
 /** Links let go here: a listing main sent before it heard so would bring them back. */
@@ -153,7 +173,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
     if (get().interfacesStatus !== 'ready') set({ interfacesStatus: 'loading' })
     set({ interfacesError: null })
     try {
-      get().receiveInterfaces(await window.plexo.listInterfaces())
+      get().receiveInterfaces(await (getApi()?.listInterfaces?.() || []))
     } catch (error) {
       set({
         interfacesStatus: 'error',
@@ -216,7 +236,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
 
   receiveLinks: async () => {
     // main lists every link still waiting, so a window that was closed or reloaded gets them back.
-    const pending = await window.plexo.pendingLinks().catch(() => [])
+    const pending = await (getApi()?.pendingLinks?.()?.catch?.(() => []) || [])
     const known = new Set(get().links.map((link) => link.id))
     const arrived = pending.filter((link) => !known.has(link.id) && !letGo.has(link.id))
     if (arrived.length === 0) return
@@ -244,7 +264,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
     if (!links.some((link) => link.id === id)) return
     letGo.add(id)
     // Started, main has already forgotten its sign-in.
-    if (!started) void window.plexo.dismissLink(id).catch(() => {})
+    if (!started) void getApi()?.dismissLink?.(id)?.catch?.(() => {})
     set({
       links: links.filter((link) => link.id !== id),
       ...(shownId === id && { shownId: null })

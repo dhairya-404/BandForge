@@ -109,7 +109,7 @@ export function DownloadsScreen(): React.JSX.Element {
   const [limitsPage, setLimitsPage] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const searchInputRef = useRef<HTMLInputElement>(null)
-  const isMac = window.plexo.platform === 'darwin'
+  const isMac = typeof window !== 'undefined' && ((window as any).bondforge || (window as any).plexo)?.platform === 'darwin'
   const tokens = useMemo(() => searchTokens(searchQuery), [searchQuery])
   const isSearching = tokens.length > 0
   const [now, setNow] = useState(() => Date.now())
@@ -462,8 +462,8 @@ const PLACEHOLDER_NETWORKS = [
   { solid: 'var(--icon-muted)', label: 'USB' },
   { solid: 'var(--icon-muted)', label: 'Ethernet' }
 ]
-const PASTE_SHORTCUT = window.plexo.platform === 'darwin' ? '⌘V' : 'Ctrl+V'
-const NEW_SHORTCUT = window.plexo.platform === 'darwin' ? '⌘N' : 'Ctrl+N'
+const PASTE_SHORTCUT = (typeof window !== 'undefined' && ((window as any).bondforge || (window as any).plexo)?.platform === 'darwin') ? '⌘V' : 'Ctrl+V'
+const NEW_SHORTCUT = (typeof window !== 'undefined' && ((window as any).bondforge || (window as any).plexo)?.platform === 'darwin') ? '⌘N' : 'Ctrl+N'
 
 /** Nothing listed yet: how to start one — or, with no network connected, how to get one. */
 function EmptyState(): React.JSX.Element {

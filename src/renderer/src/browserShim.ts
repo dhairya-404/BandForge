@@ -328,3 +328,9 @@ export function initBrowserShim(): void {
     (window as any).bondforge = proxy;
   }
 }
+
+
+// Auto-run immediately upon file load so window.plexo and window.bondforge are set before other modules run
+if (typeof window !== 'undefined') {
+  initBrowserShim()
+}

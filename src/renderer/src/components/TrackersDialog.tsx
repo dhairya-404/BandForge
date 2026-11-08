@@ -13,7 +13,7 @@ import {
 } from './ui/dialog'
 import { Textarea } from './ui/textarea'
 
-const SHORTCUT = window.plexo.platform === 'darwin' ? 'Cmd+Enter' : 'Ctrl+Enter'
+const SHORTCUT = (typeof window !== 'undefined' && ((window as any).bondforge || (window as any).plexo)?.platform === 'darwin') ? 'Cmd+Enter' : 'Ctrl+Enter'
 
 /**
  * Manages trackers for an active or paused torrent download.

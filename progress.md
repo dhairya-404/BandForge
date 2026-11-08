@@ -18,6 +18,15 @@
 
 ## Log
 
+### 2026-11-08: Fixed Vite browser blank screen & added comprehensive System Architecture to README
+- **Agent:** main-agent (Gemini 3.8 Flash)
+- **Branch:** chore/bondforge-init
+- **What:** Fixed uncaught TypeError in browser preview (Cannot read properties of undefined reading 'initialState') caused by ES module import hoisting by making browserShim self-initializing on module evaluation and safeguarding window.bondforge / window.plexo access across useAppStore.ts, theme.ts, downloadActionMeta.ts, useOpenedLinks.ts, TrackersDialog.tsx, and DownloadsScreen.tsx. Added comprehensive System Architecture section to README.md with detailed Mermaid pipeline flowchart, component breakdown table, and data flow specifications.
+- **Why:** User reported blank dark screen on http://localhost:5173 and requested system architecture in GitHub README.
+- **Files:** src/renderer/src/browserShim.ts, src/renderer/src/store/useAppStore.ts, src/renderer/src/theme.ts, src/renderer/src/components/downloadActionMeta.ts, src/renderer/src/hooks/useOpenedLinks.ts, src/renderer/src/components/TrackersDialog.tsx, src/renderer/src/screens/DownloadsScreen.tsx, README.md, progress.md.
+- **Verified:** Tested with Playwright headless chromium; verified root DOM renders 21,889+ characters with zero browser console errors and full Forge Studio UI loaded. Both typecheck:web and typecheck:node passed with exit code 0.
+- **Open / follow-ups:** Commit and push to origin main and chore/bondforge-init.
+
 ### 2026-11-08: Complete purge of upstream Plexo references and new 3D Cyber Anvil icon
 - **Agent:** main-agent (Gemini 3.8 Flash)
 - **Branch:** chore/bondforge-init\n- **What:** Completely purged all upstream Plexo artifacts and URLs to protect against copy accusations: deleted .github/FUNDING.yml, docs/CNAME, docs/og.png, and docs/screenshots; replaced docs/index.html with modern BondForge docs; updated package.json homepage/repository and electron-builder.yml to dhairya-404/BandForge; rewrote CONTRIBUTING.md and SECURITY.md; updated extension manifest and options; purged getplexo.app and anmolkapil across the entire codebase. Generated new proprietary 3D Cyber Anvil & Lightning geometric icon suite.

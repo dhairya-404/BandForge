@@ -27,3 +27,4 @@
 ## Log
 - 2026-11-08 10:25: `main-agent`: Initialized BondForge workspace, extracted baseline engine, configured devflow files.
 - 2026-11-08 19:10: `main-agent`: Renamed project to BondForge, implemented bespoke Studio UI, configured GitHub remote.
+- 2026-11-08 20:00: `main-agent`: Fixed browser blank screen issue & documented full system architecture with Mermaid in README.

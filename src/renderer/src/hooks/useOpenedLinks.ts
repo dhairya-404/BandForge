@@ -14,7 +14,7 @@ export function useOpenedLinks(): void {
   }, [receiveLinks])
 }
 
-const isMac = window.plexo.platform === 'darwin'
+const isMac = typeof window !== 'undefined' && ((window as any).bondforge || (window as any).plexo)?.platform === 'darwin'
 
 /** The ways into New download from anywhere in the window, as download managers have them:
  * pasting a link (outside a text field), ⌘N / Ctrl+N, and dropping a link, a .torrent or an
