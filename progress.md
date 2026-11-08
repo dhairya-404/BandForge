@@ -18,6 +18,15 @@
 
 ## Log
 
+### 2026-11-08: Replaced all icon assets with original BondForge branding & updated MIT License
+- **Agent:** main-agent (Gemini 3.8 Flash)
+- **Branch:** chore/bondforge-init\n- **What:** Replaced all legacy icon assets with a 100% original, high-resolution vector emblem featuring the BondForge cyber-squircle with 3-channel energy convergence (Cyan, Amber, Cobalt). Generated uild/icon.png (512x512), uild/icon.ico (multi-resolution Windows ICO), and browser extension icons (
+8.png, 8.png, .png, .png, and off-state variants) using Node.js script scripts/generate-bondforge-icons.mjs and sharp. Updated LICENSE to officially assign copyright to Dhairya (2026).
+- **Why:** Protect the repository from copy claims and ensure clean original ownership and licensing on GitHub.
+- **Files:** LICENSE, uild/icon.png, uild/icon.ico, extension/icons/, scripts/generate-bondforge-icons.mjs, progress.md.
+- **Verified:** Icon dimensions confirmed (512x512 PNG, ICO multi-layer), pm run typecheck:extension passed (exit 0).
+- **Open / follow-ups:** Commit and push to GitHub remote.
+
 ### 2026-11-08: Renamed project to BondForge and configured GitHub remote
 - **Agent:** `main-agent` (Gemini 3.8 Flash)
 - **Branch:** `chore/bondforge-init`
