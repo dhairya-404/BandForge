@@ -5,6 +5,7 @@ import type {
   DownloadState,
   DownloadUpdate,
   FinishedDownload,
+  InitialState,
   NetworkInterfaceInfo,
   NetworkPreference,
   NetworkPreferences,
@@ -104,7 +105,7 @@ interface AppStore {
 
 // Settings saved by the main process, read once before the first paint (see InitialState).
 // Safe fallback state for initial render or browser previews
-const defaultFallbackState: any = {
+const defaultFallbackState: InitialState = {
   downloadSchedule: undefined,
   homeDir: 'C:\\Users\\Dhairya',
   downloadsDir: 'C:\\Users\\Dhairya\\Downloads',
@@ -122,14 +123,17 @@ const defaultFallbackState: any = {
   destinationDir: undefined
 }
 
-const getApi = () => (typeof window !== 'undefined' ? ((window as any).bondforge || (window as any).plexo) : undefined)
+const getApi = (): typeof window.plexo | undefined =>
+  typeof window !== 'undefined' ? window.bondforge || window.plexo : undefined
 const initial = getApi()?.initialState || defaultFallbackState
 
 /** Every setting changes optimistically: the store is updated first so the UI feels instant,
  * then this saves it. The store stays the source of truth either way — a failed save just means
  * the change isn't remembered next launch. */
 function persist(patch: AppSettings): void {
-  getApi()?.updateSettings?.(patch)?.catch?.(() => {})
+  getApi()
+    ?.updateSettings?.(patch)
+    ?.catch?.(() => {})
 }
 
 /** Links let go here: a listing main sent before it heard so would bring them back. */
@@ -236,7 +240,9 @@ export const useAppStore = create<AppStore>((set, get) => ({
 
   receiveLinks: async () => {
     // main lists every link still waiting, so a window that was closed or reloaded gets them back.
-    const pending = await (getApi()?.pendingLinks?.()?.catch?.(() => []) || [])
+    const pending = await (getApi()
+      ?.pendingLinks?.()
+      ?.catch?.(() => []) || [])
     const known = new Set(get().links.map((link) => link.id))
     const arrived = pending.filter((link) => !known.has(link.id) && !letGo.has(link.id))
     if (arrived.length === 0) return
@@ -264,7 +270,10 @@ export const useAppStore = create<AppStore>((set, get) => ({
     if (!links.some((link) => link.id === id)) return
     letGo.add(id)
     // Started, main has already forgotten its sign-in.
-    if (!started) void getApi()?.dismissLink?.(id)?.catch?.(() => {})
+    if (!started)
+      void getApi()
+        ?.dismissLink?.(id)
+        ?.catch?.(() => {})
     set({
       links: links.filter((link) => link.id !== id),
       ...(shownId === id && { shownId: null })

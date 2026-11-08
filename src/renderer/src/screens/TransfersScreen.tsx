@@ -123,9 +123,7 @@ export function TransfersScreen({
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
                         <FileCode className="size-4 text-cyan-400 shrink-0" />
-                        <h4 className="text-[14px] font-bold text-white truncate">
-                          {dl.fileName}
-                        </h4>
+                        <h4 className="text-[14px] font-bold text-white truncate">{dl.fileName}</h4>
                         <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/25">
                           {dl.status.toUpperCase()}
                         </span>
@@ -193,7 +191,7 @@ export function TransfersScreen({
                     />
                     <div
                       className="bg-blue-400 h-full transition-all duration-300"
-                      style={{ width: `${pct * 0.20}%` }}
+                      style={{ width: `${pct * 0.2}%` }}
                       title="Ethernet LAN Chunks"
                     />
                   </div>
@@ -210,9 +208,7 @@ export function TransfersScreen({
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="size-4 text-emerald-400 shrink-0" />
-                    <h4 className="text-[13.5px] font-bold text-white truncate">
-                      {item.fileName}
-                    </h4>
+                    <h4 className="text-[13.5px] font-bold text-white truncate">{item.fileName}</h4>
                     <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                       COMPLETED
                     </span>
@@ -220,7 +216,9 @@ export function TransfersScreen({
                   <div className="flex items-center gap-3 text-[11.5px] font-mono text-[var(--text-tertiary)] mt-1">
                     <span>{formatBytes(item.totalBytes)}</span>
                     <span>•</span>
-                    <span>Average: {formatSpeed(item.speedBytesPerSec || 35 * 1024 * 1024, speedUnit)}</span>
+                    <span>
+                      Average: {formatSpeed(item.speedBytesPerSec || 35 * 1024 * 1024, speedUnit)}
+                    </span>
                     <span>•</span>
                     <span>Saved to Downloads</span>
                   </div>

@@ -8,9 +8,7 @@ export function TitleBar(): React.JSX.Element {
   const interfaces = useAppStore((state) => state.interfaces)
   const speedUnit = useAppStore((state) => state.speedUnit)
 
-  const activeDownloads = Object.values(downloads).filter(
-    (d) => d.status === 'downloading'
-  )
+  const activeDownloads = Object.values(downloads).filter((d) => d.status === 'downloading')
 
   const totalSpeed = activeDownloads.reduce((acc, d) => {
     return acc + (d.speedBytesPerSec || 0)
@@ -33,7 +31,9 @@ export function TitleBar(): React.JSX.Element {
       <div className="flex items-center gap-2 font-mono [-webkit-app-region:no-drag]">
         <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800 text-[11px]">
           <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-slate-300 font-semibold">{interfaces.length || 3} PATHS BONDED</span>
+          <span className="text-slate-300 font-semibold">
+            {interfaces.length || 3} PATHS BONDED
+          </span>
         </div>
         <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-950/50 border border-cyan-500/30 text-[11px] text-cyan-300 font-bold">
           <Activity className="size-3 text-cyan-400" />

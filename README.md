@@ -23,12 +23,12 @@
 
 ## ⚡ Features
 
-* **Multi-Network Aggregation ($0 Server Cost):** Combines Wi-Fi, Ethernet, and 4G/5G mobile tethering on your local machine using raw C FFI socket binding (`koffi`) and Windows source routing.
-* **Dynamic Range Chunking:** Automatically segments large downloads into parallel byte ranges across participating interfaces.
-* **The Forge Matrix Visualizer:** Real-time stream telemetry showing individual throughput per adapter converging into the unified forged stream.
-* **Multi-Route Auto-Hedging & Failover:** Seamlessly balances connections across adapters, auto-retrying and reassigning chunks if one connection suffers latency spikes or disconnects.
-* **Per-Network Controls:** Configure individual traffic weights, toggle interfaces mid-download, and set custom data limits.
-* **Studio UI:** Cyber-slate dark console with real-time throughput metrics, chunk visualizer strips, and hardware adapter health decks.
+- **Multi-Network Aggregation ($0 Server Cost):** Combines Wi-Fi, Ethernet, and 4G/5G mobile tethering on your local machine using raw C FFI socket binding (`koffi`) and Windows source routing.
+- **Dynamic Range Chunking:** Automatically segments large downloads into parallel byte ranges across participating interfaces.
+- **The Forge Matrix Visualizer:** Real-time stream telemetry showing individual throughput per adapter converging into the unified forged stream.
+- **Multi-Route Auto-Hedging & Failover:** Seamlessly balances connections across adapters, auto-retrying and reassigning chunks if one connection suffers latency spikes or disconnects.
+- **Per-Network Controls:** Configure individual traffic weights, toggle interfaces mid-download, and set custom data limits.
+- **Studio UI:** Cyber-slate dark console with real-time throughput metrics, chunk visualizer strips, and hardware adapter health decks.
 
 ---
 
@@ -109,13 +109,13 @@ flowchart TD
 
 ### Component Layer Breakdown
 
-| Layer | Technologies | Responsibilities |
-|---|---|---|
-| **Presentation (UI)** | React 19, Tailwind CSS v4, Lucide, Zustand | Studio dark theme, dynamic Forge Convergence Matrix, 60Hz aggregated throughput gauges, hardware adapter health monitors. |
-| **Desktop Shell** | Electron 44, ContextBridge, Vite HMR | Secure sandboxed IPC boundary, window lifecycle, native dialogs, global keyboard shortcuts. |
-| **Engine Orchestrator** | Node.js, TypeScript | Dynamic range chunk calculator, work-stealing task queue, slow connection auto-hedging, retry policies. |
-| **Native Socket Engine** | C FFI (`koffi`), WinSock2 | Direct low-level OS socket binding to interface IP addresses, bypassing the default gateway routing table. |
-| **Storage Engine** | Node.js Native I/O (`fs`), Sparse Files | Direct block positioning, atomic chunk commits, real-time download progress maps. |
+| Layer                    | Technologies                               | Responsibilities                                                                                                          |
+| ------------------------ | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| **Presentation (UI)**    | React 19, Tailwind CSS v4, Lucide, Zustand | Studio dark theme, dynamic Forge Convergence Matrix, 60Hz aggregated throughput gauges, hardware adapter health monitors. |
+| **Desktop Shell**        | Electron 44, ContextBridge, Vite HMR       | Secure sandboxed IPC boundary, window lifecycle, native dialogs, global keyboard shortcuts.                               |
+| **Engine Orchestrator**  | Node.js, TypeScript                        | Dynamic range chunk calculator, work-stealing task queue, slow connection auto-hedging, retry policies.                   |
+| **Native Socket Engine** | C FFI (`koffi`), WinSock2                  | Direct low-level OS socket binding to interface IP addresses, bypassing the default gateway routing table.                |
+| **Storage Engine**       | Node.js Native I/O (`fs`), Sparse Files    | Direct block positioning, atomic chunk commits, real-time download progress maps.                                         |
 
 ---
 
@@ -133,11 +133,13 @@ flowchart TD
 ## 🚀 Quick Start
 
 ### Prerequisites
-* **Operating System:** Windows 10/11 (macOS / Linux support via socket FFI)
-* **Node.js:** v20+ or v22+
-* **npm:** v10+
+
+- **Operating System:** Windows 10/11 (macOS / Linux support via socket FFI)
+- **Node.js:** v20+ or v22+
+- **npm:** v10+
 
 ### Development Setup
+
 ```bash
 # Clone the repository
 git clone https://github.com/dhairya-404/BandForge.git
@@ -151,6 +153,7 @@ npm run dev
 ```
 
 ### Production Build
+
 ```bash
 # Typecheck TypeScript
 npm run typecheck
@@ -158,6 +161,7 @@ npm run typecheck
 # Build and unpack native desktop application
 npm run build:unpack
 ```
+
 The compiled standalone executable will be located in `dist/win-unpacked/bondforge.exe`.
 
 ---

@@ -1,13 +1,5 @@
 import React from 'react'
-import {
-  Flame,
-  ArrowDownToLine,
-  Network,
-  Settings,
-  HardDrive,
-  Zap,
-  Activity
-} from 'lucide-react'
+import { Flame, ArrowDownToLine, Network, Settings, HardDrive, Zap, Activity } from 'lucide-react'
 import { formatBytes } from '../utils/format'
 import { useFreeSpace } from '../hooks/useFreeSpace'
 import { useAppStore } from '../store/useAppStore'
@@ -59,10 +51,11 @@ export function BondForgeSidebar({
       <div className="p-4">
         <button
           onClick={onOpenNewDownload}
+          aria-label="New download"
           className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-semibold text-[13.5px] text-[#02192e] bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-400 hover:from-cyan-300 hover:to-teal-200 shadow-md shadow-cyan-500/25 transition-all duration-150 active:scale-[0.98] cursor-pointer"
         >
           <Zap className="size-4 fill-current" />
-          <span>Forge New Transfer</span>
+          <span>New download</span>
         </button>
       </div>
 

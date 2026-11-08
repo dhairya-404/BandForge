@@ -143,7 +143,7 @@ function buildIco(pngBuffers) {
     offset += buffer.length
   }
 
-  return Buffer.concat([header, ...entries, ...pngBuffers.map(p => p.buffer)])
+  return Buffer.concat([header, ...entries, ...pngBuffers.map((p) => p.buffer)])
 }
 
 async function run() {

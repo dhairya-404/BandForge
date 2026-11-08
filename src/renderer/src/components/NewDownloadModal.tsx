@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import {
   Flame,
   X,
@@ -11,39 +11,23 @@ import {
   Zap,
   Clipboard
 } from 'lucide-react'
+import type { HttpProbeResult, ProbeResult, StartHttpDownloadRequest } from '@shared/types'
 import { useAppStore } from '../store/useAppStore'
 import { formatBytes } from '../utils/format'
 
-export function NewDownloadModal(): React.JSX.Element | null {
-  const open = useAppStore((state) => state.newDownloadOpen)
+function NewDownloadModalContent(): React.JSX.Element {
   const close = useAppStore((state) => state.closeNewDownload)
   const destinationDir = useAppStore((state) => state.destinationDir)
   const setDestinationDir = useAppStore((state) => state.setDestinationDir)
   const interfaces = useAppStore((state) => state.interfaces)
 
-  const [url, setUrl] = useState('')
+  const [url, setUrl] = useState('https://releases.ubuntu.com/24.04/ubuntu-24.04-desktop-amd64.iso')
   const [probing, setProbing] = useState(false)
-  const [probeResult, setProbeResult] = useState<any>(null)
+  const [probeResult, setProbeResult] = useState<ProbeResult | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [selectedAdapters, setSelectedAdapters] = useState<string[]>([
-    'wifi0',
-    'usb0',
-    'eth0'
-  ])
+  const [selectedAdapters, setSelectedAdapters] = useState<string[]>(['wifi0', 'usb0', 'eth0'])
 
-  // Reset or pre-fill on open
-  useEffect(() => {
-    if (open) {
-      setError(null)
-      setProbeResult(null)
-      setUrl('https://releases.ubuntu.com/24.04/ubuntu-24.04-desktop-amd64.iso')
-      handleProbe('https://releases.ubuntu.com/24.04/ubuntu-24.04-desktop-amd64.iso')
-    }
-  }, [open])
-
-  if (!open) return null
-
-  const handleProbe = async (link: string): Promise<void> => {
+  const handleProbe = useCallback(async (link: string): Promise<void> => {
     const trimmed = link.trim()
     if (!trimmed || !trimmed.startsWith('http')) return
     setProbing(true)
@@ -53,26 +37,42 @@ export function NewDownloadModal(): React.JSX.Element | null {
         const res = await window.plexo.probeUrl(trimmed)
         setProbeResult(res)
       } else {
-        setProbeResult({
+        const fallback: HttpProbeResult = {
+          kind: 'http',
+          requestedUrl: trimmed,
+          finalUrl: trimmed,
           suggestedFileName: trimmed.split('/').pop()?.split('?')[0] || 'accelerated-download.bin',
           totalBytes: 5.8 * 1024 * 1024 * 1024,
-          supportsRanges: true
-        })
+          supportsRanges: true,
+          contentType: 'application/x-iso9660-image',
+          etag: null,
+          lastModified: null
+        }
+        setProbeResult(fallback)
       }
-    } catch (err: any) {
-      setError(err?.message || 'Could not probe URL.')
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Could not probe URL.')
     } finally {
       setProbing(false)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    let active = true
+    const timer = setTimeout(() => {
+      if (active) {
+        void handleProbe('https://releases.ubuntu.com/24.04/ubuntu-24.04-desktop-amd64.iso')
+      }
+    }, 0)
+    return () => {
+      active = false
+      clearTimeout(timer)
+    }
+  }, [handleProbe])
 
   const handleToggleAdapter = (id: string): void => {
     setSelectedAdapters((prev) =>
-      prev.includes(id)
-        ? prev.length > 1
-          ? prev.filter((a) => a !== id)
-          : prev
-        : [...prev, id]
+      prev.includes(id) ? (prev.length > 1 ? prev.filter((a) => a !== id) : prev) : [...prev, id]
     )
   }
 
@@ -96,7 +96,7 @@ export function NewDownloadModal(): React.JSX.Element | null {
   const handleStart = async (): Promise<void> => {
     if (!url.trim()) return
     try {
-      const req: any = {
+      const req: StartHttpDownloadRequest = {
         kind: 'http',
         url: url.trim(),
         destinationDir: destinationDir || 'C:\\Users\\Dhairya\\Downloads',
@@ -109,18 +109,19 @@ export function NewDownloadModal(): React.JSX.Element | null {
       }
       await window.plexo?.startDownload(req)
       close()
-    } catch (err: any) {
-      setError(err?.message || 'Failed to start transfer.')
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to start transfer.')
     }
   }
 
-  const defaultInterfacesList = interfaces.length > 0
-    ? interfaces
-    : [
-        { id: 'wifi0', displayName: 'Primary Wi-Fi 5GHz', kind: 'wifi' as const },
-        { id: 'usb0', displayName: '5G Mobile USB Tether', kind: 'usb' as const },
-        { id: 'eth0', displayName: 'Gigabit Ethernet', kind: 'ethernet' as const }
-      ]
+  const defaultInterfacesList =
+    interfaces.length > 0
+      ? interfaces
+      : [
+          { id: 'wifi0', displayName: 'Primary Wi-Fi 5GHz', kind: 'wifi' as const },
+          { id: 'usb0', displayName: '5G Mobile USB Tether', kind: 'usb' as const },
+          { id: 'eth0', displayName: 'Gigabit Ethernet', kind: 'ethernet' as const }
+        ]
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
@@ -151,7 +152,9 @@ export function NewDownloadModal(): React.JSX.Element | null {
 
         {/* URL Input */}
         <div className="space-y-1.5">
-          <label className="text-[12px] font-mono text-slate-300">Target File URL (HTTP/HTTPS Range)</label>
+          <label className="text-[12px] font-mono text-slate-300">
+            Target File URL (HTTP/HTTPS Range)
+          </label>
           <div className="flex items-center gap-2">
             <input
               type="text"
@@ -215,12 +218,13 @@ export function NewDownloadModal(): React.JSX.Element | null {
 
         {/* Participating Network Adapters */}
         <div className="space-y-2">
-          <label className="text-[12px] font-mono text-slate-300">Participating Network Channels</label>
+          <label className="text-[12px] font-mono text-slate-300">
+            Participating Network Channels
+          </label>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             {defaultInterfacesList.map((iface) => {
               const selected = selectedAdapters.includes(iface.id)
-              const Icon =
-                iface.kind === 'wifi' ? Wifi : iface.kind === 'usb' ? Smartphone : Cable
+              const Icon = iface.kind === 'wifi' ? Wifi : iface.kind === 'usb' ? Smartphone : Cable
 
               return (
                 <button
@@ -284,4 +288,10 @@ export function NewDownloadModal(): React.JSX.Element | null {
       </div>
     </div>
   )
+}
+
+export function NewDownloadModal(): React.JSX.Element | null {
+  const open = useAppStore((state) => state.newDownloadOpen)
+  if (!open) return null
+  return <NewDownloadModalContent />
 }

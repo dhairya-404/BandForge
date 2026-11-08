@@ -8,6 +8,7 @@
 
 ```markdown
 ## Q-000: <short title>
+
 - **From:** <agent name> (<model>)
 - **Date:** YYYY-MM-DD HH:MM
 - **Related task:** T-xxx / none
@@ -18,5 +19,5 @@
 ```
 
 ## Questions
-<!-- New questions below this line. -->
 
+<!-- New questions below this line. -->

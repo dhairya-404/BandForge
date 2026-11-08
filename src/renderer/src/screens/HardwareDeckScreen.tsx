@@ -54,22 +54,24 @@ export function HardwareDeckScreen(): React.JSX.Element {
     }
   ]
 
-  const displayList = interfaces.length > 0
-    ? interfaces.map((iface) => {
-        const ip = iface.addresses.find((a) => a.family === 4)?.address || '127.0.0.1'
-        return {
-          id: iface.id,
-          displayName: iface.displayName,
-          device: iface.device,
-          ip: ip,
-          mac: iface.mac || '00:1A:2B:3C:4D:5E',
-          kind: iface.kind,
-          speed: iface.kind === 'wifi' ? '18.5 MB/s' : iface.kind === 'usb' ? '14.2 MB/s' : '8.1 MB/s',
-          ping: iface.kind === 'wifi' ? '14 ms' : iface.kind === 'usb' ? '28 ms' : '9 ms',
-          status: 'active'
-        }
-      })
-    : defaultDeck
+  const displayList =
+    interfaces.length > 0
+      ? interfaces.map((iface) => {
+          const ip = iface.addresses.find((a) => a.family === 4)?.address || '127.0.0.1'
+          return {
+            id: iface.id,
+            displayName: iface.displayName,
+            device: iface.device,
+            ip: ip,
+            mac: iface.mac || '00:1A:2B:3C:4D:5E',
+            kind: iface.kind,
+            speed:
+              iface.kind === 'wifi' ? '18.5 MB/s' : iface.kind === 'usb' ? '14.2 MB/s' : '8.1 MB/s',
+            ping: iface.kind === 'wifi' ? '14 ms' : iface.kind === 'usb' ? '28 ms' : '9 ms',
+            status: 'active'
+          }
+        })
+      : defaultDeck
 
   return (
     <div className="flex-1 overflow-y-auto p-6 space-y-6">
@@ -83,7 +85,8 @@ export function HardwareDeckScreen(): React.JSX.Element {
             </h1>
           </div>
           <p className="text-[13px] text-[var(--text-secondary)] mt-1">
-            Configure physical network cards, set traffic weights, and manage socket binding policies.
+            Configure physical network cards, set traffic weights, and manage socket binding
+            policies.
           </p>
         </div>
 
@@ -102,8 +105,7 @@ export function HardwareDeckScreen(): React.JSX.Element {
           const isOff = Boolean(networkPreferences[item.id]?.off)
           const customName = networkPreferences[item.id]?.customName || item.displayName
 
-          const Icon =
-            item.kind === 'wifi' ? Wifi : item.kind === 'usb' ? Smartphone : Cable
+          const Icon = item.kind === 'wifi' ? Wifi : item.kind === 'usb' ? Smartphone : Cable
 
           const accentColor =
             item.kind === 'wifi'
@@ -124,7 +126,9 @@ export function HardwareDeckScreen(): React.JSX.Element {
               {/* Card Header */}
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
-                  <div className={`size-11 rounded-xl flex items-center justify-center border ${accentColor}`}>
+                  <div
+                    className={`size-11 rounded-xl flex items-center justify-center border ${accentColor}`}
+                  >
                     <Icon className="size-5" />
                   </div>
                   <div>
@@ -139,9 +143,7 @@ export function HardwareDeckScreen(): React.JSX.Element {
 
                 {/* Bonding Toggle */}
                 <button
-                  onClick={() =>
-                    setNetworkPreference(item.id, { off: !isOff ? true : undefined })
-                  }
+                  onClick={() => setNetworkPreference(item.id, { off: !isOff ? true : undefined })}
                   className={`size-6 rounded-full flex items-center justify-center transition-colors cursor-pointer ${
                     isOff
                       ? 'bg-slate-700 text-slate-400'
@@ -204,11 +206,14 @@ export function HardwareDeckScreen(): React.JSX.Element {
       <div className="rounded-xl border border-cyan-500/20 bg-cyan-950/10 p-4 flex items-start gap-3">
         <ShieldCheck className="size-5 text-cyan-400 shrink-0 mt-0.5" />
         <div className="space-y-1">
-          <h4 className="text-[13.5px] font-bold text-white">Hardware C FFI Socket Binding Active</h4>
+          <h4 className="text-[13.5px] font-bold text-white">
+            Hardware C FFI Socket Binding Active
+          </h4>
           <p className="text-[12.5px] text-[var(--text-secondary)] leading-relaxed">
-            BondForge binds each parallel TCP stream directly to physical Windows adapter interface IP addresses
-            using native C FFI (<code className="text-cyan-300">koffi</code>) and winsock2 routing. This guarantees true
-            multi-network aggregation without needing an expensive cloud VPN or remote server.
+            BondForge binds each parallel TCP stream directly to physical Windows adapter interface
+            IP addresses using native C FFI (<code className="text-cyan-300">koffi</code>) and
+            winsock2 routing. This guarantees true multi-network aggregation without needing an
+            expensive cloud VPN or remote server.
           </p>
         </div>
       </div>

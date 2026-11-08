@@ -8,6 +8,7 @@
 
 ```markdown
 ## Q-000: <short title>
+
 - **Asked by:** <agent> on YYYY-MM-DD
 - **Question:** <copied from AgentQuestions.md>
 - **Answer:** <answer>
@@ -16,5 +17,5 @@
 ```
 
 ## Answers
-<!-- New answers below this line. -->
 
+<!-- New answers below this line. -->

@@ -175,4 +175,7 @@ export function resolveNetworkVisual(
 }
 
 /** In px. Drawn inside the window, so popups have to keep clear of it themselves. */
-export const TITLE_BAR_HEIGHT = (typeof window !== 'undefined' && ((window as any).bondforge || (window as any).plexo)?.platform === 'darwin') ? 32 : 44
+export const TITLE_BAR_HEIGHT =
+  typeof window !== 'undefined' && (window.bondforge || window.plexo)?.platform === 'darwin'
+    ? 32
+    : 44

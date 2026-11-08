@@ -104,9 +104,7 @@ export function ForgeDashboardScreen({
             <Flame className="size-4 text-amber-400" />
           </div>
           <div className="my-2">
-            <div className="font-mono text-3xl font-extrabold text-amber-300">
-              2.85x
-            </div>
+            <div className="font-mono text-3xl font-extrabold text-amber-300">2.85x</div>
             <span className="text-[11px] text-amber-400/80 font-mono">
               +185% boost over single WAN
             </span>
@@ -298,9 +296,13 @@ export function ForgeDashboardScreen({
                         </span>
                       </div>
                       <div className="flex items-center gap-3 text-[12px] font-mono text-[var(--text-secondary)] mt-1">
-                        <span>{formatBytes(dl.bytesDownloaded || 0)} / {formatBytes(dl.totalBytes || 0)}</span>
+                        <span>
+                          {formatBytes(dl.bytesDownloaded || 0)} / {formatBytes(dl.totalBytes || 0)}
+                        </span>
                         <span>•</span>
-                        <span className="text-cyan-300 font-semibold">{formatSpeed(dl.speedBytesPerSec || 0, speedUnit)}</span>
+                        <span className="text-cyan-300 font-semibold">
+                          {formatSpeed(dl.speedBytesPerSec || 0, speedUnit)}
+                        </span>
                         <span>•</span>
                         <span>{pct}% Completed</span>
                       </div>
@@ -356,7 +358,7 @@ export function ForgeDashboardScreen({
                       />
                       <div
                         className="bg-blue-400 h-full transition-all duration-300"
-                        style={{ width: `${pct * 0.20}%` }}
+                        style={{ width: `${pct * 0.2}%` }}
                         title="Ethernet Chunks"
                       />
                     </div>

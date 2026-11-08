@@ -8,6 +8,7 @@
 
 ```markdown
 ## R-000: <short title>
+
 - **Reported by:** <agent> on YYYY-MM-DD HH:MM
 - **About:** <agent name / "system">
 - **What happened:** <facts only>
@@ -18,5 +19,5 @@
 ```
 
 ## Reports
-<!-- New reports below this line. -->
 
+<!-- New reports below this line. -->

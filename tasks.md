@@ -8,6 +8,7 @@
 
 ```markdown
 ## T-000: <short title>
+
 - **Assigned to:** <agent name>
 - **Assigned by / date:** <main agent> on YYYY-MM-DD
 - **Priority:** high / medium / low
@@ -22,6 +23,7 @@
 ## Active tasks
 
 ## T-005: Remote Repository Setup & GitHub Push
+
 - **Assigned to:** `main-agent`
 - **Assigned by / date:** Dhairya on 2026-11-08
 - **Priority:** high
@@ -34,6 +36,7 @@
 - **Notes:** Configured remote origin and preparing push.
 
 ## T-004: Multi-Network Engine Scaling & Dynamic RTT Hedging
+
 - **Assigned to:** `main-agent`
 - **Assigned by / date:** Dhairya on 2026-11-08
 - **Priority:** high
@@ -47,6 +50,7 @@
 ## Done
 
 ## T-003: Complete BondForge UI Redesign & Studio Architecture
+
 - **Assigned to:** `main-agent`
 - **Assigned by / date:** Dhairya on 2026-11-08
 - **Priority:** high
@@ -58,6 +62,7 @@
 - **Notes:** Implemented, verified with `npm run typecheck:web` (exit 0) and `electron-vite build` (exit 0). Bundle size reduced from 1.7 MB to 770 kB.
 
 ## T-001: Workspace Initialization & Brand Transformation to BondForge
+
 - **Assigned to:** `main-agent`
 - **Assigned by / date:** Dhairya on 2026-11-08
 - **Priority:** high
@@ -69,6 +74,7 @@
 - **Notes:** Completed. Initial commit created, devflow files populated, and Git branch structure active.
 
 ## T-002: Dependency Installation & Dev Environment Verification
+
 - **Assigned to:** `main-agent`
 - **Assigned by / date:** Dhairya on 2026-11-08
 - **Priority:** high

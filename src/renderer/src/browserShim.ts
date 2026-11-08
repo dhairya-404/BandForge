@@ -1,4 +1,14 @@
-import type { InitialState, NetworkInterfaceInfo } from '@shared/types'
+import type {
+  DownloadUpdate,
+  HttpBlockState,
+  HttpDownloadNetwork,
+  HttpDownloadState,
+  HttpStreamState,
+  InitialState,
+  NetworkInterfaceInfo,
+  ProbeResult,
+  StartDownloadRequest
+} from '@shared/types'
 
 export const defaultInitialState: InitialState = {
   downloadSchedule: undefined,
@@ -42,8 +52,8 @@ export const defaultInterfaces: NetworkInterfaceInfo[] = [
   }
 ]
 
-const activeDownloadsMap = new Map<string, any>()
-const updateListeners = new Set<(update: any) => void>()
+const activeDownloadsMap = new Map<string, HttpDownloadState>()
+const updateListeners = new Set<(update: DownloadUpdate) => void>()
 const networkListeners = new Set<(networks: NetworkInterfaceInfo[]) => void>()
 
 export function initBrowserShim(): void {
@@ -53,40 +63,46 @@ export function initBrowserShim(): void {
     console.info('[BondForge] Initializing dynamic multi-network browser engine shim.')
     const totalBytes = 1024 * 1024 * 1024 * 1.5
 
-    const baseShim: Record<string, any> = {
+    const baseShim: Record<string, unknown> = {
       platform: 'win32',
       initialState: defaultInitialState,
-      listInterfaces: async () => defaultInterfaces,
-      deviceBindingSupported: async () => true,
-      openNetworkSettings: async () => {},
-      updateSettings: async () => {},
-      probeUrl: async (url: string) => {
+      listInterfaces: async (): Promise<NetworkInterfaceInfo[]> => defaultInterfaces,
+      deviceBindingSupported: async (): Promise<boolean> => true,
+      openNetworkSettings: async (): Promise<void> => {},
+      updateSettings: async (): Promise<void> => {},
+      probeUrl: async (url: string): Promise<ProbeResult> => {
         const cleanName = url.split('/').pop()?.split('?')[0] || 'ubuntu-24.04-desktop-amd64.iso'
         return {
-          kind: 'http' as const,
+          kind: 'http',
           requestedUrl: url,
           finalUrl: url,
           supportsRanges: true,
           totalBytes: totalBytes,
-          suggestedFileName: cleanName.endsWith('.iso') || cleanName.includes('.') ? cleanName : cleanName + '.bin',
-          contentType: 'application/octet-stream',
+          suggestedFileName: cleanName,
+          contentType: 'application/x-iso9660-image',
           etag: '"fast-hash-1234"',
           lastModified: new Date().toUTCString()
         }
       },
-      chooseDestinationFolder: async () => 'C:\\Users\\Dhairya\\Downloads',
-      chooseDownloadFile: async () => null,
-      pathForFile: () => '',
-      readClipboardText: async () => 'https://releases.ubuntu.com/24.04/ubuntu-24.04-desktop-amd64.iso',
-      revealDownload: async () => {},
-      openDownload: async () => {},
-      startDownload: async (request: any) => {
+      chooseDestinationFolder: async (): Promise<string> => 'C:\\Users\\Dhairya\\Downloads',
+      chooseDownloadFile: async (): Promise<null> => null,
+      pathForFile: (): string => '',
+      readClipboardText: async (): Promise<string> =>
+        'https://releases.ubuntu.com/24.04/ubuntu-24.04-desktop-amd64.iso',
+      revealDownload: async (): Promise<void> => {},
+      openDownload: async (): Promise<void> => {},
+      startDownload: async (request: StartDownloadRequest): Promise<string> => {
         const id = 'dl-' + Date.now()
-        const total = request.totalBytes || totalBytes
+        const total =
+          'totalBytes' in request &&
+          typeof request.totalBytes === 'number' &&
+          request.totalBytes > 0
+            ? request.totalBytes
+            : totalBytes
         const blockCount = Math.max(1, Math.min(60, Math.ceil(total / (25 * 1024 * 1024))))
         const blockSize = Math.ceil(total / blockCount)
 
-        const initialNetworks: any[] = [
+        const initialNetworks: HttpDownloadNetwork[] = [
           {
             id: 'wifi0',
             label: 'Wi-Fi (Primary 5GHz)',
@@ -122,7 +138,7 @@ export function initBrowserShim(): void {
           }
         ]
 
-        const initialStreams: any[] = [
+        const initialStreams: HttpStreamState[] = [
           {
             id: 1,
             interfaceId: 'wifi0',
@@ -165,7 +181,7 @@ export function initBrowserShim(): void {
           }
         ]
 
-        const initialBlocks: any[] = Array.from({ length: blockCount }, (_, i) => ({
+        const initialBlocks: HttpBlockState[] = Array.from({ length: blockCount }, (_, i) => ({
           kind: 'http',
           index: i,
           rangeStart: i * blockSize,
@@ -176,30 +192,42 @@ export function initBrowserShim(): void {
           status: i < 4 ? 'downloading' : 'pending'
         }))
 
-        const dl = {
+        const suggestedFileName =
+          'suggestedFileName' in request && request.suggestedFileName
+            ? request.suggestedFileName
+            : 'ubuntu-24.04-desktop-amd64.iso'
+        const destinationDir =
+          'destinationDir' in request && request.destinationDir
+            ? request.destinationDir
+            : 'C:\\Users\\Dhairya\\Downloads'
+        const url =
+          'url' in request && request.url
+            ? request.url
+            : 'https://releases.ubuntu.com/24.04/ubuntu-24.04-desktop-amd64.iso'
+
+        const dl: HttpDownloadState = {
           id,
-          kind: 'http' as const,
-          url: request.url,
-          fileName: request.suggestedFileName || 'ubuntu-24.04-desktop-amd64.iso',
-          destinationPath: (request.destinationDir || 'C:\\Users\\Dhairya\\Downloads') + '\\' + (request.suggestedFileName || 'ubuntu-24.04-desktop-amd64.iso'),
-          status: 'downloading' as const,
+          kind: 'http',
+          url,
+          fileName: suggestedFileName,
+          destinationPath: `${destinationDir}\\${suggestedFileName}`,
+          status: 'downloading',
           startedAt: Date.now(),
           totalBytes: total,
           bytesDownloaded: 0,
           speedBytesPerSec: 40 * 1024 * 1024,
-          speedHistory: [25 * 1024 * 1024, 32 * 1024 * 1024, 40 * 1024 * 1024],
-          supportsRanges: true,
-          etag: '"fast-hash-1234"',
-          lastModified: new Date().toUTCString(),
           networks: initialNetworks,
           streams: initialStreams,
-          blocks: initialBlocks
+          peakStreams: 4,
+          blocks: initialBlocks,
+          totalBlocks: blockCount,
+          blockSizeBytes: blockSize
         }
         activeDownloadsMap.set(id, dl)
 
         // Broadcast initial state
         setTimeout(() => {
-          for (const cb of updateListeners) cb({ ...dl })
+          for (const cb of updateListeners) cb(dl as unknown as DownloadUpdate)
         }, 50)
 
         // Simulate multi-network dynamic progress
@@ -217,7 +245,9 @@ export function initBrowserShim(): void {
           item.networks[1].bytesDownloaded += 5.5 * 1024 * 1024
           item.networks[2].bytesDownloaded += 3.0 * 1024 * 1024
 
-          const completedBlocksCount = Math.floor((item.bytesDownloaded / item.totalBytes) * blockCount)
+          const completedBlocksCount = Math.floor(
+            (item.bytesDownloaded / item.totalBytes) * blockCount
+          )
           for (let b = 0; b < blockCount; b++) {
             if (b < completedBlocksCount) {
               item.blocks[b].status = 'completed'
@@ -233,80 +263,81 @@ export function initBrowserShim(): void {
             item.completedAt = Date.now()
             clearInterval(interval)
           }
-          for (const cb of updateListeners) cb({ ...item })
+          for (const cb of updateListeners) cb(item as unknown as DownloadUpdate)
         }, 400)
 
         return id
       },
-      listDownloads: async () => Array.from(activeDownloadsMap.values()),
-      listHistory: async () => [],
-      clearHistory: async () => {},
-      networkUsage: async () => ({
+      listDownloads: async (): Promise<HttpDownloadState[]> =>
+        Array.from(activeDownloadsMap.values()),
+      listHistory: async (): Promise<never[]> => [],
+      clearHistory: async (): Promise<void> => {},
+      networkUsage: async (): Promise<Record<string, number>> => ({
         wifi0: 1024 * 1024 * 1024 * 12.4,
         eth0: 1024 * 1024 * 1024 * 18.2,
         usb0: 1024 * 1024 * 1024 * 4.8
       }),
-      resetNetworkUsage: async () => {},
-      freeSpace: async () => 1024 * 1024 * 1024 * 240,
-      torrentFiles: async () => [],
-      chooseTorrentFiles: async () => {},
-      torrentTrackers: async () => [],
-      addTorrentTrackers: async () => {},
-      pauseDownload: async (id: string) => {
+      resetNetworkUsage: async (): Promise<void> => {},
+      freeSpace: async (): Promise<number> => 1024 * 1024 * 1024 * 240,
+      torrentFiles: async (): Promise<never[]> => [],
+      chooseTorrentFiles: async (): Promise<void> => {},
+      torrentTrackers: async (): Promise<never[]> => [],
+      addTorrentTrackers: async (): Promise<void> => {},
+      pauseDownload: async (id: string): Promise<void> => {
         const item = activeDownloadsMap.get(id)
         if (item) {
           item.status = 'paused'
-          for (const cb of updateListeners) cb({ ...item })
+          for (const cb of updateListeners) cb(item as unknown as DownloadUpdate)
         }
       },
-      resumeDownload: async (id: string) => {
+      resumeDownload: async (id: string): Promise<void> => {
         const item = activeDownloadsMap.get(id)
         if (item) {
           item.status = 'downloading'
-          for (const cb of updateListeners) cb({ ...item })
+          for (const cb of updateListeners) cb(item as unknown as DownloadUpdate)
         }
       },
-      relinkDownload: async () => {},
-      setDownloadNetwork: async () => {},
-      cancelDownload: async (id: string) => {
+      relinkDownload: async (): Promise<void> => {},
+      setDownloadNetwork: async (): Promise<void> => {},
+      cancelDownload: async (id: string): Promise<void> => {
         const item = activeDownloadsMap.get(id)
         if (item) {
           item.status = 'cancelled'
-          for (const cb of updateListeners) cb({ ...item })
+          for (const cb of updateListeners) cb(item as unknown as DownloadUpdate)
         }
       },
-      removeDownload: async (id: string) => {
+      removeDownload: async (id: string): Promise<void> => {
         activeDownloadsMap.delete(id)
       },
-      updateState: async () => ({ status: 'disabled' as const }),
-      showUpdateMenu: async () => {},
-      pendingLinks: async () => [],
-      resumeFromLink: async () => {},
-      dismissLink: async () => {},
-      usenetServer: async () => undefined,
-      saveUsenetServer: async () => {},
-      testUsenetServer: async () => ({ ok: true }),
-      telegramState: async () => ({ status: 'logged_out' as const }),
-      telegramStartLogin: async () => {},
-      telegramStartQrLogin: async () => '',
-      telegramSubmitCode: async () => {},
-      telegramSubmitPassword: async () => {},
-      telegramLogout: async () => {},
-      telegramListMedia: async () => [],
-      onTelegramAuth: () => () => {},
-      onLinkReceived: () => () => {},
-      onDownloadUpdated: (callback: (update: any) => void) => {
+      updateState: async (): Promise<{ status: 'disabled' }> => ({ status: 'disabled' }),
+      showUpdateMenu: async (): Promise<void> => {},
+      pendingLinks: async (): Promise<never[]> => [],
+      resumeFromLink: async (): Promise<void> => {},
+      dismissLink: async (): Promise<void> => {},
+      usenetServer: async (): Promise<undefined> => undefined,
+      saveUsenetServer: async (): Promise<void> => {},
+      testUsenetServer: async (): Promise<{ ok: boolean }> => ({ ok: true }),
+      telegramState: async (): Promise<{ status: 'logged_out' }> => ({ status: 'logged_out' }),
+      telegramStartLogin: async (): Promise<void> => {},
+      telegramStartQrLogin: async (): Promise<string> => '',
+      telegramSubmitCode: async (): Promise<void> => {},
+      telegramSubmitPassword: async (): Promise<void> => {},
+      telegramLogout: async (): Promise<void> => {},
+      telegramListMedia: async (): Promise<never[]> => [],
+      onTelegramAuth: () => (): void => {},
+      onLinkReceived: () => (): void => {},
+      onDownloadUpdated: (callback: (update: DownloadUpdate) => void): (() => void) => {
         updateListeners.add(callback)
         return () => updateListeners.delete(callback)
       },
-      onHistoryChanged: () => () => {},
-      onUpdateState: () => () => {},
-      onNetworksChanged: (callback: (networks: NetworkInterfaceInfo[]) => void) => {
+      onHistoryChanged: () => (): void => {},
+      onUpdateState: () => (): void => {},
+      onNetworksChanged: (callback: (networks: NetworkInterfaceInfo[]) => void): (() => void) => {
         networkListeners.add(callback)
         setTimeout(() => callback(defaultInterfaces), 50)
         return () => networkListeners.delete(callback)
       },
-      onMagnetCheckStatus: () => () => {}
+      onMagnetCheckStatus: () => (): void => {}
     }
 
     // Wrap with Proxy so any unhandled property or event returns a safe fallback without throwing
@@ -317,18 +348,17 @@ export function initBrowserShim(): void {
         }
         if (typeof prop === 'string') {
           if (prop.startsWith('on')) {
-            return () => () => {}
+            return () => (): void => {}
           }
-          return async () => undefined
+          return async (): Promise<unknown> => undefined
         }
         return undefined
       }
-    }) as any;
-    window.plexo = proxy;
-    (window as any).bondforge = proxy;
+    }) as unknown as typeof window.plexo
+    window.plexo = proxy
+    window.bondforge = proxy
   }
 }
-
 
 // Auto-run immediately upon file load so window.plexo and window.bondforge are set before other modules run
 if (typeof window !== 'undefined') {

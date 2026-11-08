@@ -1,13 +1,5 @@
 import React from 'react'
-import {
-  Settings,
-  FolderOpen,
-  Gauge,
-  Cpu,
-  Sliders,
-  HardDrive,
-  Turtle
-} from 'lucide-react'
+import { Settings, FolderOpen, Gauge, Cpu, Sliders, HardDrive, Turtle } from 'lucide-react'
 import { useAppStore } from '../store/useAppStore'
 
 export function EngineSettingsScreen(): React.JSX.Element {
