@@ -76,6 +76,7 @@ function App(): React.JSX.Element {
 
   const [activeTab, setActiveTab] = useState<StudioTab>('transfers')
   const openNewDownload = useAppStore((state) => state.openNewDownload)
+  const isDetailView = useAppStore((state) => state.view.name === 'download')
 
   return (
     <TooltipProvider>
@@ -83,11 +84,13 @@ function App(): React.JSX.Element {
         <div className="flex h-full flex-col bg-[var(--bg)] text-[var(--text)] overflow-hidden font-sans">
           <TitleBar />
           <div className="flex flex-1 min-h-0 overflow-hidden">
-            <BondForgeSidebar
-              activeTab={activeTab}
-              onSelectTab={setActiveTab}
-              onOpenNewDownload={() => openNewDownload()}
-            />
+            {!isDetailView && (
+              <BondForgeSidebar
+                activeTab={activeTab}
+                onSelectTab={setActiveTab}
+                onOpenNewDownload={() => openNewDownload()}
+              />
+            )}
             <main className="flex-1 min-w-0 flex flex-col bg-[var(--bg)] overflow-hidden">
               <CurrentScreen activeTab={activeTab} />
             </main>

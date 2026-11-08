@@ -8,8 +8,7 @@ import {
   Trash2,
   CheckCircle2,
   X,
-  FileCode,
-  Flame
+  Plus
 } from 'lucide-react'
 import { useAppStore } from '../store/useAppStore'
 import { formatBytes, formatSpeed } from '../utils/format'
@@ -44,26 +43,29 @@ export function TransfersScreen({
     return true
   })
 
+  const api =
+    typeof window !== 'undefined' ? window.bondforge || window.plexo : undefined
+
   return (
-    <div className="flex-1 overflow-y-auto p-6 space-y-5">
+    <div className="flex-1 overflow-y-auto p-6 space-y-5 select-none">
       {/* Top Header & Search */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-white tracking-wide flex items-center gap-2">
-            <ArrowDownToLine className="size-5 text-cyan-400" />
+          <h1 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+            <ArrowDownToLine className="size-5 text-sky-400" />
             <span>Transfers & Queue Manager</span>
           </h1>
-          <p className="text-[13px] text-[var(--text-secondary)] mt-0.5">
-            Monitor real-time chunk streams, manage paused jobs, and inspect downloaded files.
+          <p className="text-[13px] text-slate-400 mt-0.5">
+            Real-time chunk allocation, active downloads, and historical transfers.
           </p>
         </div>
 
         <button
           onClick={onOpenNewDownload}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 font-bold text-[13px] transition-colors cursor-pointer shrink-0"
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-medium text-[13px] shadow-sm shadow-sky-600/30 transition-colors cursor-pointer shrink-0"
         >
-          <Flame className="size-4 fill-current" />
-          <span>New Accelerated Transfer</span>
+          <Plus className="size-4 stroke-[2.5]" />
+          <span>New Transfer</span>
         </button>
       </div>
 
@@ -76,7 +78,7 @@ export function TransfersScreen({
               onClick={() => setFilter(tab)}
               className={`px-3 py-1.5 rounded-lg text-[12.5px] font-medium capitalize transition-colors cursor-pointer ${
                 filter === tab
-                  ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-500/30'
+                  ? 'bg-sky-500/15 text-sky-300 border border-sky-500/30 font-semibold'
                   : 'text-slate-400 hover:text-white hover:bg-white/5'
               }`}
             >
@@ -91,20 +93,20 @@ export function TransfersScreen({
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search downloads..."
-            className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-[var(--input-bg)] border border-[var(--border)] text-[12.5px] text-white placeholder-slate-500 outline-none focus:border-cyan-500/50"
+            placeholder="Search transfers..."
+            className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-[#070b13] border border-slate-800 text-[12.5px] text-white placeholder-slate-500 outline-none focus:border-sky-500/50"
           />
         </div>
       </div>
 
-      {/* Active Downloads List */}
+      {/* Downloads List */}
       <div className="space-y-3">
         {filteredActive.length === 0 && filteredHistory.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-[var(--border)] p-12 text-center bg-[var(--bg-secondary)]/30">
-            <ArrowDownToLine className="size-8 text-cyan-400/50 mx-auto mb-2" />
-            <h3 className="text-base font-semibold text-white">No downloads found</h3>
+          <div className="rounded-xl border border-dashed border-slate-800 p-12 text-center bg-[#0a0f1d]">
+            <ArrowDownToLine className="size-8 text-sky-400/50 mx-auto mb-2" />
+            <h3 className="text-base font-semibold text-white">No transfers in queue</h3>
             <p className="text-[13px] text-slate-400 mt-1">
-              Add a URL link to initiate dynamic multi-WAN bonding.
+              Add a URL link to initiate multi-WAN bonded acceleration.
             </p>
           </div>
         ) : (
@@ -117,23 +119,24 @@ export function TransfersScreen({
               return (
                 <div
                   key={dl.id}
-                  className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-4 space-y-3 hover:border-cyan-500/40 transition-colors"
+                  className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-4 space-y-3 hover:border-sky-500/30 transition-colors"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <FileCode className="size-4 text-cyan-400 shrink-0" />
-                        <h4 className="text-[14px] font-bold text-white truncate">{dl.fileName}</h4>
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/25">
-                          {dl.status.toUpperCase()}
+                        <span className="text-[14px] font-semibold text-white truncate">
+                          {dl.fileName}
+                        </span>
+                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 font-bold">
+                          BONDED
                         </span>
                       </div>
-                      <div className="flex items-center gap-3 text-[12px] font-mono text-[var(--text-secondary)] mt-1.5">
+                      <div className="flex items-center gap-3 text-[11.5px] font-mono text-slate-400 mt-1.5">
                         <span>
                           {formatBytes(dl.bytesDownloaded || 0)} / {formatBytes(dl.totalBytes || 0)}
                         </span>
                         <span>•</span>
-                        <span className="text-cyan-300 font-semibold">
+                        <span className="text-sky-300 font-semibold">
                           {formatSpeed(dl.speedBytesPerSec || 0, speedUnit)}
                         </span>
                         <span>•</span>
@@ -145,7 +148,7 @@ export function TransfersScreen({
                     <div className="flex items-center gap-2 shrink-0">
                       {dl.status === 'downloading' ? (
                         <button
-                          onClick={() => window.plexo?.pauseDownload(dl.id)}
+                          onClick={() => api?.pauseDownload?.(dl.id)}
                           className="size-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-slate-300 hover:text-white transition-colors cursor-pointer"
                           title="Pause"
                         >
@@ -153,22 +156,22 @@ export function TransfersScreen({
                         </button>
                       ) : (
                         <button
-                          onClick={() => window.plexo?.resumeDownload(dl.id)}
-                          className="size-8 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 flex items-center justify-center text-cyan-300 transition-colors cursor-pointer"
+                          onClick={() => api?.resumeDownload?.(dl.id)}
+                          className="size-8 rounded-lg bg-sky-500/20 hover:bg-sky-500/30 flex items-center justify-center text-sky-300 transition-colors cursor-pointer"
                           title="Resume"
                         >
                           <Play className="size-3.5" />
                         </button>
                       )}
                       <button
-                        onClick={() => window.plexo?.revealDownload(dl.id)}
+                        onClick={() => api?.revealDownload?.(dl.id)}
                         className="size-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-slate-300 hover:text-white transition-colors cursor-pointer"
                         title="Show in Folder"
                       >
                         <FolderOpen className="size-3.5" />
                       </button>
                       <button
-                        onClick={() => window.plexo?.cancelDownload(dl.id)}
+                        onClick={() => api?.cancelDownload?.(dl.id)}
                         className="size-8 rounded-lg bg-red-500/10 hover:bg-red-500/20 flex items-center justify-center text-red-400 transition-colors cursor-pointer"
                         title="Cancel"
                       >
@@ -177,22 +180,11 @@ export function TransfersScreen({
                     </div>
                   </div>
 
-                  {/* Multi-Network Chunk Visualizer */}
-                  <div className="w-full h-2 rounded-full bg-[var(--track-bg)] overflow-hidden flex">
+                  {/* Multi-Network Progress */}
+                  <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden flex">
                     <div
-                      className="bg-cyan-400 h-full transition-all duration-300"
-                      style={{ width: `${pct * 0.45}%` }}
-                      title="Wi-Fi 5GHz Chunks"
-                    />
-                    <div
-                      className="bg-amber-400 h-full transition-all duration-300"
-                      style={{ width: `${pct * 0.35}%` }}
-                      title="5G USB Tether Chunks"
-                    />
-                    <div
-                      className="bg-blue-400 h-full transition-all duration-300"
-                      style={{ width: `${pct * 0.2}%` }}
-                      title="Ethernet LAN Chunks"
+                      className="bg-sky-500 h-full transition-all duration-300"
+                      style={{ width: `${pct}%` }}
                     />
                   </div>
                 </div>
@@ -208,32 +200,32 @@ export function TransfersScreen({
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="size-4 text-emerald-400 shrink-0" />
-                    <h4 className="text-[13.5px] font-bold text-white truncate">{item.fileName}</h4>
+                    <h4 className="text-[13.5px] font-semibold text-white truncate">
+                      {item.fileName}
+                    </h4>
                     <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                       COMPLETED
                     </span>
                   </div>
-                  <div className="flex items-center gap-3 text-[11.5px] font-mono text-[var(--text-tertiary)] mt-1">
+                  <div className="flex items-center gap-3 text-[11.5px] font-mono text-slate-400 mt-1">
                     <span>{formatBytes(item.totalBytes)}</span>
                     <span>•</span>
-                    <span>
-                      Average: {formatSpeed(item.speedBytesPerSec || 35 * 1024 * 1024, speedUnit)}
-                    </span>
+                    <span>Speed: {formatSpeed(item.speedBytesPerSec || 0, speedUnit)}</span>
                     <span>•</span>
-                    <span>Saved to Downloads</span>
+                    <span>Saved to local disk</span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2 shrink-0">
                   <button
-                    onClick={() => window.plexo?.revealDownload(item.id)}
+                    onClick={() => api?.revealDownload?.(item.id)}
                     className="size-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-slate-300 hover:text-white transition-colors cursor-pointer"
                     title="Open File"
                   >
                     <FolderOpen className="size-3.5" />
                   </button>
                   <button
-                    onClick={() => window.plexo?.removeDownload(item.id)}
+                    onClick={() => api?.removeDownload?.(item.id)}
                     className="size-8 rounded-lg bg-white/5 hover:bg-red-500/20 flex items-center justify-center text-slate-400 hover:text-red-400 transition-colors cursor-pointer"
                     title="Remove from history"
                   >

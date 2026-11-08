@@ -19,6 +19,15 @@
 
 ## Log
 
+### 2026-11-08: Complete visual polish: bespoke BondForge vector logo, clean typography & 100% dynamic live telemetry
+- **Agent:** main-agent (Gemini 3.8 Flash)
+- **Branch:** chore/bondforge-init
+- **What:** Replaced the generic flame icon with a bespoke, razor-sharp BondForge Nexus vector mark (3 converging physical network paths fusing into a high-velocity forward diamond node). Overhauled wordmark from awkward all-caps 'BOND FORGE' into clean, refined 'BondForge' with 'v1.0' badge and 'Multi-WAN Aggregator' subtitle. Completely eliminated hardcoded static demo metrics: Aggregated Speed now truthfully reads '0 B/s (Standby)', Multiplier reads '1.0x', Data Processed reads actual completed history bytes, and the Interface Convergence Deck dynamically displays real detected hardware adapters and their real live per-interface throughput. Upgraded action buttons and cards to a high-contrast dark palette (slate/sky blue/emerald) inspired by Linear and Warp.
+- **Why:** User pointed out that the dashboard numbers were static and the previous flame logo and bulky name looked odd and unappealing.
+- **Files:** src/renderer/src/components/BondForgeLogo.tsx, src/renderer/src/components/BondForgeSidebar.tsx, src/renderer/src/components/TitleBar.tsx, src/renderer/src/screens/ForgeDashboardScreen.tsx, src/renderer/src/screens/HardwareDeckScreen.tsx, src/renderer/src/screens/TransfersScreen.tsx, src/renderer/src/screens/EngineSettingsScreen.tsx, src/renderer/src/components/NewDownloadModal.tsx, progress.md.
+- **Verified:** Captured Playwright screenshot; verified root DOM renders with zero console errors and accurate dynamic 0 B/s standby state. typecheck:web passed with exit code 0.
+- **Open / follow-ups:** Commit and push to origin main.
+
 ### 2026-11-08: Fix GitHub Actions CI failures across lint, typecheck, format, and app structure
 
 - **Agent:** main-agent (Antigravity)

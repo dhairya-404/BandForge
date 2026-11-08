@@ -1,5 +1,6 @@
 import React from 'react'
-import { Flame, ArrowDownToLine, Network, Settings, HardDrive, Zap, Activity } from 'lucide-react'
+import { Plus, ArrowDownToLine, Network, Settings, HardDrive, Activity } from 'lucide-react'
+import { BondForgeLogo } from './BondForgeLogo'
 import { formatBytes } from '../utils/format'
 import { useFreeSpace } from '../hooks/useFreeSpace'
 import { useAppStore } from '../store/useAppStore'
@@ -26,23 +27,22 @@ export function BondForgeSidebar({
     (d) => d.status === 'downloading'
   ).length
 
-  const activeInterfacesCount = interfaces.length || 3
+  const activeInterfacesCount = interfaces.length || 0
 
   return (
-    <aside className="w-64 flex flex-col border-r border-[var(--border)] bg-[var(--bg-secondary)] select-none">
+    <aside className="hidden min-[860px]:flex w-64 flex-col border-r border-[var(--border)] bg-[#0c121e] select-none shrink-0">
       {/* Brand Header */}
       <div className="h-16 flex items-center gap-3 px-5 border-b border-[var(--border)]">
-        <div className="relative flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-700 shadow-lg shadow-cyan-500/20 text-white">
-          <Flame className="size-5 animate-pulse text-cyan-200" />
-          <div className="absolute -bottom-0.5 -right-0.5 size-3 rounded-full bg-emerald-400 border-2 border-[var(--bg-secondary)]" />
-        </div>
-        <div className="flex flex-col">
-          <div className="flex items-center gap-1.5 font-bold tracking-wider text-[15px] text-white">
-            <span>BOND</span>
-            <span className="text-cyan-400">FORGE</span>
+        <BondForgeLogo size={32} />
+        <div className="flex flex-col min-w-0">
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-[15px] text-white tracking-tight">BondForge</span>
+            <span className="text-[10px] font-mono font-medium text-sky-400 bg-sky-500/10 border border-sky-500/20 px-1.5 py-0.2 rounded">
+              v1.0
+            </span>
           </div>
-          <span className="font-mono text-[10px] text-[var(--text-tertiary)] tracking-widest uppercase">
-            Bonding Engine v1.0
+          <span className="text-[11px] text-slate-400 truncate font-sans">
+            Multi-Network Aggregator
           </span>
         </div>
       </div>
@@ -52,28 +52,28 @@ export function BondForgeSidebar({
         <button
           onClick={onOpenNewDownload}
           aria-label="New download"
-          className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-semibold text-[13.5px] text-[#02192e] bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-400 hover:from-cyan-300 hover:to-teal-200 shadow-md shadow-cyan-500/25 transition-all duration-150 active:scale-[0.98] cursor-pointer"
+          className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg font-medium text-[13px] text-white bg-sky-600 hover:bg-sky-500 shadow-sm shadow-sky-600/30 transition-all duration-150 active:scale-[0.98] cursor-pointer"
         >
-          <Zap className="size-4 fill-current" />
-          <span>New download</span>
+          <Plus className="size-4 stroke-[2.5]" />
+          <span>New Transfer</span>
         </button>
       </div>
 
       {/* Navigation Items */}
-      <nav className="flex-1 px-3 space-y-1.5 overflow-y-auto">
+      <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
         <button
           onClick={() => onSelectTab('dashboard')}
           className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-[13px] font-medium transition-colors cursor-pointer ${
             activeTab === 'dashboard'
-              ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-500/30'
-              : 'text-[var(--text-secondary)] hover:text-white hover:bg-white/5'
+              ? 'bg-sky-500/15 text-sky-300 border border-sky-500/30 font-semibold'
+              : 'text-slate-400 hover:text-white hover:bg-white/5'
           }`}
         >
           <div className="flex items-center gap-3">
             <Activity className="size-4" />
-            <span>Forge Deck</span>
+            <span>Dashboard</span>
           </div>
-          <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-semibold">
+          <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 font-medium">
             LIVE
           </span>
         </button>
@@ -82,18 +82,20 @@ export function BondForgeSidebar({
           onClick={() => onSelectTab('transfers')}
           className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-[13px] font-medium transition-colors cursor-pointer ${
             activeTab === 'transfers'
-              ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-500/30'
-              : 'text-[var(--text-secondary)] hover:text-white hover:bg-white/5'
+              ? 'bg-sky-500/15 text-sky-300 border border-sky-500/30 font-semibold'
+              : 'text-slate-400 hover:text-white hover:bg-white/5'
           }`}
         >
           <div className="flex items-center gap-3">
             <ArrowDownToLine className="size-4" />
-            <span>Transfers & Queue</span>
+            <span>Transfers</span>
           </div>
-          {activeDownloadsCount > 0 && (
-            <span className="size-5 flex items-center justify-center rounded-full bg-cyan-500 text-black font-mono text-[11px] font-bold">
+          {activeDownloadsCount > 0 ? (
+            <span className="size-5 flex items-center justify-center rounded-full bg-sky-500 text-slate-950 font-mono text-[11px] font-bold">
               {activeDownloadsCount}
             </span>
+          ) : (
+            <span className="text-[11px] font-mono text-slate-500">0</span>
           )}
         </button>
 
@@ -101,16 +103,16 @@ export function BondForgeSidebar({
           onClick={() => onSelectTab('adapters')}
           className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-[13px] font-medium transition-colors cursor-pointer ${
             activeTab === 'adapters'
-              ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-500/30'
-              : 'text-[var(--text-secondary)] hover:text-white hover:bg-white/5'
+              ? 'bg-sky-500/15 text-sky-300 border border-sky-500/30 font-semibold'
+              : 'text-slate-400 hover:text-white hover:bg-white/5'
           }`}
         >
           <div className="flex items-center gap-3">
             <Network className="size-4" />
-            <span>Hardware Adapters</span>
+            <span>Hardware Deck</span>
           </div>
-          <span className="font-mono text-[11px] text-emerald-400">
-            {activeInterfacesCount} active
+          <span className="font-mono text-[11px] text-emerald-400 font-medium">
+            {activeInterfacesCount} online
           </span>
         </button>
 
@@ -118,8 +120,8 @@ export function BondForgeSidebar({
           onClick={() => onSelectTab('settings')}
           className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-[13px] font-medium transition-colors cursor-pointer ${
             activeTab === 'settings'
-              ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-500/30'
-              : 'text-[var(--text-secondary)] hover:text-white hover:bg-white/5'
+              ? 'bg-sky-500/15 text-sky-300 border border-sky-500/30 font-semibold'
+              : 'text-slate-400 hover:text-white hover:bg-white/5'
           }`}
         >
           <Settings className="size-4" />
@@ -127,20 +129,20 @@ export function BondForgeSidebar({
         </button>
       </nav>
 
-      {/* Storage & Telemetry Footer */}
-      <div className="p-4 border-t border-[var(--border)] bg-[var(--bg)]/50">
-        <div className="flex items-center gap-2 mb-2 text-[12px] text-[var(--text-secondary)] font-mono">
-          <HardDrive className="size-3.5 text-cyan-400" />
-          <span>Storage NVMe</span>
+      {/* Storage Footer */}
+      <div className="p-4 border-t border-[var(--border)] bg-[#090d16]">
+        <div className="flex items-center gap-2 mb-1.5 text-[12px] text-slate-400 font-mono">
+          <HardDrive className="size-3.5 text-sky-400" />
+          <span>Local Storage</span>
         </div>
         <div className="flex justify-between items-baseline text-[11.5px] font-mono text-slate-300">
-          <span>Free Available:</span>
-          <span className="font-bold text-cyan-300">
-            {freeSpace !== null ? formatBytes(freeSpace) : '240.0 GB'}
+          <span className="text-slate-500">Available:</span>
+          <span className="font-semibold text-sky-300">
+            {freeSpace !== null ? formatBytes(freeSpace) : 'Calculating...'}
           </span>
         </div>
-        <div className="w-full h-1.5 mt-2 rounded-full bg-[var(--track-bg)] overflow-hidden">
-          <div className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 w-[68%]" />
+        <div className="w-full h-1 mt-2 rounded-full bg-slate-800 overflow-hidden">
+          <div className="h-full bg-sky-500 w-[60%]" />
         </div>
       </div>
     </aside>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import {
-  Flame,
   X,
   FolderOpen,
   Wifi,
@@ -8,10 +7,12 @@ import {
   Cable,
   CheckCircle2,
   AlertCircle,
-  Zap,
-  Clipboard
+  Clipboard,
+  Network,
+  ArrowRight
 } from 'lucide-react'
 import type { HttpProbeResult, ProbeResult, StartHttpDownloadRequest } from '@shared/types'
+import { BondForgeLogo } from './BondForgeLogo'
 import { useAppStore } from '../store/useAppStore'
 import { formatBytes } from '../utils/format'
 
@@ -27,35 +28,42 @@ function NewDownloadModalContent(): React.JSX.Element {
   const [error, setError] = useState<string | null>(null)
   const [selectedAdapters, setSelectedAdapters] = useState<string[]>(['wifi0', 'usb0', 'eth0'])
 
-  const handleProbe = useCallback(async (link: string): Promise<void> => {
-    const trimmed = link.trim()
-    if (!trimmed || !trimmed.startsWith('http')) return
-    setProbing(true)
-    setError(null)
-    try {
-      if (window.plexo?.probeUrl) {
-        const res = await window.plexo.probeUrl(trimmed)
-        setProbeResult(res)
-      } else {
-        const fallback: HttpProbeResult = {
-          kind: 'http',
-          requestedUrl: trimmed,
-          finalUrl: trimmed,
-          suggestedFileName: trimmed.split('/').pop()?.split('?')[0] || 'accelerated-download.bin',
-          totalBytes: 5.8 * 1024 * 1024 * 1024,
-          supportsRanges: true,
-          contentType: 'application/x-iso9660-image',
-          etag: null,
-          lastModified: null
+  const api =
+    typeof window !== 'undefined' ? window.bondforge || window.plexo : undefined
+
+  const handleProbe = useCallback(
+    async (link: string): Promise<void> => {
+      const trimmed = link.trim()
+      if (!trimmed || !trimmed.startsWith('http')) return
+      setProbing(true)
+      setError(null)
+      try {
+        if (api?.probeUrl) {
+          const res = await api.probeUrl(trimmed)
+          setProbeResult(res)
+        } else {
+          const fallback: HttpProbeResult = {
+            kind: 'http',
+            requestedUrl: trimmed,
+            finalUrl: trimmed,
+            suggestedFileName:
+              trimmed.split('/').pop()?.split('?')[0] || 'accelerated-download.bin',
+            totalBytes: 5.8 * 1024 * 1024 * 1024,
+            supportsRanges: true,
+            contentType: 'application/x-iso9660-image',
+            etag: null,
+            lastModified: null
+          }
+          setProbeResult(fallback)
         }
-        setProbeResult(fallback)
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Could not probe URL.')
+      } finally {
+        setProbing(false)
       }
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Could not probe URL.')
-    } finally {
-      setProbing(false)
-    }
-  }, [])
+    },
+    [api]
+  )
 
   useEffect(() => {
     let active = true
@@ -77,7 +85,7 @@ function NewDownloadModalContent(): React.JSX.Element {
   }
 
   const handleBrowse = async (): Promise<void> => {
-    const chosen = await window.plexo?.chooseDestinationFolder(destinationDir)
+    const chosen = await api?.chooseDestinationFolder?.(destinationDir)
     if (chosen) setDestinationDir(chosen)
   }
 
@@ -107,7 +115,7 @@ function NewDownloadModalContent(): React.JSX.Element {
         etag: probeResult?.etag || null,
         lastModified: probeResult?.lastModified || null
       }
-      await window.plexo?.startDownload(req)
+      await api?.startDownload?.(req)
       close()
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to start transfer.')
@@ -124,20 +132,18 @@ function NewDownloadModalContent(): React.JSX.Element {
         ]
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-      <div className="relative w-full max-w-xl rounded-2xl border border-[var(--border-strong)] bg-[#0c121e] shadow-2xl p-6 space-y-5 animate-in fade-in-0 zoom-in-95 duration-150">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 select-none">
+      <div className="relative w-full max-w-xl rounded-xl border border-slate-700/80 bg-[#0c121e] shadow-2xl p-6 space-y-5">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-[var(--border)] pb-4">
-          <div className="flex items-center gap-2.5">
-            <div className="size-8 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center">
-              <Flame className="size-4" />
-            </div>
+          <div className="flex items-center gap-3">
+            <BondForgeLogo size={26} />
             <div>
-              <h2 className="text-base font-bold text-white tracking-wide">
-                Forge Accelerated Transfer
+              <h2 className="text-base font-bold text-white tracking-tight">
+                New Accelerated Transfer
               </h2>
-              <span className="text-[11px] font-mono text-[var(--text-tertiary)] uppercase tracking-wider">
-                Multi-WAN Socket Aggregation
+              <span className="text-[11px] font-mono text-slate-400">
+                Multi-Network Socket Bonding Engine
               </span>
             </div>
           </div>
@@ -150,95 +156,112 @@ function NewDownloadModalContent(): React.JSX.Element {
           </button>
         </div>
 
-        {/* URL Input */}
-        <div className="space-y-1.5">
-          <label className="text-[12px] font-mono text-slate-300">
-            Target File URL (HTTP/HTTPS Range)
-          </label>
+        {/* URL Input Form */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <label className="text-[12px] font-mono text-slate-300">
+              Target File / Resource URL
+            </label>
+            <button
+              onClick={() => void handlePasteClipboard()}
+              className="text-[11px] font-mono text-sky-400 hover:text-sky-300 flex items-center gap-1 cursor-pointer"
+            >
+              <Clipboard className="size-3" />
+              <span>Paste from Clipboard</span>
+            </button>
+          </div>
+
           <div className="flex items-center gap-2">
             <input
               type="text"
-              autoFocus
               value={url}
               onChange={(e) => {
                 setUrl(e.target.value)
                 void handleProbe(e.target.value)
               }}
-              placeholder="Paste file download link: https://..."
-              className="flex-1 px-3.5 py-2.5 rounded-xl bg-slate-950 border border-[var(--border)] text-[13px] font-mono text-white placeholder-slate-500 outline-none focus:border-cyan-500"
+              placeholder="https://example.com/large-file.iso"
+              className="flex-1 px-3.5 py-2.5 rounded-lg bg-[#070b13] border border-slate-700 text-[13px] text-white placeholder-slate-500 font-mono outline-none focus:border-sky-500 transition-colors"
             />
-            <button
-              onClick={() => void handlePasteClipboard()}
-              className="px-3 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-[var(--border)] text-slate-300 hover:text-white text-[12px] font-mono flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
-              title="Paste from clipboard"
-            >
-              <Clipboard className="size-3.5 text-cyan-400" />
-              <span>Paste</span>
-            </button>
           </div>
         </div>
 
-        {/* Probed Metadata Preview */}
-        {probeResult && (
-          <div className="rounded-xl border border-cyan-500/20 bg-cyan-950/20 p-3.5 space-y-2 font-mono text-[12px]">
-            <div className="flex justify-between items-center text-slate-300">
-              <span>File:</span>
-              <span className="text-white font-bold truncate max-w-xs">
-                {probeResult.suggestedFileName}
-              </span>
+        {/* Probe Telemetry & Capabilities */}
+        <div className="rounded-lg bg-[#070b13] p-3.5 border border-slate-800 space-y-2">
+          {probing ? (
+            <div className="flex items-center gap-2 text-[12px] font-mono text-sky-400">
+              <span className="size-2 rounded-full bg-sky-400 animate-ping" />
+              <span>Probing server capabilities and Range support...</span>
             </div>
-            <div className="flex justify-between items-center text-slate-300">
-              <span>Size:</span>
-              <span className="text-cyan-300 font-bold">
-                {formatBytes(probeResult.totalBytes || 0)}
-              </span>
+          ) : error ? (
+            <div className="flex items-center gap-2 text-[12px] font-mono text-red-400">
+              <AlertCircle className="size-4" />
+              <span>{error}</span>
             </div>
-            <div className="flex justify-between items-center text-slate-300">
-              <span>Range Chunking:</span>
-              <span className="text-emerald-400 font-bold flex items-center gap-1">
-                <CheckCircle2 className="size-3.5" />
-                <span>SUPPORTED (Multi-WAN Aggregation Active)</span>
-              </span>
+          ) : probeResult ? (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-[12px]">
+                <span className="text-white font-medium truncate max-w-[320px]">
+                  {probeResult.suggestedFileName}
+                </span>
+                <span className="font-mono text-sky-300 font-bold">
+                  {formatBytes(probeResult.totalBytes || 0)}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 text-[11px] font-mono">
+                <span
+                  className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10.5px] ${
+                    probeResult.supportsRanges
+                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                      : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                  }`}
+                >
+                  <CheckCircle2 className="size-3" />
+                  {probeResult.supportsRanges
+                    ? 'HTTP Range Bonding Supported'
+                    : 'Single-Stream Only'}
+                </span>
+                <span className="text-slate-500 truncate max-w-[200px]">
+                  {probeResult.contentType}
+                </span>
+              </div>
             </div>
-          </div>
-        )}
+          ) : (
+            <div className="text-[12px] font-mono text-slate-500">
+              Enter a valid URL to verify file size and multi-range bonding capability.
+            </div>
+          )}
+        </div>
 
-        {probing && (
-          <div className="font-mono text-[12px] text-cyan-400 animate-pulse">
-            Probing target URL for HTTP Range headers...
-          </div>
-        )}
-
-        {error && (
-          <div className="flex items-center gap-2 text-red-400 text-[12px] font-mono">
-            <AlertCircle className="size-4 shrink-0" />
-            <span>{error}</span>
-          </div>
-        )}
-
-        {/* Participating Network Adapters */}
+        {/* Interface Participation Selector */}
         <div className="space-y-2">
           <label className="text-[12px] font-mono text-slate-300">
-            Participating Network Channels
+            Active Hardware Sockets for this Transfer
           </label>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+          <div className="grid grid-cols-3 gap-2.5">
             {defaultInterfacesList.map((iface) => {
               const selected = selectedAdapters.includes(iface.id)
-              const Icon = iface.kind === 'wifi' ? Wifi : iface.kind === 'usb' ? Smartphone : Cable
+              const Icon =
+                iface.kind === 'wifi'
+                  ? Wifi
+                  : iface.kind === 'usb'
+                    ? Smartphone
+                    : iface.kind === 'ethernet'
+                      ? Cable
+                      : Network
 
               return (
                 <button
                   key={iface.id}
                   onClick={() => handleToggleAdapter(iface.id)}
-                  className={`flex items-center gap-2.5 p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                  className={`flex items-center gap-2.5 p-2.5 rounded-lg border text-left transition-all cursor-pointer ${
                     selected
-                      ? 'border-cyan-500/50 bg-cyan-950/30 text-white'
+                      ? 'border-sky-500/50 bg-sky-950/30 text-white'
                       : 'border-slate-800 bg-slate-900/40 text-slate-500 hover:text-slate-300'
                   }`}
                 >
-                  <Icon className={`size-4 ${selected ? 'text-cyan-400' : 'text-slate-500'}`} />
+                  <Icon className={`size-4 ${selected ? 'text-sky-400' : 'text-slate-500'}`} />
                   <div className="min-w-0 flex-1">
-                    <div className="text-[12px] font-bold truncate">{iface.displayName}</div>
+                    <div className="text-[12px] font-semibold truncate">{iface.displayName}</div>
                     <div className="text-[10px] font-mono text-slate-400 uppercase">
                       {selected ? 'Bonded' : 'Excluded'}
                     </div>
@@ -257,13 +280,13 @@ function NewDownloadModalContent(): React.JSX.Element {
               type="text"
               readOnly
               value={destinationDir || 'C:\\Users\\Dhairya\\Downloads'}
-              className="flex-1 px-3 py-2 rounded-xl bg-slate-950 border border-[var(--border)] font-mono text-[12px] text-slate-300 outline-none"
+              className="flex-1 px-3 py-2 rounded-lg bg-[#070b13] border border-slate-700 font-mono text-[12px] text-slate-300 outline-none"
             />
             <button
               onClick={() => void handleBrowse()}
-              className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-[var(--border)] text-slate-300 hover:text-white text-[12px] font-mono flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
+              className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white text-[12px] font-mono flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
             >
-              <FolderOpen className="size-3.5 text-cyan-400" />
+              <FolderOpen className="size-3.5 text-sky-400" />
               <span>Browse</span>
             </button>
           </div>
@@ -273,16 +296,16 @@ function NewDownloadModalContent(): React.JSX.Element {
         <div className="pt-2 flex items-center justify-end gap-3 border-t border-[var(--border)]">
           <button
             onClick={close}
-            className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-[13px] font-medium transition-colors cursor-pointer"
+            className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[13px] font-medium transition-colors cursor-pointer"
           >
             Cancel
           </button>
           <button
             onClick={() => void handleStart()}
-            className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 font-bold text-[13.5px] shadow-lg shadow-cyan-500/20 active:scale-95 transition-all cursor-pointer"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-semibold text-[13px] shadow-sm shadow-sky-600/30 active:scale-95 transition-all cursor-pointer"
           >
-            <Zap className="size-4 fill-current" />
-            <span>Ignite Accelerated Download</span>
+            <span>Start Bonded Download</span>
+            <ArrowRight className="size-4" />
           </button>
         </div>
       </div>
