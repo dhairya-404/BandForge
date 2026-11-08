@@ -18,6 +18,15 @@
 
 ## Log
 
+### 2026-11-08: Dependencies installed and production build verified
+- **Agent:** `main-agent` (Gemini 3.8 Flash)
+- **Branch:** `chore/bandforge-init`
+- **What:** Installed all npm dependencies, downloaded prebuilt Electron v44 runtime, ran TypeScript checks on web and node contexts, executed full `electron-vite build`.
+- **Why:** Establish working build verification for the BandForge multi-network bonding engine on Windows.
+- **Files:** `node_modules/`, `out/`, `tasks.md`, `progress.md`.
+- **Verified:** `npm run typecheck:web` (exit 0), `npm run typecheck:node` (exit 0), `electron-vite build` produced `out/main/index.js` (404 kB), `out/preload/index.js` (7.6 kB), `out/renderer/index.html` (1.7 MB bundled JS/CSS) in 9.55s.
+- **Open / follow-ups:** Launch and test the desktop application live with multi-network interfaces (Wi-Fi + USB tethering).
+
 ### 2026-11-08: Workspace setup and BandForge initialization
 - **Agent:** `main-agent` (Gemini 3.8 Flash)
 - **Branch:** `chore/bandforge-init`

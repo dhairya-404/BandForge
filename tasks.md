@@ -21,6 +21,19 @@
 
 ## Active tasks
 
+## T-003: UI & Branding Polish for BandForge
+- **Assigned to:** `main-agent`
+- **Assigned by / date:** Dhairya on 2026-11-08
+- **Priority:** medium
+- **Repeats:** once
+- **Files / area:** `src/renderer/`, `build/`
+- **Branch:** `chore/bandforge-init`
+- **Status:** TODO
+- **Done when:** All UI references, dialogs, titles, and headers reflect BandForge branding.
+- **Notes:** Ready to execute after build verification.
+
+## Done
+
 ## T-001: Workspace Initialization & Brand Transformation to BandForge
 - **Assigned to:** `main-agent`
 - **Assigned by / date:** Dhairya on 2026-11-08
@@ -28,9 +41,9 @@
 - **Repeats:** once
 - **Files / area:** `package.json`, `README.md`, `src/`, `build/`, `electron-builder.yml`
 - **Branch:** `chore/bandforge-init`
-- **Status:** IN PROGRESS
+- **Status:** DONE
 - **Done when:** Package and project references renamed to BandForge, devflow files in place, git repository setup with `main`, `staging`, and `chore/bandforge-init`.
-- **Notes:** Workspace files created; git initialized; preparing initial commit.
+- **Notes:** Completed. Initial commit created, devflow files populated, and Git branch structure active.
 
 ## T-002: Dependency Installation & Dev Environment Verification
 - **Assigned to:** `main-agent`
@@ -39,9 +52,6 @@
 - **Repeats:** once
 - **Files / area:** `node_modules/`, `package.json`
 - **Branch:** `chore/bandforge-init`
-- **Status:** TODO
+- **Status:** DONE
 - **Done when:** `npm install` runs cleanly, electron/electron-vite packages configured, typechecks pass.
-- **Notes:** Pending completion of T-001.
-
-## Done
-<!-- Move finished tasks here. -->
+- **Notes:** Completed. Electron binary verified, typechecks (`web` and `node`) passed with 0 errors, full `electron-vite build` output generated in `out/`.
