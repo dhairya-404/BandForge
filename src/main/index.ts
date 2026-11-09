@@ -19,6 +19,15 @@ import { startUpdater } from './updater'
 import { testKnobs } from './testKnobs'
 import type { DownloadManager } from './download/downloadManager'
 
+// Global process safeguards against uncaught exceptions and rejections
+process.on('uncaughtException', (error) => {
+  console.error('[Tesso] Uncaught Exception in main process:', error)
+})
+
+process.on('unhandledRejection', (reason) => {
+  console.error('[Tesso] Unhandled Rejection in main process:', reason)
+})
+
 // In dev mode the app runs as the raw `electron` binary, which otherwise shows "Electron" in
 // the Dock tooltip/menu bar — must be set before the app is ready. Packaged builds already get
 // this from electron-builder's productName, but setting it here keeps dev and packaged in sync.
@@ -27,7 +36,7 @@ app.setName('Tesso')
 // Each e2e test runs against its own throwaway userData folder (downloads, manifests, settings).
 if (testKnobs.userDataDir) app.setPath('userData', testKnobs.userDataDir)
 
-// One Plexo at a time (per userData folder, so parallel e2e runs each have their own): a second
+// One instance at a time (per userData folder, so parallel e2e runs each have their own): a second
 // launch — a magnet link clicked, a .torrent opened — hands its link to the first and exits.
 if (!app.requestSingleInstanceLock()) app.exit(0)
 
@@ -209,12 +218,12 @@ app.whenReady().then(async () => {
 
   // A failed move keeps the old file, to retry next launch — it must never stop the window opening.
   await migrateLegacyNetworkPreferences().catch((error) =>
-    console.error('[plexo] failed to migrate network-preferences.json', error)
+    console.error('[Tesso] failed to migrate network-preferences.json', error)
   )
 
-  // The macOS About window (Plexo › About Plexo); its copyright comes from electron-builder.yml.
+  // The macOS About window; its copyright comes from electron-builder.yml.
   app.setAboutPanelOptions({
-    credits: 'Developed by Anmol Kapil.\nmacOS code signing provided by Dhananjay Bhosale.'
+    credits: 'Engineered with high-throughput multi-network bonding technology.'
   })
 
   // Applied before the window is created so the initial background/icon already match —
@@ -229,22 +238,30 @@ app.whenReady().then(async () => {
   void startBridge({
     manager: downloadManager,
     offer: (link) => offerLink(link, ensureWindow())
-  }).catch((error) => console.error('[plexo] browser bridge failed to start', error))
-  // Unlike magnet:, plexo:// is Plexo's own, so registering it takes nothing from another app. A
-  // development build has no fixed path to register.
+  }).catch((error) => console.error('[Tesso] browser bridge failed to start', error))
+  // A development build has no fixed path to register.
   if (app.isPackaged) app.setAsDefaultProtocolClient('plexo')
+
+  createWindow()
+  if (testKnobs.hideWindow) app.dock?.hide()
 
   nativeTheme.on('updated', () => {
     try {
-      mainWindow?.setBackgroundColor(nativeTheme.shouldUseDarkColors ? '#1c1c1e' : '#ffffff')
-      if (process.platform !== 'darwin') mainWindow?.setTitleBarOverlay(titleBarOverlay())
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.setBackgroundColor(nativeTheme.shouldUseDarkColors ? '#1c1c1e' : '#ffffff')
+        if (process.platform !== 'darwin') {
+          try {
+            mainWindow.setTitleBarOverlay(titleBarOverlay())
+          } catch (overlayErr) {
+            console.warn('[Tesso] Could not update titleBarOverlay:', overlayErr)
+          }
+        }
+      }
     } catch (error) {
       console.warn('[Tesso] nativeTheme updated handler error:', error)
     }
   })
 
-  createWindow()
-  if (testKnobs.hideWindow) app.dock?.hide()
   startUpdater(() => mainWindow, (await loadSettings()).autoUpdate !== false)
 
   app.on('activate', function () {

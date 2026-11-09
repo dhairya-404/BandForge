@@ -76,17 +76,25 @@ If `chrome.exe` is not in your system environment PATH, launch via Chrome's defa
   & "C:\Program Files\Google\Chrome\Application\chrome.exe" --proxy-pac-url=http://127.0.0.1:9091/proxy.pac
   ```
 
-#### Option 3: Tesso Chrome Companion Extension (1-Click UI)
+#### Option 3: Tesso Companion Extension (Permanent in Chrome, Brave, Edge & Arc)
 
 Zero terminal commands needed:
 
-1. In Google Chrome, navigate to `chrome://extensions`.
-2. Toggle on **Developer mode** in the top-right corner.
-3. Click **Load unpacked** and select the folder:
-   ```
-   extension/dist/chrome
-   ```
-4. Click the **Tesso** icon in your Chrome toolbar and switch on **Accelerate Browser (Multi-WAN)**.
+1. **Local Permanent Install (Chrome & Brave):**
+   - In Google Chrome (`chrome://extensions`) or Brave (`brave://extensions`), toggle on **Developer mode** in the top-right corner.
+   - Click **Load unpacked** and select the folder:
+     ```
+     extension/dist/chrome
+     ```
+   - _Permanence Note:_ Unpacked extensions remain **permanently installed** across browser restarts and PC reboots. (Brave runs unpacked extensions completely silently without startup prompts).
+2. **Universal 1-Click Install Everywhere (Chrome Web Store):**
+   - Run `npm run build:extension` to generate the production-ready upload package:
+     ```
+     extension/dist/tesso-chrome-extension.zip
+     ```
+   - Upload this package to the [Chrome Developer Dashboard](https://chrome.google.com/webstore/devconsole) (publish as _Public_ or _Unlisted_).
+   - Once published, users on **Chrome, Brave, Edge, Arc, and Opera** can install Tesso permanently with a single click ("Add to Chrome"), requiring zero developer mode switches.
+3. Click the **Tesso** icon in your browser toolbar and toggle **Accelerate Browser (Multi-WAN)**.
 
 #### Option 4: System-Wide Windows Proxy (Accelerates All Browsers)
 
@@ -238,6 +246,13 @@ Tesso features **dynamic auto-hedging and failover**. If one connection experien
 
 No. Standard user privileges are sufficient. Tesso uses standard operating system socket binding APIs (`bind()` with `localAddress` on Node.js / Electron), which do not require kernel driver installation or elevated administrator permissions.
 
+### 8. Can I install the Tesso Companion Extension permanently in Chrome, Brave, and Edge?
+
+Yes. There are two permanent installation methods:
+
+- **Local Unpacked Permanence:** When loaded via `chrome://extensions` or `brave://extensions` with Developer Mode enabled, the extension **persists permanently across all browser restarts, tab closures, and PC reboots**. It only unloads if you manually delete the directory or click "Remove".
+- **Store 1-Click Permanence Everywhere:** The project generates `extension/dist/tesso-chrome-extension.zip`. Once published to the Chrome Web Store (as Public or Unlisted), anyone on Chrome, Brave, Edge, Arc, or Opera can install it permanently with 1 click without ever opening Developer Mode.
+
 ---
 
 ## 🚀 Quick Start
@@ -270,6 +285,9 @@ npm run typecheck
 
 # Build and unpack native desktop application
 npm run build:unpack
+
+# Build Chrome and Firefox companion extensions
+npm run build:extension
 ```
 
 The compiled standalone executable will be located in `dist/win-unpacked/tesso.exe`.

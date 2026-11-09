@@ -1,6 +1,7 @@
 import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { execSync } from 'node:child_process'
 import { build } from 'vite'
 
 const root = dirname(fileURLToPath(import.meta.url))
@@ -22,7 +23,7 @@ for (const name of ['background', 'popup', 'options']) {
       lib: {
         entry: join(root, 'src', `${name}.ts`),
         formats: ['iife'],
-        name: 'plexo',
+        name: 'tesso',
         fileName: () => `${name}.js`
       }
     }
@@ -44,7 +45,7 @@ const manifests = {
     background: { scripts: ['background.js'] },
     browser_specific_settings: {
       gecko: {
-        id: 'extension@bondforge.app',
+        id: 'extension@tesso.app',
         strict_min_version: '121.0',
         // Everything goes to the local app on 127.0.0.1; nothing leaves the device.
         data_collection_permissions: { required: ['none'] }
@@ -63,6 +64,22 @@ for (const [browser, manifest] of Object.entries(manifests)) {
   await cp(join(root, 'icons'), join(dir, 'icons'), { recursive: true })
   await cp(join(root, '../src/renderer/src/assets/fonts'), join(dir, 'fonts'), { recursive: true })
   await writeFile(join(dir, 'manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`)
+
+  // Package zip for Chrome Web Store / Firefox Add-on store upload
+  const zipPath = join(out, `tesso-${browser}-extension.zip`)
+  try {
+    if (process.platform === 'win32') {
+      execSync(
+        `powershell -NoProfile -Command "Compress-Archive -Path '${dir}/*' -DestinationPath '${zipPath}' -Force"`
+      )
+    } else {
+      execSync(`cd "${dir}" && zip -r "${zipPath}" ./*`)
+    }
+    console.log(`Packaged ${zipPath}`)
+  } catch (err) {
+    console.warn(`Failed to create zip package for ${browser}:`, err.message)
+  }
 }
+
 await rm(scripts, { recursive: true })
 console.log(`Built ${Object.keys(manifests).join(' and ')} into ${out}`)

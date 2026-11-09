@@ -2,21 +2,10 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability within **BondForge**, please report it responsibly via GitHub:
+If you discover a security vulnerability within **Tesso**, please report it responsibly via GitHub:
 
-1. Open the [Security tab](https://github.com/dhairya-404/BandForge/security).
-2. Click **Report a vulnerability**.
+1. Navigate to the [Security Advisories tab](https://github.com/dhairya-404/Tesso/security/advisories) on GitHub.
+2. Click **Report a vulnerability** to open a private disclosure draft.
+3. Include detailed reproduction steps and affected components.
 
-Please do not disclose security vulnerabilities publicly until an official patch has been published.
-
-## Supported Versions
-
-| Version      | Supported          |
-| ------------ | ------------------ |
-| 1.x (latest) | :white_check_mark: |
-
-## Scope
-
-- Core desktop engine (Windows, macOS, Linux)
-- Local socket binding & range download engine
-- Browser extension
+We take the security of Tesso's local socket proxying and multi-network bonding engine seriously and will review your report promptly.

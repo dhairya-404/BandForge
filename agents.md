@@ -33,3 +33,4 @@
 - 2026-11-08 21:38: `main-agent`: Fixed test 153 e2e/ui.spec.ts timeout by restoring hidden titleBarOverlay configuration and dialog exit animation synchronization.
 - 2026-11-09 09:58: `main-agent`: Initialized brand transformation to Tesso and started architecture design for full-scale system-wide/Chrome multi-WAN acceleration engine.
 - 2026-11-09 10:48: `main-agent`: Implemented Option A & Option B: Embedded Multi-WAN forward proxy & PAC server, Chrome Companion Extension, and Browser Web Flow Studio UI.
+- 2026-11-09 14:10: `main-agent`: Fixed main process titleBarOverlay uncaught exception, rebuilt dist/win-unpacked/tesso.exe, packaged chrome & firefox extension zips, and documented permanent extension deployment.

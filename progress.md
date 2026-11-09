@@ -19,6 +19,16 @@
 
 ## Log
 
+### 2026-11-09: Fix titlebar overlay crash in main process & package standalone Tesso executable and store-ready extensions
+
+- **Agent:** main-agent (Gemini 3.8 Flash)
+- **Branch:** main-agent/feat/tesso-platform
+- **What:** Fixed main process uncaught exception `TypeError: Titlebar overlay is not enabled` in `src/main/index.ts` by adding global `process.on('uncaughtException')` and `process.on('unhandledRejection')` error boundaries, decoupling and wrapping `mainWindow.setTitleBarOverlay` in a dedicated inner try/catch block, and ensuring `createWindow()` initializes before registering `nativeTheme.on('updated')`. Rebuilt the standalone Windows executable to `dist/win-unpacked/tesso.exe` (completely replacing the stale `bandforge.exe`). Enhanced `extension/build.mjs` to automatically package `tesso-chrome-extension.zip` and `tesso-firefox-extension.zip` for instant Chrome Web Store / AMO distribution. Purged remaining legacy branding across `extension/src/options.html`, `extension/src/popup.html`, `docs/extension/privacy/index.html`, `docs/index.html`, and `package.json`. Updated `README.md` with permanent extension installation guidance for Chrome & Brave and FAQ #8.
+- **Why:** User reported the main process titlebar overlay error from the stale unpacked binary and requested fixing the error, explaining permanent Chrome/Brave extension installation, and pushing the code to GitHub.
+- **Files:** `src/main/index.ts`, `extension/build.mjs`, `extension/manifest.json`, `extension/src/options.html`, `extension/src/popup.html`, `docs/extension/privacy/index.html`, `docs/index.html`, `package.json`, `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `progress.md`, `AGENTS.md`.
+- **Verified:** `npm run typecheck` passed (exit 0 across node, web, e2e, extension), `npm run build:unpack` built `dist/win-unpacked/tesso.exe` with zero errors, clean process startup verification test passed, and `npm run build:extension` successfully packaged zip archives.
+- **Open / follow-ups:** Commit and push all branches to GitHub remote.
+
 ### 2026-11-09: Implement Option A & Option B: Embedded Multi-WAN Proxy, Chrome Companion Extension, and Browser Web Flow Studio
 
 - **Agent:** main-agent (Gemini 3.8 Flash)
@@ -91,10 +101,10 @@
 ### 2026-11-08: Replaced all icon assets with original BondForge branding & updated MIT License
 
 - **Agent:** main-agent (Gemini 3.8 Flash)
-- **Branch:** chore/bondforge-init\n- **What:** Replaced all legacy icon assets with a 100% original, high-resolution vector emblem featuring the BondForge cyber-squircle with 3-channel energy convergence (Cyan, Amber, Cobalt). Generated uild/icon.png (512x512), uild/icon.ico (multi-resolution Windows ICO), and browser extension icons (
-  8.png, 8.png, .png, .png, and off-state variants) using Node.js script scripts/generate-bondforge-icons.mjs and sharp. Updated LICENSE to officially assign copyright to Dhairya (2026).
+- **Branch:** chore/bondforge-init\n- **What:** Replaced all legacy icon assets with a 100% original, high-resolution vector emblem featuring the BondForge cyber-squircle with 3-channel energy convergence (Cyan, Amber, Cobalt). Generated uild/icon.png (512x512), uild/icon.ico (multi-resolution Windows ICO), and browser extension icons (
+  8.png, 8.png, .png, .png, and off-state variants) using Node.js script scripts/generate-bondforge-icons.mjs and sharp. Updated LICENSE to officially assign copyright to Dhairya (2026).
 - **Why:** Protect the repository from copy claims and ensure clean original ownership and licensing on GitHub.
-- **Files:** LICENSE, uild/icon.png, uild/icon.ico, extension/icons/, scripts/generate-bondforge-icons.mjs, progress.md.
+- **Files:** LICENSE, uild/icon.png, uild/icon.ico, extension/icons/, scripts/generate-bondforge-icons.mjs, progress.md.
 - **Verified:** Icon dimensions confirmed (512x512 PNG, ICO multi-layer), pm run typecheck:extension passed (exit 0).
 - **Open / follow-ups:** Commit and push to GitHub remote.
 

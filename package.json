@@ -4,7 +4,7 @@
   "description": "Tesso: High-performance multi-network bonding & acceleration engine",
   "main": "./out/main/index.js",
   "author": "Dhairya",
-  "homepage": "https://github.com/dhairya-404/BandForge",
+  "homepage": "https://github.com/dhairya-404/Tesso",
   "scripts": {
     "format": "prettier --write .",
     "format:check": "prettier --check .",
