@@ -46,17 +46,60 @@ Traditional applications route all outgoing TCP traffic through the operating sy
 
 ---
 
-## 🌐 Browser Multi-WAN Acceleration (Chrome & Edge)
+## 🌐 Browser Multi-WAN Acceleration (Chrome, Edge & System)
 
 Beyond file downloads, Tesso accelerates general web browsing and video streaming across all connected networks via an embedded local forward proxy and automatic configuration server:
 
 - **Local Forward Proxy (`127.0.0.1:9090`)**: Dispatches outbound HTTP requests and HTTPS `CONNECT` tunnels across your physical adapters using least-connections round-robin scheduling.
 - **PAC Auto-Config Server (`http://127.0.0.1:9091/proxy.pac`)**: Serves a dynamic Proxy Auto-Configuration (PAC) script directly to browsers. Local and intranet domains are routed `DIRECT`, while public internet streams are multiplexed across your bonded adapters.
-- **Chrome Companion Extension (`extension/dist/chrome`)**: Provides a 1-click toolbar toggle to activate or deactivate browser multi-network acceleration instantly without altering your OS network settings.
-- **Direct CLI Launch (No Extension Needed)**: Launch Chrome with multi-WAN acceleration from terminal:
-  ```powershell
-  start chrome --proxy-pac-url=http://127.0.0.1:9091/proxy.pac
+
+### 4 Ways to Connect Your Browser:
+
+#### Option 1: Command Prompt (CMD) — Recommended Quickest
+
+In standard Windows Command Prompt (`cmd.exe`), the built-in `start` command automatically resolves Google Chrome's path:
+
+```cmd
+start chrome --proxy-pac-url=http://127.0.0.1:9091/proxy.pac
+```
+
+#### Option 2: Full Executable Path (PowerShell & CMD)
+
+If `chrome.exe` is not in your system environment PATH, launch via Chrome's default install directory:
+
+- **Command Prompt (CMD):**
+  ```cmd
+  "C:\Program Files\Google\Chrome\Application\chrome.exe" --proxy-pac-url=http://127.0.0.1:9091/proxy.pac
   ```
+- **PowerShell:**
+  ```powershell
+  & "C:\Program Files\Google\Chrome\Application\chrome.exe" --proxy-pac-url=http://127.0.0.1:9091/proxy.pac
+  ```
+
+#### Option 3: Tesso Chrome Companion Extension (1-Click UI)
+
+Zero terminal commands needed:
+
+1. In Google Chrome, navigate to `chrome://extensions`.
+2. Toggle on **Developer mode** in the top-right corner.
+3. Click **Load unpacked** and select the folder:
+   ```
+   extension/dist/chrome
+   ```
+4. Click the **Tesso** icon in your Chrome toolbar and switch on **Accelerate Browser (Multi-WAN)**.
+
+#### Option 4: System-Wide Windows Proxy (Accelerates All Browsers)
+
+Route all browsers (Chrome, Edge, Brave, Firefox, Arc) through Tesso without command line flags:
+
+1. Press `Win + I` to open **Windows Settings**.
+2. Navigate to **Network & Internet** → **Proxy**.
+3. Under **Automatic proxy setup**, turn ON **Use setup script**.
+4. Set the Script address:
+   ```
+   http://127.0.0.1:9091/proxy.pac
+   ```
+5. Click **Save**. All browser sessions will now automatically distribute across your bonded adapters.
 
 ---
 
