@@ -38,10 +38,10 @@ async function renderConnection(): Promise<void> {
   element('dot').className = `dot ${reached === 'ok' ? 'ok' : reached === 'update' ? 'warn' : ''}`
   element('connection').textContent =
     reached === 'ok'
-      ? 'Connected to Plexo'
+      ? 'Connected to Tesso'
       : reached === 'update'
-        ? 'Update Plexo to use this extension'
-        : 'Plexo isn’t open'
+        ? 'Update Tesso to use this extension'
+        : 'Tesso isn’t open'
   element('open-plexo').hidden = reached !== 'closed'
   const port = plexoPort()
   element('port').textContent = port === null ? '' : `127.0.0.1:${port}`

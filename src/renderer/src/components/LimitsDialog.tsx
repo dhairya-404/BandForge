@@ -387,7 +387,7 @@ function NetworkPage({
       <div className="flex flex-col gap-1 pb-3">
         <h3 className="font-sans text-[18px] leading-none font-semibold">{name}</h3>
         <div className="font-mono text-[12px] text-muted-foreground">
-          {formatBytes(used)} used by Plexo {dataUsageLabel(period)}
+          {formatBytes(used)} used by Tesso {dataUsageLabel(period)}
         </div>
       </div>
 

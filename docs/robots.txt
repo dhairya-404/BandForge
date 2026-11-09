@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://github.com/dhairya-404/BandForgesitemap.xml
+Sitemap: https://github.com/dhairya-404/Tesso/sitemap.xml

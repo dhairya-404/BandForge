@@ -13,7 +13,7 @@ import { saveSettings } from './settings'
 
 const CHECK_EVERY_MS = 4 * 60 * 60_000
 /** Where an update the app couldn't install itself is downloaded from instead. */
-const DOWNLOAD_PAGE = 'https://github.com/dhairya-404/BandForge/releases'
+const DOWNLOAD_PAGE = 'https://github.com/dhairya-404/Tesso/releases'
 
 let state: UpdateState = { status: 'idle', autoUpdate: true }
 let getWindow: () => BrowserWindow | null = () => null
@@ -58,7 +58,7 @@ function setAutoUpdate(on: boolean): void {
   autoUpdater.autoDownload = on
   set({ autoUpdate: on })
   saveSettings({ autoUpdate: on }).catch((error) =>
-    console.error('[plexo] failed to save the automatic updates setting', error)
+    console.error('[tesso] failed to save the automatic updates setting', error)
   )
   if (on && state.status === 'available') download()
 }
@@ -77,10 +77,10 @@ function menuItems(): MenuItemConstructorOptions[] {
   } else if (status === 'downloading') {
     items.push({ label: `Downloading ${version}…`, enabled: false })
   } else if (status === 'available') {
-    items.push({ label: `Download Plexo ${version}`, click: download })
+    items.push({ label: `Download Tesso ${version}`, click: download })
   } else if (status === 'error') {
     items.push({
-      label: `Get Plexo ${version} from the Website…`,
+      label: `Get Tesso ${version} from the Website…`,
       click: () => void shell.openExternal(DOWNLOAD_PAGE)
     })
   }
@@ -141,15 +141,22 @@ export function startUpdater(window: () => BrowserWindow | null, autoUpdate: boo
   getWindow = window
   state = { ...state, autoUpdate }
   autoUpdater.autoDownload = autoUpdate
-  // On by default for an rc build, and then it only ever looks for newer rc tags: 1.0.0 would
-  // never reach it. Off, every build follows Latest, whatever its version. A release marked
-  // pre-release on GitHub is never Latest, so it reaches nobody.
   autoUpdater.allowPrerelease = false
+
+  try {
+    autoUpdater.setFeedURL({
+      provider: 'github',
+      owner: 'dhairya-404',
+      repo: 'Tesso'
+    })
+  } catch (err) {
+    console.warn('[Tesso] Failed to configure autoUpdater feed URL:', err)
+  }
 
   autoUpdater.on('checking-for-update', () => set({ status: 'checking' }))
   autoUpdater.on('update-not-available', () => {
     set({ status: 'idle', version: undefined })
-    answer('You’re up to date', `Plexo ${app.getVersion()} is the newest version.`)
+    answer('You’re up to date', `Tesso ${app.getVersion()} is the newest version.`)
   })
   autoUpdater.on('update-available', ({ version }) => {
     asked = false
@@ -161,7 +168,7 @@ export function startUpdater(window: () => BrowserWindow | null, autoUpdate: boo
   })
   autoUpdater.on('update-downloaded', ({ version }) => set({ status: 'ready', version }))
   autoUpdater.on('error', (error) => {
-    console.error('[plexo] update failed', error)
+    console.error('[tesso] update failed', error)
     // Before an update is found (offline, GitHub down) there's nothing to show. After, the
     // website still has it — the way an unsigned Mac build, which can't install it, gets it.
     set({ status: state.version ? 'error' : 'idle' })

@@ -6,8 +6,8 @@ import { STRIPPED_FROM_NAMES } from '../torrent/paths'
 /** An NZB is a list of message IDs; a few MB for even a large release. A file or link much
  * larger than this isn't one. */
 const MAX_NZB_FILE_BYTES = 64 * 1024 * 1024
-const TOO_LARGE = 'Plexo supports NZB files up to 64 MB.'
-const NOT_NZB = 'This isn’t an NZB file Plexo can read'
+const TOO_LARGE = 'Tesso supports NZB files up to 64 MB.'
+const NOT_NZB = 'This isn’t an NZB file Tesso can read'
 const MAX_NAME_BYTES = 255
 const WINDOWS_RESERVED = /^(con|prn|aux|nul|com\d|lpt\d)(\..*)?$/i
 

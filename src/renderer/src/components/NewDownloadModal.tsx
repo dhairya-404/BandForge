@@ -12,7 +12,7 @@ import {
   ArrowRight
 } from 'lucide-react'
 import type { HttpProbeResult, ProbeResult, StartHttpDownloadRequest } from '@shared/types'
-import { BondForgeLogo } from './BondForgeLogo'
+import { TessoLogo } from './TessoLogo'
 import { useAppStore } from '../store/useAppStore'
 import { formatBytes } from '../utils/format'
 
@@ -136,7 +136,7 @@ function NewDownloadModalContent(): React.JSX.Element {
         {/* Header */}
         <div className="flex items-center justify-between border-b border-[var(--border)] pb-4">
           <div className="flex items-center gap-3">
-            <BondForgeLogo size={26} />
+            <TessoLogo size={26} />
             <div>
               <h2 className="text-base font-bold text-white tracking-tight">
                 New Accelerated Transfer

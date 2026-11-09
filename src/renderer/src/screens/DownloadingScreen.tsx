@@ -144,12 +144,12 @@ export const DownloadingScreen = memo(function DownloadingScreen({
   useEffect(() => {
     if (isPaused) {
       const label = isQueued ? 'Queued' : 'Paused'
-      document.title = knownSize ? `Plexo — ${label} (${percent}%)` : `Plexo — ${label}`
+      document.title = knownSize ? `Tesso — ${label} (${percent}%)` : `Tesso — ${label}`
     } else {
-      document.title = knownSize ? `Plexo — ${percent}%` : 'Plexo — downloading'
+      document.title = knownSize ? `Tesso — ${percent}%` : 'Tesso — downloading'
     }
     return () => {
-      document.title = 'Plexo'
+      document.title = 'Tesso'
     }
   }, [percent, knownSize, isPaused, isQueued])
 

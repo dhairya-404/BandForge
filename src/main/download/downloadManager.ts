@@ -1510,7 +1510,7 @@ export class DownloadManager {
       throw new Error('That link is to a different file: its bytes don’t match what’s downloaded.')
     }
     if (verdict === 'unknown') {
-      throw new Error('Plexo couldn’t check that link against what’s downloaded. Try again.')
+      throw new Error('Tesso couldn’t check that link against what’s downloaded. Try again.')
     }
     if (!replaceable()) throw new Error('The download changed while its new link was checked.')
     runtime.requestPayload.url = probe.finalUrl

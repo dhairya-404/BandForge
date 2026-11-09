@@ -231,7 +231,7 @@ function UsenetServerForm({
         </div>
         {server?.passwordInMemory && (
           <p className={hintClass}>
-            This computer has no keychain Plexo can use, so your password is kept only until Plexo
+            This computer has no keychain Tesso can use, so your password is kept only until Tesso
             quits.
           </p>
         )}

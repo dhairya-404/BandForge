@@ -1,6 +1,6 @@
 import type { BrowserContext, BrowserCookie } from '../../shared/types'
 
-const USER_AGENT = 'Plexo/1.0'
+const USER_AGENT = 'Tesso/1.0'
 
 /** Called again for every redirect, so a site's session cookie never reaches the next host (its
  * CDN), while a cookie set for a whole domain still follows a hop within it. */

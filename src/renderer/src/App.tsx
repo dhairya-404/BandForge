@@ -1,22 +1,22 @@
 import type { DownloadState, FinishedDownload } from '@shared/types'
 import React, { useState } from 'react'
-import { BondForgeSidebar, StudioTab } from './components/BondForgeSidebar'
+import { TessoNavigationDeck, StudioTab } from './components/TessoNavigationDeck'
 import { DownloadActionsProvider } from './components/DownloadActionsProvider'
 import { NetworkBindingDialog } from './components/NetworkBindingDialog'
-import { NewDownloadDialog } from './components/NewDownloadDialog'
+import { NewPipelineModal } from './components/NewPipelineModal'
 import { StatusBar } from './components/StatusBar'
 import { TelegramDialog } from './components/TelegramDialog'
-import { TitleBar } from './components/TitleBar'
+import { TessoTitleBar } from './components/TessoTitleBar'
 import { TooltipProvider } from './components/ui/tooltip'
 import { useDownloadEvents } from './hooks/useDownloadEvents'
 import { useNetworkEvents } from './hooks/useNetworks'
 import { useNewDownloadShortcuts, useOpenedLinks } from './hooks/useOpenedLinks'
 import { CompleteScreen } from './screens/CompleteScreen'
 import { DownloadingScreen } from './screens/DownloadingScreen'
-import { DownloadsScreen } from './screens/DownloadsScreen'
+import { PipelineStudioScreen } from './screens/PipelineStudioScreen'
 import { EngineSettingsScreen } from './screens/EngineSettingsScreen'
 import { ErrorScreen } from './screens/ErrorScreen'
-import { ForgeDashboardScreen } from './screens/ForgeDashboardScreen'
+import { NexusDashboardScreen } from './screens/NexusDashboardScreen'
 import { HardwareDeckScreen } from './screens/HardwareDeckScreen'
 import { BrowserFlowScreen } from './screens/BrowserFlowScreen'
 import { useAppStore } from './store/useAppStore'
@@ -63,9 +63,10 @@ function CurrentScreen({
   switch (activeTab) {
     case 'dashboard':
       return (
-        <ForgeDashboardScreen
+        <NexusDashboardScreen
           onOpenNewDownload={() => useAppStore.getState().openNewDownload()}
           onNavigateBrowserFlow={() => onNavigateTab('browser')}
+          onNavigateTransfers={() => onNavigateTab('transfers')}
         />
       )
     case 'adapters':
@@ -76,7 +77,7 @@ function CurrentScreen({
       return <EngineSettingsScreen />
     case 'transfers':
     default:
-      return <DownloadsScreen />
+      return <PipelineStudioScreen />
   }
 }
 
@@ -86,7 +87,8 @@ function App(): React.JSX.Element {
   useNewDownloadShortcuts()
   useNetworkEvents()
 
-  const [activeTab, setActiveTab] = useState<StudioTab>('transfers')
+  // Default landing route is the Tesso Nexus Command Dashboard
+  const [activeTab, setActiveTab] = useState<StudioTab>('dashboard')
   const openNewDownload = useAppStore((state) => state.openNewDownload)
   const isDetailView = useAppStore((state) => state.view.name === 'download')
 
@@ -94,10 +96,10 @@ function App(): React.JSX.Element {
     <TooltipProvider>
       <DownloadActionsProvider>
         <div className="flex h-full flex-col bg-[var(--bg)] text-[var(--text)] overflow-hidden font-sans">
-          <TitleBar />
+          <TessoTitleBar />
           <div className="flex flex-1 min-h-0 overflow-hidden">
             {!isDetailView && (
-              <BondForgeSidebar
+              <TessoNavigationDeck
                 activeTab={activeTab}
                 onSelectTab={setActiveTab}
                 onOpenNewDownload={() => openNewDownload()}
@@ -108,7 +110,7 @@ function App(): React.JSX.Element {
             </main>
           </div>
           <StatusBar />
-          <NewDownloadDialog />
+          <NewPipelineModal />
           <TelegramDialog />
           <NetworkBindingDialog />
         </div>

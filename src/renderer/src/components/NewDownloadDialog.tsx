@@ -66,7 +66,7 @@ function NetworkListNotice({
   return (
     <span className="flex flex-wrap items-center gap-2 text-[12.5px] leading-snug text-[var(--text-secondary)]">
       {status === 'error'
-        ? `Plexo couldn’t list this computer’s networks.${detail ? ` ${detail}` : ''}`
+        ? `Tesso couldn’t list this computer’s networks.${detail ? ` ${detail}` : ''}`
         : 'No networks connected. Join a Wi-Fi network, plug in Ethernet, or connect your phone using USB tethering.'}
       <Button type="button" variant="secondary" size="xs" onClick={onScan}>
         Scan again

@@ -2,7 +2,7 @@
 ;(function () {
   'use strict'
   const $ = (id) => document.getElementById(id)
-  const repo = 'https://github.com/dhairya-404/BandForge'
+  const repo = 'https://github.com/dhairya-404/Tesso'
   const labels = { mac: 'macOS', win: 'Windows', linux: 'Linux' }
   const sectionIds = ['features', 'downloads', 'faq', 'support']
   const sectionLinks = Array.from(document.querySelectorAll('.nav-section-link'))
@@ -77,8 +77,8 @@
 
   const installGuides = {
     win: {
-      title: 'Installing Plexo on Windows',
-      why: 'Plexo isn’t code-signed yet, so your browser and Windows SmartScreen may warn you before it installs.',
+      title: 'Installing Tesso on Windows',
+      why: 'Tesso isn’t code-signed yet, so your browser and Windows SmartScreen may warn you before it installs.',
       steps: [
         ['If your browser flags the file, choose **Keep**.'],
         ['On **Windows protected your PC**, click **More info**.'],
@@ -87,7 +87,7 @@
       fix: null
     },
     linux: {
-      title: 'Running Plexo on Linux',
+      title: 'Running Tesso on Linux',
       why: 'Linux doesn’t block unsigned apps, but each package type has its own first step.',
       steps: [
         [
@@ -159,7 +159,7 @@
       const url = new URL(value)
       return url.protocol === 'https:' &&
         url.hostname === 'github.com' &&
-        url.pathname.startsWith('/dhairya-404/BandForge/releases/')
+        url.pathname.startsWith('/dhairya-404/Tesso/releases/')
         ? url.href
         : null
     } catch {
@@ -268,7 +268,7 @@
     icon.append(shield)
     const title = element('span', 'install-help-title')
     title.append(
-      element('strong', '', 'First time opening Plexo?'),
+      element('strong', '', 'First time opening Tesso?'),
       element('small', '', guide.title)
     )
     summary.append(icon, title, element('span', 'install-help-toggle', '+'))
@@ -422,7 +422,7 @@
         $('hero-alternates').append(link)
       })
     } else {
-      $('primary-title').textContent = 'Download Plexo'
+      $('primary-title').textContent = 'Download Tesso'
       if (env.os === 'mobile') {
         const suggestedOS = /Android/i.test(navigator.userAgent) ? 'linux' : 'mac'
         const suggestedGroup =
@@ -446,7 +446,7 @@
     const timeout = setTimeout(() => controller.abort(), 9000)
     try {
       const [response, env] = await Promise.all([
-        fetch('https://api.github.com/repos/dhairya-404/BandForge/releases?per_page=10', {
+        fetch('https://api.github.com/repos/dhairya-404/Tesso/releases?per_page=10', {
           signal: controller.signal
         }),
         environment()
@@ -503,7 +503,7 @@
     if (!guide) return
     lastDownload = { asset, href }
     downloadToast.hidden = true
-    $('install-dialog-title').textContent = 'Thanks for downloading Plexo'
+    $('install-dialog-title').textContent = 'Thanks for downloading Tesso'
     $('install-dialog-subtitle').textContent =
       'Your download has started. Here’s how to open it on ' + labels[asset.os] + ' the first time.'
     $('download-retry').href = href
@@ -743,12 +743,12 @@
   $('share-button').addEventListener('click', async () => {
     const url =
       location.protocol === 'file:' || ['localhost', '127.0.0.1'].includes(location.hostname)
-        ? 'https://github.com/dhairya-404/BandForge'
+        ? 'https://github.com/dhairya-404/Tesso'
         : location.origin + location.pathname
     try {
       if (navigator.share)
         await navigator.share({
-          title: 'Plexo',
+          title: 'Tesso',
           text: 'Combine your networks. Download faster.',
           url
         })
@@ -756,7 +756,7 @@
         await navigator.clipboard.writeText(url)
         $('share-status').textContent = 'Link copied. Ready to share.'
         $('share-label').textContent = 'Link copied'
-        window.setTimeout(() => ($('share-label').textContent = 'Share Plexo'), 2400)
+        window.setTimeout(() => ($('share-label').textContent = 'Share Tesso'), 2400)
       }
     } catch (error) {
       if (error.name !== 'AbortError') {

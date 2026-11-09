@@ -8,24 +8,54 @@
 ;(function (root) {
   'use strict'
 
-  root.PlexoChangelog = [
+  root.TessoChangelog = root.PlexoChangelog = [
+    {
+      version: 'v1.0.0',
+      items: [
+        {
+          kind: 'new',
+          title: 'Tesso Multi-WAN Bonding Platform',
+          text: 'Dynamically aggregates Wi-Fi, Ethernet, and Mobile 4G/5G USB tethering to accelerate downloads and web traffic with $0 server cost.'
+        },
+        {
+          kind: 'new',
+          title: 'Browser Multi-WAN Acceleration',
+          text: 'Local forward proxy (127.0.0.1:9090) and dynamic PAC auto-config server (port 9091) distributing HTTP and HTTPS CONNECT tunnels across bonded adapters.'
+        },
+        {
+          kind: 'new',
+          title: 'Companion Browser Extensions & CRX',
+          text: '1-click companion extension and drag-and-drop CRX for permanent installation in Google Chrome, Brave, and Microsoft Edge.'
+        },
+        {
+          kind: 'new',
+          title: 'Windows NSIS Assisted Setup Installer',
+          text: 'Interactive installer providing customizable destination directories, desktop shortcuts, and uninstaller support.'
+        },
+        {
+          kind: 'improved',
+          title: 'Resilient Dual-Stack Socket Binding & Failover',
+          text: 'Socket address family matching, ordered adapter failover, and dynamic network interface hotplugging.'
+        }
+      ]
+    },
     {
       version: 'v1.0.0-rc.15',
       items: [
         {
           kind: 'new',
           title: 'Automatic updates',
-          text: 'New versions download in the background and install when you restart. The update button in the bottom bar shows how far along it is. Turn automatic updates off there, or in the Plexo menu on a Mac.'
+          text: 'New versions download in the background and install when you restart. The update button in the bottom bar shows how far along it is. Turn automatic updates off there, or in the Tesso menu on a Mac.'
         },
         {
           kind: 'new',
           title: 'Scheduled downloads',
-          text: 'Let downloads run only at set times, like overnight, under Networks → Speed & data limits. Outside those times they wait in the queue. Plexo needs to be running for them to start.'
+          text: 'Let downloads run only at set times, like overnight, under Networks → Speed & data limits. Outside those times they wait in the queue. Tesso needs to be running for them to start.'
         },
         {
           kind: 'new',
           title: 'Downloads from your browser',
-          text: 'The Plexo extension for Chrome, Edge and Firefox hands a download to Plexo with your sign-in, so files behind a login download as they do in the browser.'
+          text: 'The Tesso extension for Chrome, Edge and Firefox hands a download to Tesso with your sign-in, so files behind a login download as they do in the browser.'
         },
         {
           kind: 'new',
@@ -40,7 +70,7 @@
         {
           kind: 'fixed',
           title: 'Smaller fixes',
-          text: 'Servers that answered Plexo’s first check with the whole file now download in parallel, and file names sent encoded (like `=?UTF-8?B?…?=`) are saved readable.'
+          text: 'Servers that answered Tesso’s first check with the whole file now download in parallel, and file names sent encoded (like `=?UTF-8?B?…?=`) are saved readable.'
         }
       ]
     },
@@ -60,7 +90,7 @@
         {
           kind: 'new',
           title: 'Speed and data limits',
-          text: 'Set a total speed limit, a limit per network, and Slow mode for calls. Give a network a daily, weekly or monthly data allowance and Plexo stops using it once it is spent.'
+          text: 'Set a total speed limit, a limit per network, and Slow mode for calls. Give a network a daily, weekly or monthly data allowance and Tesso stops using it once it is spent.'
         },
         {
           kind: 'new',
@@ -125,7 +155,7 @@
         {
           kind: 'faster',
           title: 'Picks its own stream count',
-          text: 'Each network starts with 4 streams and Plexo adds more only while they actually add speed, so the streams setting is gone.'
+          text: 'Each network starts with 4 streams and Tesso adds more only while they actually add speed, so the streams setting is gone.'
         },
         {
           kind: 'faster',
@@ -145,7 +175,7 @@
         {
           kind: 'improved',
           title: 'Windows installer options',
-          text: 'Choose where Plexo is installed, and whether it adds a desktop shortcut.'
+          text: 'Choose where Tesso is installed, and whether it adds a desktop shortcut.'
         }
       ]
     },
@@ -160,7 +190,7 @@
         {
           kind: 'new',
           title: 'Same-network warning',
-          text: 'Plexo warns you when two selected connections are on the same local network, since Windows only uses one adapter then.'
+          text: 'Tesso warns you when two selected connections are on the same local network, since Windows only uses one adapter then.'
         },
         {
           kind: 'improved',

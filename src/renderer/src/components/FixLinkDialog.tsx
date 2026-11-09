@@ -56,7 +56,7 @@ export function FixLinkDialog({
           <DialogTitle>Paste a new link</DialogTitle>
           <DialogDescription>
             {download &&
-              `Paste a new link to the same file: ${download.fileName}${download.totalBytes > 0 ? ` (${formatBytes(download.totalBytes)})` : ''}. Plexo resumes from where the download stopped.`}
+              `Paste a new link to the same file: ${download.fileName}${download.totalBytes > 0 ? ` (${formatBytes(download.totalBytes)})` : ''}. Tesso resumes from where the download stopped.`}
             {download?.kind === 'http' &&
               download.fromBrowser &&
               ` Or download it again in ${download.fromBrowser} and choose Resume it.`}

@@ -19,6 +19,16 @@
 
 ## Log
 
+### 2026-11-09: Build Windows NSIS setup installer and publish GitHub v1.0.0 release
+
+- **Agent:** main-agent (Gemini 3.8 Flash)
+- **Branch:** main-agent/feat/tesso-platform
+- **What:** Configured `electron-builder.yml` to target Windows NSIS installer (`tesso-1.0.0-setup.exe`), excluding non-app root directories. Assembled and packaged full 64-bit setup installer with uninstaller, desktop shortcuts, and auto-updater blockmap. Updated `docs/changelog.js`, `scripts/release-notes.mjs`, and `README.md` with 1-click installer download badges and release tables. Created and published the official GitHub release `v1.0.0` with assets (`tesso-1.0.0-setup.exe`, `tesso.crx`, `tesso-chrome-extension.zip`, `latest.yml`, `tesso-1.0.0-setup.exe.blockmap`).
+- **Why:** User requested creating a new release in GitHub with an installer for easier downloading.
+- **Files:** `electron-builder.yml`, `docs/changelog.js`, `scripts/release-notes.mjs`, `README.md`, `releases/README.md`, `.gitignore`, `progress.md`, `AGENTS.md`.
+- **Verified:** Built `dist/tesso-1.0.0-setup.exe` (131 MB) via electron-builder with exit code 0, verified `release-notes.mjs` outputs markdown notes and file list cleanly, and verified `npm run format:check` passes with zero errors.
+- **Open / follow-ups:** Push commits to `origin/main-agent/feat/tesso-platform`, `origin/staging`, and `origin/main`, and push git tag `v1.0.0`.
+
 ### 2026-11-09: Purge remaining legacy 'Plexo' branding across TelegramDialog and application strings
 
 - **Agent:** main-agent (Gemini 3.8 Flash)

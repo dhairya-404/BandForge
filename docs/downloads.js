@@ -1,5 +1,5 @@
 /*
- * What Plexo's download page and its GitHub Release notes say about each file we ship, and which
+ * What Tesso's download page and its GitHub Release notes say about each file we ship, and which
  * one to put in front of a visitor. Plain ES5 so the page can load it as-is; the release-notes
  * script and the tests load it with require().
  *
@@ -38,7 +38,7 @@
       '.rpm (Fedora / RHEL): `sudo dnf install ./plexo-*.rpm`.',
       '.tar.gz (Arch, or anywhere without FUSE): `tar xzf plexo-*.tar.gz`, then run `./plexo` inside the extracted folder.',
       'Don’t open the AppImage with Disks (it isn’t a disk image — an “image is smaller than the target device” message means it was opened there). Make it executable and run it as above.',
-      'Using more than one network needs Linux kernel 5.7 or newer (any current distro); on older kernels Plexo can only use the default network.'
+      'Using more than one network needs Linux kernel 5.7 or newer (any current distro); on older kernels Tesso can only use the default network.'
     ]
   }
 
@@ -314,7 +314,7 @@
     return out.join('\n')
   }
 
-  root.PlexoDownloads = {
+  root.TessoDownloads = root.PlexoDownloads = {
     describe: describe,
     detectEnvironment: detectEnvironment,
     build: build,

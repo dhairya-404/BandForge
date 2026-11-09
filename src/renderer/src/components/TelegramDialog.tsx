@@ -21,7 +21,7 @@ import { Dialog, DialogContent, DialogTitle } from './ui/dialog'
 import { Input } from './ui/input'
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 
-/** Telegram, as Plexo reaches it: the user's own session, and only Saved Messages — the "me"
+/** Telegram, as Tesso reaches it: the user's own session, and only Saved Messages — the "me"
  * peer every request here is hard-pinned to. Signed in, it lists the media there; a pick of it
  * starts downloads the manager runs like any other. */
 
@@ -75,7 +75,7 @@ function TelegramPanel({ onDone }: { onDone: () => void }): React.JSX.Element {
           </div>
         </div>
         <p className="mt-1.5 text-[12px] leading-[1.5] text-[var(--text-secondary)]">
-          Plexo is an unofficial Telegram client: signing in grants it full access to your account,
+          Tesso is an unofficial Telegram client: signing in grants it full access to your account,
           though it reads nothing but Saved Messages.
         </p>
       </div>
@@ -114,7 +114,7 @@ const fieldLabelClass = 'w-24 shrink-0 text-[12.5px] text-[var(--text-secondary)
 const errorClass = 'text-[12px] leading-[1.4] text-[var(--color-danger)]'
 
 /** The sign-in steps, driven by what main reports: a QR to scan (default, when credentials to
- * power one exist — Plexo's own in a bundled release, else the user's from an earlier
+ * power one exist — Tesso's own in a bundled release, else the user's from an earlier
  * sign-in), then the code or the two-step-verification password if those flows are used. */
 function TelegramLogin({ auth }: { auth: TelegramAuthState }): React.JSX.Element {
   const canQr = auth.bundled === true || auth.hasOwnKeys === true
@@ -125,7 +125,7 @@ function TelegramLogin({ auth }: { auth: TelegramAuthState }): React.JSX.Element
   const [code, setCode] = useState('')
   const [password, setPassword] = useState('')
   const [busy, setBusy] = useState(false)
-  // Bundled builds lead with Plexo's own credentials; the user's own api keys are one toggle
+  // Bundled builds lead with Tesso's own credentials; the user's own api keys are one toggle
   // away — the api_hash never comes prefilled (main never sends it), and stored own keys keep
   // winning while the fields stay empty (see main's startLogin).
   const [showApi, setShowApi] = useState(auth.bundled !== true)
@@ -277,7 +277,7 @@ function TelegramLogin({ auth }: { auth: TelegramAuthState }): React.JSX.Element
     >
       {needsApiFields ? (
         <p className="text-[12.5px] leading-[1.5]">
-          Plexo needs an <span className="font-medium">api_id</span> and{' '}
+          Tesso needs an <span className="font-medium">api_id</span> and{' '}
           <span className="font-medium">api_hash</span> of your own: create an app at
           my.telegram.org → API development tools, and enter them here with your phone number.
         </p>
@@ -333,7 +333,7 @@ function TelegramLogin({ auth }: { auth: TelegramAuthState }): React.JSX.Element
           size="xs"
           onClick={() => setShowApi((shown) => !shown)}
         >
-          {showApi ? 'Use Plexo’s api keys instead' : 'Use your own api keys (advanced)'}
+          {showApi ? 'Use Tesso’s api keys instead' : 'Use your own api keys (advanced)'}
         </Button>
       )}
       {auth.error && (

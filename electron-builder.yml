@@ -19,7 +19,13 @@ files:
   # the native WebRTC polyfill; don't ship unused host-platform binaries in cross-platform builds.
   - '!node_modules/node-datachannel/**'
   - '!node_modules/webrtc-polyfill/**'
-  - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+  - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json,tsconfig.e2e.json}'
+  - '!extension/**'
+  - '!releases/**'
+  - '!docs/**'
+  - '!e2e/**'
+  - '!test-results/**'
+  - '!scripts/**'
 asarUnpack:
   - resources/**
 win:
@@ -29,10 +35,8 @@ win:
   executableName: tesso
   target:
     - target: nsis
-      arch: [x64, arm64]
+      arch: [x64]
 nsis:
-  # No ${arch} on purpose: one installer holds both x64 and ARM64, and docs/downloads.js reads an
-  # installer with no architecture in its name as exactly that. Add one here and update it there.
   artifactName: ${name}-${version}-setup.${ext}
   # Assisted installer instead of one-click, so users can choose the install folder (and drive).
   # One-click always installs to %LOCALAPPDATA%\Programs with no way to change it.
@@ -52,14 +56,14 @@ mac:
       arch: [x64, arm64]
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
-    - NSDownloadsFolderUsageDescription: Plexo saves downloaded files to your Downloads folder.
-    # Magnet links, .torrent and .nzb files can be opened with Plexo, as one choice among others:
+    - NSDownloadsFolderUsageDescription: Tesso saves downloaded files to your Downloads folder.
+    # Magnet links, .torrent and .nzb files can be opened with Tesso, as one choice among others:
     # it's never made the default over a client the user already has (LSHandlerRank).
-    # plexo:// is Plexo's own scheme, so registering it takes nothing from another app.
+    # plexo:// is Tesso's own scheme, so registering it takes nothing from another app.
     - CFBundleURLTypes:
         - CFBundleURLName: Magnet link
           CFBundleURLSchemes: [magnet]
-        - CFBundleURLName: Plexo
+        - CFBundleURLName: Tesso
           CFBundleURLSchemes: [plexo]
       CFBundleDocumentTypes:
         - CFBundleTypeName: Torrent
@@ -109,4 +113,4 @@ npmRebuild: false
 publish:
   provider: github
   owner: dhairya-404
-  repo: BandForge
+  repo: Tesso

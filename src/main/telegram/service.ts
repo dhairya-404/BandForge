@@ -825,7 +825,7 @@ export class TelegramService implements TelegramServiceApi {
         if (result instanceof Api.upload.FileCdnRedirect) {
           throw new TelegramFileError(
             'other',
-            'Telegram served this file from a CDN, which Plexo can’t fetch.'
+            'Telegram served this file from a CDN, which Tesso can’t fetch.'
           )
         }
         return result.bytes
@@ -983,7 +983,7 @@ export class TelegramService implements TelegramServiceApi {
                 apiId: identity?.apiId ?? this.credentials!.apiId,
                 deviceModel: identity?.deviceModel ?? 'Desktop',
                 systemVersion: identity?.systemVersion ?? 'unknown',
-                appVersion: identity?.appVersion ?? 'Plexo',
+                appVersion: identity?.appVersion ?? 'Tesso',
                 systemLangCode: identity?.systemLangCode ?? 'en',
                 langPack: identity?.langPack ?? '',
                 langCode: identity?.langCode ?? 'en',

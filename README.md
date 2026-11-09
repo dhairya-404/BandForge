@@ -10,6 +10,16 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/dhairya-404/Tesso/releases/latest">
+    <img src="https://img.shields.io/badge/Download-Windows%20Setup%20Installer-00ffcc?style=for-the-badge&logo=windows&logoColor=black" alt="Download Windows Installer">
+  </a>
+  <a href="https://github.com/dhairya-404/Tesso/raw/main/releases/tesso.crx">
+    <img src="https://img.shields.io/badge/Companion%20Extension-.crx-38bdf8?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Download Chrome Extension">
+  </a>
+</p>
+
+<p align="center">
+  <a href="#downloads">Downloads</a> •
   <a href="#features">Features</a> •
   <a href="#how-it-works">How It Works</a> •
   <a href="#browser-multi-wan">Browser Multi-WAN</a> •
@@ -19,6 +29,18 @@
   <a href="#quick-start">Quick Start</a> •
   <a href="#license">License</a>
 </p>
+
+---
+
+## <a id="downloads" name="downloads"></a>🚀 Downloads & Releases
+
+| Package                                                                                                          | Platform            | Format                  | Description                                                      |
+| :--------------------------------------------------------------------------------------------------------------- | :------------------ | :---------------------- | :--------------------------------------------------------------- |
+| **[Tesso Windows Setup](https://github.com/dhairya-404/Tesso/releases/download/v1.0.0/tesso-1.0.0-setup.exe)**   | Windows 10/11 (x64) | `.exe` (NSIS Installer) | Full desktop app with automatic PAC proxy and network aggregator |
+| **[Chrome Companion Extension](https://github.com/dhairya-404/Tesso/raw/main/releases/tesso.crx)**               | Chromium Browsers   | `.crx`                  | 1-click drag-and-drop extension for Chrome, Brave, and Edge      |
+| **[Extension Store Package](https://github.com/dhairya-404/Tesso/raw/main/releases/tesso-chrome-extension.zip)** | Web Store           | `.zip`                  | Store-ready distribution archive                                 |
+
+---
 
 ---
 

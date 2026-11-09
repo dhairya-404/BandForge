@@ -117,7 +117,7 @@ export class NzbTransfer implements Transfer {
         (server) => {
           if (this.runtime.stop.signal.aborted) return
           if (!server) {
-            this.host.failDownload('Set up a news server in Plexo to download from Usenet.')
+            this.host.failDownload('Set up a news server in Tesso to download from Usenet.')
             return
           }
           if (!server.enabled) {
