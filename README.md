@@ -126,10 +126,10 @@ flowchart TD
     end
 
     subgraph Native ["Low-Level Hardware Layer (C FFI via koffi)"]
-        WinSock["WinSock2 / socket() C FFI Bindings"]
-        Bind_WiFi["bind(IP_UNICAST_IF) -> 172.21.117.113"]
-        Bind_Eth["bind(IP_UNICAST_IF) -> 192.168.1.150"]
-        Bind_USB["bind(IP_UNICAST_IF) -> 192.168.42.12"]
+        WinSock["WinSock2 / socket C FFI Bindings"]
+        Bind_WiFi["bind IP_UNICAST_IF: 172.21.117.113"]
+        Bind_Eth["bind IP_UNICAST_IF: 192.168.1.150"]
+        Bind_USB["bind IP_UNICAST_IF: 192.168.42.12"]
     end
 
     subgraph Physical ["Physical Hardware Adapters"]
@@ -142,14 +142,15 @@ flowchart TD
         Web_Server["Target Origin Server (HTTP Range Capable)"]
     end
 
-    UI_Store <--> |Typed IPC Events| Scheduler
-    UI_Dash <--- |60Hz Telemetry Stream| DiskWriter
-    UI_Deck ---> |Interface State & Weights| Scheduler
+    UI_Store -->|"Typed IPC Events"| Scheduler
+    Scheduler -->|"State Updates"| UI_Store
+    DiskWriter -->|"60Hz Telemetry Stream"| UI_Dash
+    UI_Deck -->|"Interface State & Weights"| Scheduler
 
-    Probe --> |Total Size & Range Support| Scheduler
-    Scheduler --> |Range 0MB-50MB| Bind_WiFi
-    Scheduler --> |Range 50MB-100MB| Bind_Eth
-    Scheduler --> |Range 100MB-150MB| Bind_USB
+    Probe -->|"Total Size & Range Support"| Scheduler
+    Scheduler -->|"Range 0MB-50MB"| Bind_WiFi
+    Scheduler -->|"Range 50MB-100MB"| Bind_Eth
+    Scheduler -->|"Range 100MB-150MB"| Bind_USB
 
     Bind_WiFi --> WinSock
     Bind_Eth --> WinSock
@@ -159,13 +160,13 @@ flowchart TD
     WinSock --> Adapter_Eth
     WinSock --> Adapter_USB
 
-    Adapter_WiFi --> |Chunk Stream 1| Web_Server
-    Adapter_Eth --> |Chunk Stream 2| Web_Server
-    Adapter_USB --> |Chunk Stream 3| Web_Server
+    Adapter_WiFi -->|"Chunk Stream 1"| Web_Server
+    Adapter_Eth -->|"Chunk Stream 2"| Web_Server
+    Adapter_USB -->|"Chunk Stream 3"| Web_Server
 
-    Web_Server --> |Parallel Byte Payloads| Failover
+    Web_Server -->|"Parallel Byte Payloads"| Failover
     Failover --> DiskWriter
-    DiskWriter --> |Flush Chunks to NVMe/SSD| Local_Disk[("Local Storage (.bin / .iso)")]
+    DiskWriter -->|"Flush Chunks to NVMe/SSD"| Local_Disk[("Local Storage - bin / iso")]
 ```
 
 ### Component Layer Breakdown

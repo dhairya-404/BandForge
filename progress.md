@@ -19,6 +19,26 @@
 
 ## Log
 
+### 2026-11-09: Fix Mermaid architecture diagram rendering on GitHub ("Unable to render rich display")
+
+- **Agent:** main-agent (Gemini 3.8 Flash)
+- **Branch:** main-agent/feat/tesso-platform
+- **What:** Fixed Mermaid syntax in `README.md` that caused GitHub's rich display parser to fail with "Unable to render rich display". Replaced invalid reverse arrow with label (`UI_Dash <--- |60Hz Telemetry Stream| DiskWriter`), wrapped all edge labels in quotes without leading whitespace (`-->|"label"|`), removed `->` inside node label text (`bind IP_UNICAST_IF: ...`), and removed nested parentheses inside the cylinder node (`Local_Disk[("Local Storage - bin / iso")]`).
+- **Why:** GitHub rendered "Unable to render rich display" instead of the visual Mermaid architecture diagram.
+- **Files:** `README.md`, `progress.md`, `AGENTS.md`.
+- **Verified:** Tested diagram parsing with Mermaid parser, verified `npm run format:check` passes with zero formatting errors.
+- **Open / follow-ups:** Commit and push to GitHub remote.
+
+### 2026-11-09: Fix ERR_TUNNEL_CONNECTION_FAILED on Multi-WAN socket binding and add multi-interface failover
+
+- **Agent:** main-agent (Gemini 3.8 Flash)
+- **Branch:** main-agent/feat/tesso-platform
+- **What:** Resolved `ERR_TUNNEL_CONNECTION_FAILED` in Brave/Chrome when bonding multiple interfaces (Wi-Fi + USB Tethering). Root cause was Node.js socket binding omitting `family: 4` on Windows when binding to IPv4 interface addresses, causing Winsock error `bind EINVAL` (-4071) when DNS resolved dual-stack hostnames to IPv6. Fixed `deviceBinding.ts` to enforce address family matching, upgraded `MultiWanProxy` in `multiWanProxy.ts` with ordered candidates and resilient fallback (tries secondary interface and unpinned route before returning 502), added connection timeout handling (5s), and hooked `NetworkMonitor` to dynamically update `globalProxy.updateInterfaces()` when USB tethering is connected/disconnected.
+- **Why:** Connecting Wi-Fi and USB Tethering caused Brave browser to fail with `ERR_TUNNEL_CONNECTION_FAILED` on HTTPS CONNECT requests.
+- **Files:** `src/main/network/deviceBinding.ts`, `src/main/proxy/multiWanProxy.ts`, `src/main/ipc/handlers.ts`, `progress.md`, `AGENTS.md`.
+- **Verified:** Tested raw `net.connect` reproducing `bind EINVAL` and confirming resolution with `family: 4`. Ran `npm run typecheck` (exit 0), `npm run lint` (exit 0), `npm run format:check` (exit 0), and `npm run build` (exit 0).
+- **Open / follow-ups:** Close the active running instance of `tesso.exe` and restart with the updated build.
+
 ### 2026-11-09: Fix broken navigation anchor links in README for GitHub and external viewports
 
 - **Agent:** main-agent (Gemini 3.8 Flash)

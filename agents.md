@@ -36,4 +36,7 @@
 - 2026-11-09 14:10: `main-agent`: Fixed main process titleBarOverlay uncaught exception, rebuilt dist/win-unpacked/tesso.exe, packaged chrome & firefox extension zips, and documented permanent extension deployment.
 - 2026-11-09 14:28: `main-agent`: Uploaded and committed releases/tesso.crx and releases/tesso-chrome-extension.zip with drag-and-drop distribution guide to GitHub.
 - 2026-11-09 15:04: `main-agent`: Fixed GitHub Actions CI #17 formatting failure with .gitattributes LF normalization and auto endOfLine.
+- 2026-11-09 15:20: `main-agent`: Fixed ERR_TUNNEL_CONNECTION_FAILED in Multi-WAN proxy with socket address family matching, ordered multi-adapter failover, and dynamic interface hotplugging.
 - 2026-11-09 15:12: `main-agent`: Added explicit HTML anchor tags to README.md headings to fix GitHub in-page anchor jumping.
+- 2026-11-09 15:23: `main-agent`: Fixed Mermaid architecture diagram syntax in README.md to restore rich display rendering on GitHub.
+- 2026-11-09 15:30: `main-agent`: Beginning execution of complete inside-out UI/UX overhaul: Tesso Cyber Studio design tokens, TessoNavigationDeck, TessoTitleBar, PipelineStudioScreen, PipelineInspectorDrawer, and NewPipelineModal.
