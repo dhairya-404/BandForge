@@ -44,3 +44,4 @@
 - 2026-11-09 15:58: `main-agent`: Built Windows NSIS setup installer (dist/tesso-1.0.0-setup.exe) and prepared official v1.0.0 GitHub release with companion extensions.
 - 2026-11-09 16:20: `main-agent`: Executed full inside-out UI/UX overhaul: purged dark mode Plexo tokens, modernized StatusBar into obsidian telemetry deck, decoupled detail routing in App.tsx with permanent deck visibility, and verified native builds.
 - 2026-11-09 18:05: `main-agent`: Implemented comprehensive dual-theme system (Obsidian Cyber Dark & Studio Titanium Light) with 1-click switcher, resolved Proxy PAC verification error with auto-ignition, enhanced NSIS installer with high-res BMP assets and smooth DPI-aware animation, and verified all typechecks and Playwright tests.
+- 2026-11-09 18:35: `main-agent`: Prepared and tagged official v1.1.0 release: bumped version to 1.1.0, updated docs/changelog.js, built dist/tesso-1.1.0-setup.exe, and synchronized main and staging.

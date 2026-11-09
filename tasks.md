@@ -22,7 +22,19 @@
 
 ## Active tasks
 
-## T-009: Dual-Theme Engine, High-Resolution Animated NSIS Installer & PAC Auto-Ignition
+## T-010: Official v1.1.0 Release Packaging & Distribution
+
+- **Assigned to:** `main-agent`
+- **Assigned by / date:** Dhairya on 2026-11-09
+- **Priority:** high
+- **Repeats:** once
+- **Files / area:** `package.json`, `docs/changelog.js`, `dist/tesso-1.1.0-setup.exe`
+- **Branch:** `main-agent/feat/tesso-platform`
+- **Status:** DONE
+- **Done when:** Bump version to 1.1.0, update changelog with dual-theme system, inside-out UI studio overhaul, PAC auto-ignition, high-res installer, compile dist/tesso-1.1.0-setup.exe, tag v1.1.0, and push to GitHub.
+- **Notes:** Full verification passed. `dist/tesso-1.1.0-setup.exe` (118.0 MB) built successfully. Tag `v1.1.0` created.
+
+## Done
 
 - **Assigned to:** `main-agent`
 - **Assigned by / date:** Dhairya on 2026-11-09

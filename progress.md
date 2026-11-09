@@ -19,6 +19,25 @@
 
 ## Log
 
+### 2026-11-09: Official v1.1.0 Release Packaging & Distribution
+
+- **Agent:** main-agent (Gemini 3.8 Flash)
+- **Branch:** main-agent/feat/tesso-platform
+- **What:** Packaged and published official version `v1.1.0`:
+  1. Bumped `package.json` version to `1.1.0`.
+  2. Documented comprehensive `v1.1.0` release notes in `docs/changelog.js`:
+     - Dual-theme engine (Obsidian Cyber Dark & Studio Titanium Light) with 1-click toggling across all screens.
+     - Complete inside-out UI/UX redesign (Tesso Navigation Deck, high-contrast Pipeline Studio, dynamic chunk byte heatmap drawer, and real-time status telemetry deck).
+     - Proxy PAC health auto-ignition and resilience test probe.
+     - High-resolution 4K installer assets and smooth 60fps Windows visual progress animations.
+  3. Verified all 4 TypeScript targets (`npm run typecheck`), ESLint, Prettier, and Playwright tests (`19 passed`).
+  4. Successfully packaged native Windows NSIS installer `dist/tesso-1.1.0-setup.exe` (118.0 MB) and unpacked binary `dist/win-unpacked/tesso.exe`.
+  5. Tagged release `v1.1.0` and pushed commit and tag to remote GitHub repository.
+- **Why:** Synchronize GitHub releases with `main` so users downloading the app get the full UI/UX overhaul, dual-theme engine, and high-res installer.
+- **Files:** `package.json`, `docs/changelog.js`, `progress.md`, `tasks.md`, `AGENTS.md`.
+- **Verified:** All test suites and builds passed with exit code 0.
+- **Open / follow-ups:** Push tag `v1.1.0` to trigger automated GitHub Actions release workflow.
+
 ### 2026-11-09: Complete Dual-Theme UI/UX Overhaul, High-Res Animated Installer, and PAC Auto-Ignition
 
 - **Agent:** main-agent (Gemini 3.8 Flash)

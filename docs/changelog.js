@@ -10,6 +10,31 @@
 
   root.TessoChangelog = root.PlexoChangelog = [
     {
+      version: 'v1.1.0',
+      items: [
+        {
+          kind: 'new',
+          title: 'Dual-Theme Engine (Obsidian Dark & Titanium Light)',
+          text: 'Comprehensive dual-theme system featuring deep Obsidian Cyber Dark and Studio Titanium Light with instant 1-click toggling across all screens.'
+        },
+        {
+          kind: 'improved',
+          title: 'Complete Inside-Out UI/UX Studio Overhaul',
+          text: 'Bespoke Tesso Navigation Deck, high-contrast Pipeline Studio, dynamic chunk byte heatmap drawer, and real-time status telemetry deck.'
+        },
+        {
+          kind: 'new',
+          title: 'Proxy PAC Health Auto-Ignition',
+          text: 'One-click proxy verification with automatic background daemon auto-ignition and multi-adapter tunnel probing.'
+        },
+        {
+          kind: 'improved',
+          title: 'High-Resolution Animated Windows Installer',
+          text: 'Enhanced NSIS setup wizard with 24-bit high-resolution branded bitmaps, 4K DPI awareness, and smooth 60fps Windows progress animations.'
+        }
+      ]
+    },
+    {
       version: 'v1.0.0',
       items: [
         {
