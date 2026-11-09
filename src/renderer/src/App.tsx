@@ -18,6 +18,7 @@ import { EngineSettingsScreen } from './screens/EngineSettingsScreen'
 import { ErrorScreen } from './screens/ErrorScreen'
 import { ForgeDashboardScreen } from './screens/ForgeDashboardScreen'
 import { HardwareDeckScreen } from './screens/HardwareDeckScreen'
+import { BrowserFlowScreen } from './screens/BrowserFlowScreen'
 import { useAppStore } from './store/useAppStore'
 
 function assertNever(status: never): never {
@@ -41,7 +42,13 @@ function renderDownload(download: DownloadState | FinishedDownload): React.JSX.E
   }
 }
 
-function CurrentScreen({ activeTab }: { activeTab: StudioTab }): React.JSX.Element {
+function CurrentScreen({
+  activeTab,
+  onNavigateTab
+}: {
+  activeTab: StudioTab
+  onNavigateTab: (tab: StudioTab) => void
+}): React.JSX.Element {
   const shown = useAppStore((store) => {
     const { view } = store
     if (view.name !== 'download') return null
@@ -56,10 +63,15 @@ function CurrentScreen({ activeTab }: { activeTab: StudioTab }): React.JSX.Eleme
   switch (activeTab) {
     case 'dashboard':
       return (
-        <ForgeDashboardScreen onOpenNewDownload={() => useAppStore.getState().openNewDownload()} />
+        <ForgeDashboardScreen
+          onOpenNewDownload={() => useAppStore.getState().openNewDownload()}
+          onNavigateBrowserFlow={() => onNavigateTab('browser')}
+        />
       )
     case 'adapters':
       return <HardwareDeckScreen />
+    case 'browser':
+      return <BrowserFlowScreen />
     case 'settings':
       return <EngineSettingsScreen />
     case 'transfers':
@@ -92,7 +104,7 @@ function App(): React.JSX.Element {
               />
             )}
             <main className="flex-1 min-w-0 flex flex-col bg-[var(--bg)] overflow-hidden">
-              <CurrentScreen activeTab={activeTab} />
+              <CurrentScreen activeTab={activeTab} onNavigateTab={setActiveTab} />
             </main>
           </div>
           <StatusBar />

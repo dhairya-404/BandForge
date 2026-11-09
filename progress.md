@@ -19,6 +19,16 @@
 
 ## Log
 
+### 2026-11-09: Implement Option A & Option B: Embedded Multi-WAN Proxy, Chrome Companion Extension, and Browser Web Flow Studio
+
+- **Agent:** main-agent (Gemini 3.8 Flash)
+- **Branch:** main-agent/feat/tesso-platform
+- **What:** Implemented Option A (Local Multi-WAN Forward Proxy daemon on port 9090 with CONNECT HTTPS tunneling and automatic PAC server on port 9091 distributing traffic across all active physical network interfaces using round-robin socket binding via `connectFrom`) and Option B (Google Chrome Companion Extension with 1-click PAC proxy arming via `chrome.proxy.settings`, lightning status badges, and direct URL forwarding). Built the bespoke `BrowserFlowScreen.tsx` studio view with real-time browser socket counters, dynamic per-interface browser traffic allocations, 1-click PAC/proxy endpoints copying, and interactive PAC health verification. Added real-time browser proxy telemetry cards to `ForgeDashboardScreen.tsx` and configuration controls to `EngineSettingsScreen.tsx`.
+- **Why:** User explicitly chose Option A & Option B to transform Tesso into a full-scale multi-network aggregation platform that accelerates Google Chrome and browser traffic.
+- **Files:** `src/main/proxy/multiWanProxy.ts`, `src/main/ipc/handlers.ts`, `src/preload/index.ts`, `src/shared/types.ts`, `src/shared/ipc-channels.ts`, `src/shared/ipc-contract.ts`, `src/renderer/src/screens/BrowserFlowScreen.tsx`, `src/renderer/src/screens/ForgeDashboardScreen.tsx`, `src/renderer/src/screens/EngineSettingsScreen.tsx`, `src/renderer/src/components/BondForgeSidebar.tsx`, `src/renderer/src/App.tsx`, `src/renderer/src/hooks/useProxyStatus.ts`, `src/renderer/src/browserShim.ts`, `extension/manifest.json`, `extension/src/background.ts`, `extension/src/settings.ts`, `extension/src/popup.html`, `extension/src/popup.ts`, `tasks.md`, `progress.md`, `AGENTS.md`.
+- **Verified:** `npm run typecheck` passed (exit 0 across node, web, e2e, extension), `npm run lint` passed (exit 0), `npm run format:check` passed (exit 0), `npm run build:extension` built chrome and firefox dists cleanly, `npm run build` completed cleanly, and Playwright smoke tests (`format.spec.ts`, `downloadSearch.spec.ts`) passed with 0 regressions.
+- **Open / follow-ups:** Commit and push to GitHub remote `https://github.com/dhairya-404/Tesso.git`.
+
 ### 2026-11-09: Complete brand transformation to Tesso & multi-WAN Chrome/system platform blueprint
 
 - **Agent:** main-agent (Gemini 3.8 Flash)

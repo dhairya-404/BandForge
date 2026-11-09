@@ -20,9 +20,9 @@ async function render(): Promise<void> {
   ])
   const [tone, text] =
     reached === 'closed'
-      ? ['', 'Plexo not open']
+      ? ['', 'Tesso not open']
       : reached === 'update'
-        ? ['warn', 'Update Plexo']
+        ? ['warn', 'Update Tesso']
         : settings.capture
           ? ['ok', 'Connected']
           : ['', 'Capture off']
@@ -31,9 +31,14 @@ async function render(): Promise<void> {
   element('access').hidden = access
   element('closed').hidden = reached !== 'closed'
 
+  element<HTMLInputElement>('browserBonding').checked = settings.browserBonding
+  element('bonding-hint').textContent = settings.browserBonding
+    ? 'All Chrome tabs routed over bonded multi-network links ⚡'
+    : 'Direct single-network connection'
+
   element<HTMLInputElement>('capture').checked = settings.capture
   element('capture-hint').textContent = settings.capture
-    ? 'Downloads open in Plexo instead of the browser.'
+    ? 'Downloads open in Tesso instead of the browser.'
     : 'Downloads stay in the browser.'
 
   element('site-row').hidden = host === null
@@ -46,10 +51,14 @@ async function render(): Promise<void> {
     element('site-hint').textContent = !settings.capture
       ? 'Capture is off everywhere.'
       : on
-        ? 'Downloads from this site go to Plexo.'
+        ? 'Downloads from this site go to Tesso.'
         : 'Downloads from this site stay in the browser.'
   }
 }
+
+element<HTMLInputElement>('browserBonding').addEventListener('change', (event) => {
+  void saveSettings({ browserBonding: (event.target as HTMLInputElement).checked })
+})
 
 element<HTMLInputElement>('capture').addEventListener('change', (event) => {
   void saveSettings({ capture: (event.target as HTMLInputElement).checked })

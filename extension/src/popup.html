@@ -60,24 +60,32 @@
   <body>
     <header>
       <img src="icons/icon-32.png" alt="" />
-      <strong>BondForge</strong>
+      <strong>Tesso</strong>
       <div id="status" role="status">
         <span class="dot" id="status-dot"></span><span id="status-text">…</span>
       </div>
     </header>
 
     <div class="notice" id="access" hidden>
-      BondForge needs access to websites to send your sign-in with each download.
+      Tesso needs access to websites to send your sign-in with each download.
       <button type="button" class="primary" id="grant">Allow access</button>
     </div>
 
     <div id="closed" hidden>
-      <div class="title">BondForge isn’t open</div>
+      <div class="title">Tesso isn’t open</div>
       <div class="muted">Downloads stay in the browser until it is.</div>
       <div style="display: flex; align-items: center; gap: 12px">
-        <button type="button" id="open-plexo">Open BondForge</button>
+        <button type="button" id="open-plexo">Open Tesso</button>
       </div>
     </div>
+
+    <label class="row" for="browserBonding">
+      <span class="grow">
+        <span class="title">Accelerate Browser (Multi-WAN)</span>
+        <span class="muted" id="bonding-hint">Bond Wi-Fi, 5G, & Ethernet for Chrome browsing</span>
+      </span>
+      <input type="checkbox" role="switch" class="switch" id="browserBonding" />
+    </label>
 
     <label class="row" for="capture">
       <span class="grow">
@@ -96,7 +104,7 @@
     </label>
 
     <footer>
-      <span>Right-click any link › Download with BondForge</span>
+      <span>Right-click any link › Download with Tesso</span>
       <button type="button" class="ghost" id="options">Options</button>
     </footer>
     <script src="popup.js"></script>

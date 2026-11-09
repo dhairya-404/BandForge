@@ -1,11 +1,11 @@
 import React from 'react'
-import { Plus, ArrowDownToLine, Network, Settings, HardDrive, Activity } from 'lucide-react'
+import { Plus, ArrowDownToLine, Network, Settings, HardDrive, Activity, Globe } from 'lucide-react'
 import { TessoLogo } from './TessoLogo'
 import { formatBytes } from '../utils/format'
 import { useFreeSpace } from '../hooks/useFreeSpace'
 import { useAppStore } from '../store/useAppStore'
 
-export type StudioTab = 'dashboard' | 'transfers' | 'adapters' | 'settings'
+export type StudioTab = 'dashboard' | 'transfers' | 'adapters' | 'browser' | 'settings'
 
 interface BondForgeSidebarProps {
   activeTab: StudioTab
@@ -117,6 +117,23 @@ export function BondForgeSidebar({
         </button>
 
         <button
+          onClick={() => onSelectTab('browser')}
+          className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-[13px] font-medium transition-colors cursor-pointer ${
+            activeTab === 'browser'
+              ? 'bg-sky-500/15 text-sky-300 border border-sky-500/30 font-semibold'
+              : 'text-slate-400 hover:text-white hover:bg-white/5'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <Globe className="size-4 text-sky-400" />
+            <span>Browser Multi-WAN</span>
+          </div>
+          <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-300 font-medium">
+            PAC
+          </span>
+        </button>
+
+        <button
           onClick={() => onSelectTab('settings')}
           className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-[13px] font-medium transition-colors cursor-pointer ${
             activeTab === 'settings'
@@ -148,3 +165,5 @@ export function BondForgeSidebar({
     </aside>
   )
 }
+
+export { BondForgeSidebar as TessoSidebar }

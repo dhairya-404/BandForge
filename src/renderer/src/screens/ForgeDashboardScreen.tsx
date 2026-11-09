@@ -13,21 +13,27 @@ import {
   X,
   Plus,
   Network,
-  HardDrive
+  HardDrive,
+  Globe
 } from 'lucide-react'
 import { TessoLogo } from '../components/TessoLogo'
 import { useAppStore } from '../store/useAppStore'
 import { formatBytes, formatSpeed } from '../utils/format'
+import { useProxyStatus } from '../hooks/useProxyStatus'
 
 export function ForgeDashboardScreen({
-  onOpenNewDownload
+  onOpenNewDownload,
+  onNavigateBrowserFlow
 }: {
   onOpenNewDownload: () => void
+  onNavigateBrowserFlow?: () => void
 }): React.JSX.Element {
   const downloads = useAppStore((state) => state.downloads)
   const history = useAppStore((state) => state.history)
   const interfaces = useAppStore((state) => state.interfaces)
   const speedUnit = useAppStore((state) => state.speedUnit)
+
+  const { status: proxyStatus, toggleProxy, loading: proxyLoading } = useProxyStatus()
 
   const activeDownloads = Object.values(downloads).filter(
     (d) => d.status === 'downloading' || d.status === 'paused'
@@ -65,6 +71,10 @@ export function ForgeDashboardScreen({
         return <Network className="size-4" />
     }
   }
+
+  const isProxyActive = proxyStatus?.enabled ?? false
+  const browserConnections = proxyStatus?.activeConnections || 0
+  const browserBytes = proxyStatus?.totalBytes || 0
 
   return (
     <div className="flex-1 overflow-y-auto p-6 space-y-6 select-none">
@@ -271,6 +281,79 @@ export function ForgeDashboardScreen({
         </div>
       </div>
 
+      {/* Browser & Chrome Multi-WAN Acceleration (Web Flow) Card */}
+      <div className="rounded-xl border border-sky-500/20 bg-gradient-to-r from-[#0a1424] via-[#0d182e] to-[#091220] p-5 space-y-4 shadow-lg">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="size-10 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 shrink-0">
+              <Globe className="size-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="text-[14.5px] font-bold text-white tracking-wide">
+                  Browser Multi-WAN Acceleration
+                </h3>
+                <span
+                  className={`text-[10px] font-mono px-2 py-0.5 rounded font-semibold flex items-center gap-1.5 ${
+                    isProxyActive
+                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                      : 'bg-slate-800 text-slate-400'
+                  }`}
+                >
+                  <span
+                    className={`size-1.5 rounded-full ${isProxyActive ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'}`}
+                  />
+                  <span>{isProxyActive ? 'PROXY ARMED' : 'STANDBY'}</span>
+                </span>
+              </div>
+              <p className="text-[12px] text-slate-400 mt-0.5">
+                Transparent multi-network balancing for Google Chrome, Edge, and video streams via
+                local PAC proxy.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2.5 shrink-0 w-full sm:w-auto justify-end">
+            <button
+              onClick={() => void toggleProxy(!isProxyActive)}
+              disabled={proxyLoading}
+              className={`px-3.5 py-1.5 rounded-lg font-mono text-[12px] font-semibold transition-all cursor-pointer ${
+                isProxyActive
+                  ? 'bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/25'
+                  : 'bg-white/5 border border-slate-700 text-slate-300 hover:bg-white/10'
+              }`}
+            >
+              {isProxyActive ? 'Enabled' : 'Disabled'}
+            </button>
+            {onNavigateBrowserFlow && (
+              <button
+                onClick={onNavigateBrowserFlow}
+                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-medium text-[12px] transition-colors cursor-pointer"
+              >
+                <span>Console</span>
+                <ArrowRight className="size-3.5" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Live Proxy Metrics Sub-Bar */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-3 border-t border-slate-800/80 font-mono text-[11.5px]">
+          <div className="p-2.5 rounded-lg bg-[#070b13]/80 border border-slate-800 flex items-center justify-between">
+            <span className="text-slate-400">PAC Auto-Proxy:</span>
+            <span className="text-sky-300 font-semibold">127.0.0.1:9091/proxy.pac</span>
+          </div>
+          <div className="p-2.5 rounded-lg bg-[#070b13]/80 border border-slate-800 flex items-center justify-between">
+            <span className="text-slate-400">Active Chrome Sockets:</span>
+            <span className="text-emerald-400 font-semibold">{browserConnections} connections</span>
+          </div>
+          <div className="p-2.5 rounded-lg bg-[#070b13]/80 border border-slate-800 flex items-center justify-between">
+            <span className="text-slate-400">Browser Data Accelerated:</span>
+            <span className="text-slate-200 font-semibold">{formatBytes(browserBytes)}</span>
+          </div>
+        </div>
+      </div>
+
       {/* Active Accelerated Transfers */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
@@ -307,7 +390,10 @@ export function ForgeDashboardScreen({
                 ? Math.min(100, Math.round(((dl.bytesDownloaded || 0) / dl.totalBytes) * 100))
                 : 0
 
-              const api = window.bondforge || window.plexo
+              const api =
+                typeof window !== 'undefined'
+                  ? window.tesso || window.bondforge || window.plexo
+                  : undefined
 
               return (
                 <div

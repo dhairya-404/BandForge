@@ -13,18 +13,50 @@ const ICON = { 16: 'icons/icon-16.png', 32: 'icons/icon-32.png' }
 // A greyed-out icon rather than a badge: the browser draws badges too small to notice.
 const ICON_OFF = { 16: 'icons/icon-off-16.png', 32: 'icons/icon-off-32.png' }
 
+async function syncProxyState(): Promise<void> {
+  const { browserBonding } = await loadSettings()
+  if (typeof chrome !== 'undefined' && chrome.proxy) {
+    if (browserBonding) {
+      chrome.proxy.settings.set(
+        {
+          value: {
+            mode: 'pac_script',
+            pacScript: { url: 'http://127.0.0.1:9091/proxy.pac' }
+          },
+          scope: 'regular'
+        },
+        () => {
+          console.log('[Tesso Extension] Chrome proxy configured for Multi-WAN bonding.')
+        }
+      )
+    } else {
+      chrome.proxy.settings.clear({ scope: 'regular' }, () => {
+        console.log('[Tesso Extension] Chrome proxy reverted to direct.')
+      })
+    }
+  }
+}
+
 async function showState(reached?: Reach): Promise<void> {
-  const { capture } = await loadSettings()
+  const { capture, browserBonding } = await loadSettings()
   reached ??= await reach()
   const title = !capture
-    ? 'Plexo: capture is off'
+    ? 'Tesso: capture is off'
     : reached === 'closed'
-      ? 'Plexo isn’t open: downloads stay in the browser'
+      ? 'Tesso isn’t open: downloads stay in the browser'
       : reached === 'update'
-        ? 'Update Plexo to use this extension'
-        : 'Plexo'
+        ? 'Update Tesso to use this extension'
+        : browserBonding
+          ? 'Tesso: Multi-WAN Browser Acceleration Active ⚡'
+          : 'Tesso'
   await api.action.setIcon({ path: capture && reached === 'ok' ? ICON : ICON_OFF })
   await api.action.setTitle({ title })
+  if (typeof api.action.setBadgeText === 'function') {
+    await api.action.setBadgeText({ text: browserBonding ? '⚡' : '' })
+    if (typeof api.action.setBadgeBackgroundColor === 'function') {
+      await api.action.setBadgeBackgroundColor({ color: '#0ea5e9' })
+    }
+  }
 }
 
 /** True when Plexo took the download; otherwise the browser keeps it. */
@@ -108,6 +140,7 @@ async function sendLink(
 // Run on install and on every browser start: menus and alarms don't always survive a restart.
 function setUp(): void {
   createMenu()
+  void syncProxyState()
   void api.alarms.create(CHECK_ALARM, { periodInMinutes: 0.5 })
   void showState()
 }
@@ -116,7 +149,7 @@ function createMenu(): void {
   void api.contextMenus
     .removeAll()
     .then(() =>
-      api.contextMenus.create({ id: MENU_ID, title: 'Download with Plexo', contexts: ['link'] })
+      api.contextMenus.create({ id: MENU_ID, title: 'Download with Tesso', contexts: ['link'] })
     )
 }
 
@@ -131,7 +164,10 @@ api.contextMenus.onClicked.addListener((info, tab) => {
 api.tabs.onCreated.addListener((tab) => {
   if (tab.id !== undefined) openedAt.set(tab.id, Date.now())
 })
-api.storage.onChanged.addListener(() => void showState())
+api.storage.onChanged.addListener(() => {
+  void syncProxyState()
+  void showState()
+})
 
 api.runtime.onMessage.addListener((message) => {
   const { wakePlexo, checkPlexo } = message as { wakePlexo?: boolean; checkPlexo?: boolean }

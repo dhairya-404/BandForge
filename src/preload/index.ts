@@ -7,6 +7,7 @@ import type {
   InitialState,
   MagnetCheckStatus,
   NetworkInterfaceInfo,
+  ProxyStatus,
   TelegramAuthState,
   TelegramCredentials,
   UpdateState,
@@ -46,7 +47,7 @@ const plexoApi = {
   listHistory: () => invoke('listHistory'),
   clearHistory: () => invoke('clearHistory'),
   networkUsage: () => invoke('networkUsage'),
-  resetNetworkUsage: (id) => invoke('resetNetworkUsage', id),
+  resetNetworkUsage: (id: string) => invoke('resetNetworkUsage', id),
   freeSpace: (dir: string) => invoke('freeSpace', dir),
   torrentFiles: (downloadId: string) => invoke('torrentFiles', downloadId),
   chooseTorrentFiles: (downloadId: string, selected: number[]) =>
@@ -71,6 +72,9 @@ const plexoApi = {
   usenetServer: () => invoke('usenetServer'),
   saveUsenetServer: (server: UsenetServerInput) => invoke('saveUsenetServer', server),
   testUsenetServer: (server: UsenetServerInput) => invoke('testUsenetServer', server),
+
+  getProxyStatus: () => invoke('getProxyStatus'),
+  setProxyEnabled: (enabled: boolean) => invoke('setProxyEnabled', enabled),
 
   telegramState: () => invoke('telegramState'),
   telegramStartLogin: (credentials: TelegramCredentials) =>
@@ -126,6 +130,12 @@ const plexoApi = {
     const listener = (_event: IpcRendererEvent, status: MagnetCheckStatus): void => callback(status)
     ipcRenderer.on(IpcChannels.magnetCheckStatus, listener)
     return () => ipcRenderer.removeListener(IpcChannels.magnetCheckStatus, listener)
+  },
+
+  onProxyStatusChanged: (callback: (status: ProxyStatus) => void): (() => void) => {
+    const listener = (_event: IpcRendererEvent, status: ProxyStatus): void => callback(status)
+    ipcRenderer.on(IpcChannels.proxyStatusChanged, listener)
+    return () => ipcRenderer.removeListener(IpcChannels.proxyStatusChanged, listener)
   }
 }
 

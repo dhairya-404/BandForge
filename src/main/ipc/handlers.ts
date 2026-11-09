@@ -37,6 +37,7 @@ import { pendingLink, pendingLinks, releaseLink } from '../openLinks'
 import { NetworkMonitor } from '../network/interfaces'
 import { loadSettings, saveSettings } from '../settings'
 import { showUpdateMenu, updateState } from '../updater'
+import { globalProxy } from '../proxy/multiWanProxy'
 
 async function openNetworkSettings(): Promise<void> {
   if (process.platform === 'win32') {
@@ -318,6 +319,28 @@ export function registerIpcHandlers(getWindow: () => BrowserWindow | null): Down
   handle('telegramListMedia', async (_event, offsetId, limit) => {
     return telegram.listMediaPage(offsetId, limit)
   })
+
+  handle('getProxyStatus', () => globalProxy.getStatus())
+  handle('setProxyEnabled', async (_event, enabled) => {
+    if (enabled) {
+      return await globalProxy.start()
+    } else {
+      await globalProxy.stop()
+      return false
+    }
+  })
+
+  globalProxy.setStatsListener((status) => {
+    const window = getWindow()
+    if (window && !window.isDestroyed()) {
+      window.webContents.send(IpcChannels.proxyStatusChanged, status)
+    }
+  })
+
+  // Start multi-WAN browser proxy in background (skip auto-bind during headless e2e worker runs)
+  if (!testKnobs.hideWindow) {
+    void globalProxy.start().catch(() => {})
+  }
 
   return manager
 }

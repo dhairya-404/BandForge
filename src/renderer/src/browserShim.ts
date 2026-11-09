@@ -7,6 +7,7 @@ import type {
   InitialState,
   NetworkInterfaceInfo,
   ProbeResult,
+  ProxyStatus,
   StartDownloadRequest
 } from '@shared/types'
 
@@ -70,6 +71,42 @@ export function initBrowserShim(): void {
       deviceBindingSupported: async (): Promise<boolean> => true,
       openNetworkSettings: async (): Promise<void> => {},
       updateSettings: async (): Promise<void> => {},
+      getProxyStatus: async (): Promise<ProxyStatus> => ({
+        enabled: true,
+        port: 9090,
+        pacPort: 9091,
+        pacUrl: 'http://127.0.0.1:9091/proxy.pac',
+        activeConnections: 0,
+        totalBytes: 0,
+        interfaces: {
+          wifi0: {
+            id: 'wifi0',
+            name: 'Wi-Fi (Primary 5GHz)',
+            address: '172.21.117.113',
+            activeConnections: 0,
+            bytesReceived: 0,
+            bytesSent: 0
+          },
+          eth0: {
+            id: 'eth0',
+            name: 'Ethernet (High-Speed LAN)',
+            address: '192.168.1.150',
+            activeConnections: 0,
+            bytesReceived: 0,
+            bytesSent: 0
+          },
+          usb0: {
+            id: 'usb0',
+            name: '5G Mobile USB Tether',
+            address: '192.168.42.12',
+            activeConnections: 0,
+            bytesReceived: 0,
+            bytesSent: 0
+          }
+        }
+      }),
+      setProxyEnabled: async (): Promise<boolean> => true,
+      onProxyStatusChanged: () => (): void => {},
       probeUrl: async (url: string): Promise<ProbeResult> => {
         const cleanName = url.split('/').pop()?.split('?')[0] || 'ubuntu-24.04-desktop-amd64.iso'
         return {

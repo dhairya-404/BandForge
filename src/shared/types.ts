@@ -21,6 +21,25 @@ export interface NetworkInterfaceInfo {
   mac?: string
 }
 
+export interface InterfaceProxyStats {
+  id: string
+  name: string
+  address: string
+  activeConnections: number
+  bytesReceived: number
+  bytesSent: number
+}
+
+export interface ProxyStatus {
+  enabled: boolean
+  port: number
+  pacPort: number
+  pacUrl: string
+  activeConnections: number
+  totalBytes: number
+  interfaces: Record<string, InterfaceProxyStats>
+}
+
 interface ProbeResultBase {
   requestedUrl: string
   /** URL after following redirects — this is what the download should actually fetch. */

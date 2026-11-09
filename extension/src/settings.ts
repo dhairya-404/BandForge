@@ -4,13 +4,15 @@ export interface Settings {
   sites: string[]
   skipSmall: boolean
   minMegabytes: number
+  browserBonding: boolean
 }
 
 const DEFAULTS: Settings = {
   capture: true,
   sites: [],
   skipSmall: false,
-  minMegabytes: 1
+  minMegabytes: 1,
+  browserBonding: false
 }
 
 export async function loadSettings(): Promise<Settings> {

@@ -13,7 +13,8 @@ import type {
   TorrentTrackersResult,
   UpdateState,
   UsenetServer,
-  UsenetServerInput
+  UsenetServerInput,
+  ProxyStatus
 } from './types'
 
 /** The request/response half of the IPC surface (every IpcChannels entry except the
@@ -96,4 +97,6 @@ export interface IpcContract {
   saveUsenetServer: { args: [server: UsenetServerInput]; result: UsenetServer }
   /** Connects and signs in, over the computer's default route; throws what went wrong. */
   testUsenetServer: { args: [server: UsenetServerInput]; result: void }
+  getProxyStatus: { args: []; result: ProxyStatus }
+  setProxyEnabled: { args: [enabled: boolean]; result: boolean }
 }

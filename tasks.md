@@ -22,6 +22,20 @@
 
 ## Active tasks
 
+## T-007: Option A & B: Embedded Multi-WAN Proxy & Chrome Extension Integration
+
+- **Assigned to:** `main-agent`
+- **Assigned by / date:** Dhairya on 2026-11-09
+- **Priority:** high
+- **Repeats:** once
+- **Files / area:** `src/main/proxy/`, `src/renderer/src/screens/BrowserFlowScreen.tsx`, `extension/`, `src/renderer/src/screens/ForgeDashboardScreen.tsx`, `src/renderer/src/screens/EngineSettingsScreen.tsx`
+- **Branch:** `main-agent/feat/tesso-platform`
+- **Status:** DONE
+- **Done when:** Local Multi-WAN forward proxy & PAC server running with dynamic round-robin socket binding across physical interfaces, Chrome companion extension armed with 1-click proxy toggling, and bespoke Browser Multi-WAN Flow UI screen and telemetry cards implemented and verified.
+- **Notes:** Full end-to-end integration verified: `npm run typecheck` passed (exit 0), `npm run lint` passed (exit 0), `npm run format:check` passed (exit 0), `npm run build` passed (exit 0), Playwright smoke tests passed.
+
+## Done
+
 ## T-006: Rebrand to Tesso & Full-Scale Multi-WAN Platform Architecture
 
 - **Assigned to:** `main-agent`
@@ -30,9 +44,9 @@
 - **Repeats:** once
 - **Files / area:** `package.json`, `electron-builder.yml`, `src/`, `README.md`, `TESSO_FULL_SCALE_BLUEPRINT.md`
 - **Branch:** `main-agent/feat/tesso-platform`
-- **Status:** IN PROGRESS
+- **Status:** DONE
 - **Done when:** Application is completely rebranded to Tesso across all files, tests pass, and an extensive full-scale architecture plan for Chrome/system-wide multi-network acceleration is established.
-- **Notes:** Creating comprehensive scaling blueprint artifact and executing atomic rebrand.
+- **Notes:** Rebrand complete with bespoke Tesso monogram, enterprise architecture blueprint published, remote repository synced to `https://github.com/dhairya-404/Tesso.git`.
 
 ## T-005: Remote Repository Setup & GitHub Push
 

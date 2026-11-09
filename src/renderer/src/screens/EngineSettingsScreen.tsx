@@ -1,6 +1,7 @@
 import React from 'react'
-import { Settings, FolderOpen, Gauge, Cpu, Sliders, HardDrive, Turtle } from 'lucide-react'
+import { Settings, FolderOpen, Gauge, Cpu, Sliders, HardDrive, Turtle, Globe } from 'lucide-react'
 import { useAppStore } from '../store/useAppStore'
+import { useProxyStatus } from '../hooks/useProxyStatus'
 
 export function EngineSettingsScreen(): React.JSX.Element {
   const downloadsAtOnce = useAppStore((state) => state.downloadsAtOnce)
@@ -12,7 +13,11 @@ export function EngineSettingsScreen(): React.JSX.Element {
   const destinationDir = useAppStore((state) => state.destinationDir)
   const setDestinationDir = useAppStore((state) => state.setDestinationDir)
 
-  const api = typeof window !== 'undefined' ? window.bondforge || window.plexo : undefined
+  const { status: proxyStatus, toggleProxy, loading: proxyLoading } = useProxyStatus()
+  const isProxyActive = proxyStatus?.enabled ?? false
+
+  const api =
+    typeof window !== 'undefined' ? window.tesso || window.bondforge || window.plexo : undefined
 
   const handleBrowse = async (): Promise<void> => {
     const chosen = await api?.chooseDestinationFolder?.(destinationDir)
@@ -28,7 +33,7 @@ export function EngineSettingsScreen(): React.JSX.Element {
           <span>Engine Settings</span>
         </h1>
         <p className="text-[13px] text-slate-400 mt-1">
-          Socket concurrency, throughput telemetry units, and local storage routing.
+          Socket concurrency, throughput telemetry units, browser proxy routing, and local storage.
         </p>
       </div>
 
@@ -57,7 +62,50 @@ export function EngineSettingsScreen(): React.JSX.Element {
           </div>
         </div>
 
-        {/* Section 2: Concurrency & Stream Sizing */}
+        {/* Section 2: Browser Multi-WAN Proxy Configuration */}
+        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-5 space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 font-semibold text-[14px] text-white">
+              <Globe className="size-4 text-sky-400" />
+              <span>Browser & Chrome Multi-WAN Proxy</span>
+            </div>
+            <button
+              onClick={() => void toggleProxy(!isProxyActive)}
+              disabled={proxyLoading}
+              className={`px-3 py-1 rounded-lg font-mono text-[12px] font-semibold transition-colors cursor-pointer ${
+                isProxyActive
+                  ? 'bg-emerald-500 text-slate-950 font-bold'
+                  : 'bg-white/5 text-slate-400 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              {isProxyActive ? 'ENABLED' : 'DISABLED'}
+            </button>
+          </div>
+
+          <p className="text-[12.5px] text-slate-400 leading-relaxed">
+            Routes outbound browser traffic across active physical interfaces using round-robin
+            socket binding. Zero remote server infrastructure required.
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[12px] font-mono">
+            <div className="p-3 rounded-lg bg-[#070b13] border border-slate-800 flex justify-between items-center">
+              <span className="text-slate-400">HTTP/HTTPS Proxy Port:</span>
+              <span className="text-sky-300 font-semibold">{proxyStatus?.port || 9090}</span>
+            </div>
+            <div className="p-3 rounded-lg bg-[#070b13] border border-slate-800 flex justify-between items-center">
+              <span className="text-slate-400">PAC Script Port:</span>
+              <span className="text-sky-300 font-semibold">{proxyStatus?.pacPort || 9091}</span>
+            </div>
+            <div className="p-3 rounded-lg bg-[#070b13] border border-slate-800 flex justify-between items-center sm:col-span-2">
+              <span className="text-slate-400">PAC Auto-Config URL:</span>
+              <span className="text-emerald-400 font-semibold">
+                {proxyStatus?.pacUrl || 'http://127.0.0.1:9091/proxy.pac'}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Section 3: Concurrency & Stream Sizing */}
         <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-5 space-y-4">
           <div className="flex items-center gap-2 font-semibold text-[14px] text-white">
             <Sliders className="size-4 text-sky-400" />
@@ -90,7 +138,7 @@ export function EngineSettingsScreen(): React.JSX.Element {
           </div>
         </div>
 
-        {/* Section 3: Telemetry & Units */}
+        {/* Section 4: Telemetry & Units */}
         <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-5 space-y-4">
           <div className="flex items-center gap-2 font-semibold text-[14px] text-white">
             <Gauge className="size-4 text-sky-400" />
@@ -153,7 +201,7 @@ export function EngineSettingsScreen(): React.JSX.Element {
           </div>
         </div>
 
-        {/* Section 4: Engine Status */}
+        {/* Section 5: Engine Status */}
         <div className="rounded-xl border border-sky-500/20 bg-sky-950/10 p-5 space-y-3">
           <div className="flex items-center gap-2 font-semibold text-[14px] text-white">
             <Cpu className="size-4 text-sky-400" />
