@@ -33,6 +33,8 @@
   3. Verified all 4 TypeScript targets (`npm run typecheck`), ESLint, Prettier, and Playwright tests (`19 passed`).
   4. Successfully packaged native Windows NSIS installer `dist/tesso-1.1.0-setup.exe` (118.0 MB) and unpacked binary `dist/win-unpacked/tesso.exe`.
   5. Tagged release `v1.1.0` and pushed commit and tag to remote GitHub repository.
+  6. Successfully transitioned GitHub release from draft to public (`draft: false`, `make_latest: true`), resolving the 404 download error.
+  7. Attached `releases/tesso.crx` and `releases/tesso-chrome-extension.zip` directly to the v1.1.0 release assets.
 - **Why:** Synchronize GitHub releases with `main` so users downloading the app get the full UI/UX overhaul, dual-theme engine, and high-res installer.
 - **Files:** `package.json`, `docs/changelog.js`, `progress.md`, `tasks.md`, `AGENTS.md`.
 - **Verified:** All test suites and builds passed with exit code 0.
