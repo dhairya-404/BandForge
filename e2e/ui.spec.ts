@@ -133,7 +133,7 @@ test.describe('a torrent through the UI', () => {
   })
 })
 
-test.describe('UI journeys @smoke', () => {
+test.describe('UI journeys', () => {
   test('minimum window keeps download controls and a network row in view', async ({
     plexo,
     serve
@@ -290,7 +290,7 @@ test.describe('UI journeys @smoke', () => {
 })
 
 // What a user sets is still set after they reload or restart — checked only through what they see.
-test.describe('settings @smoke', () => {
+test.describe('settings', () => {
   test('every choice survives a reload and a restart, even made right before', async ({
     plexo,
     dirs
@@ -387,7 +387,7 @@ test.describe('settings @smoke', () => {
 test.describe('no networks', () => {
   test.use({ appEnv: { PLEXO_E2E_INTERFACES: '' } })
 
-  test('New download says why it has no network to offer @smoke', async ({ plexo }) => {
+  test('New download says why it has no network to offer', async ({ plexo }) => {
     await plexo.newDownload()
     const dialog = plexo.page.getByRole('dialog', { name: 'New download' })
     await expect(
@@ -399,7 +399,7 @@ test.describe('no networks', () => {
     await expect(dialog.getByRole('button', { name: 'Download', exact: true })).toBeDisabled()
   })
 
-  test('a network appearing makes the list ready for downloads @smoke', async ({ plexo }) => {
+  test('a network appearing makes the list ready for downloads', async ({ plexo }) => {
     await expect(plexo.page.getByText('No networks connected')).toBeVisible()
     // A manual scan is safe while the list stays empty. Once an interface appears, the
     // background monitor can remove this button before Playwright finishes clicking it.
