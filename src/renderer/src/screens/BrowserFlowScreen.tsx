@@ -29,7 +29,7 @@ export function BrowserFlowScreen(): React.JSX.Element {
   const isProxyActive = status?.enabled ?? false
   const pacUrl = status?.pacUrl || 'http://127.0.0.1:9091/proxy.pac'
   const proxyEndpoint = `127.0.0.1:${status?.port || 9090}`
-  const cliCommand = `chrome.exe --proxy-pac-url=${pacUrl}`
+  const cliCommand = `start chrome --proxy-pac-url=${pacUrl}`
 
   const copyToClipboard = async (
     text: string,

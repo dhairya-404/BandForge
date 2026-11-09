@@ -55,7 +55,7 @@ Beyond file downloads, Tesso accelerates general web browsing and video streamin
 - **Chrome Companion Extension (`extension/dist/chrome`)**: Provides a 1-click toolbar toggle to activate or deactivate browser multi-network acceleration instantly without altering your OS network settings.
 - **Direct CLI Launch (No Extension Needed)**: Launch Chrome with multi-WAN acceleration from terminal:
   ```powershell
-  chrome.exe --proxy-pac-url=http://127.0.0.1:9091/proxy.pac
+  start chrome --proxy-pac-url=http://127.0.0.1:9091/proxy.pac
   ```
 
 ---
