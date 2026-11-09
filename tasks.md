@@ -22,6 +22,20 @@
 
 ## Active tasks
 
+## T-008: Complete Inside-Out UI/UX Overhaul & Obsidian Cyber Studio
+
+- **Assigned to:** `main-agent`
+- **Assigned by / date:** Dhairya on 2026-11-09
+- **Priority:** high
+- **Repeats:** once
+- **Files / area:** `src/renderer/`, `resources/icon-dark.png`, `build/icon.ico`, `electron-builder.yml`
+- **Branch:** `main-agent/feat/tesso-platform`
+- **Status:** DONE
+- **Done when:** Legacy Plexo layouts, dialogs, dark mode palette overrides, and taskbar icons are completely eradicated and replaced with the 100% bespoke Tesso Cyber Studio design tokens, TessoNavigationDeck, TessoTitleBar, PipelineStudioScreen, PipelineInspectorDrawer, NewPipelineModal, and modernized StatusBar telemetry deck.
+- **Notes:** All 4 typecheck targets, ESLint, Prettier format check, and native Windows binary builds (`dist/win-unpacked/tesso.exe` and `dist/tesso-1.0.0-setup.exe`) passing with exit code 0.
+
+## Done
+
 ## T-007: Option A & B: Embedded Multi-WAN Proxy & Chrome Extension Integration
 
 - **Assigned to:** `main-agent`

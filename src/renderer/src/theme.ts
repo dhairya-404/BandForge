@@ -21,9 +21,8 @@ function makeKindPalette(name: string, label: string): KindPalette {
   }
 }
 
-// Teal / amber / steel per network, per the "Plexo v2" design — exact hex values live as
-// CSS custom properties (main.css) so dark mode reproduces the design precisely while light
-// mode gets a coherent, hand-tuned counterpart in the same hues.
+// Cyan / Emerald / Cobalt per network interface conduit, per the Tesso Cyber-Studio design —
+// exact hex values live as CSS custom properties (main.css) for sub-pixel luminous rendering.
 export const KIND_PALETTE: Record<NetworkInterfaceKind, KindPalette> = {
   wifi: makeKindPalette('wifi', 'WIFI'),
   usb: makeKindPalette('usb', 'USB'),
@@ -32,7 +31,7 @@ export const KIND_PALETTE: Record<NetworkInterfaceKind, KindPalette> = {
   other: makeKindPalette('neutral', 'NET')
 }
 
-// The brand amber doubles as the USB network color, exactly as in the design.
+// Brand danger / stall color
 export const DANGER = 'var(--color-danger)'
 
 // The table's 20px side gutters live inside the first and last tracks (30px = 20 + the status

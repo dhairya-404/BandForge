@@ -25,17 +25,30 @@ type FilterType = 'all' | 'active' | 'queued' | 'paused' | 'completed' | 'failed
 export function PipelineStudioScreen(): React.JSX.Element {
   const [filter, setFilter] = useState<FilterType>('all')
   const [search, setSearch] = useState('')
-  const [inspectedDownload, setInspectedDownload] = useState<
-    DownloadState | FinishedDownload | null
-  >(null)
+  const [inspectedId, setInspectedId] = useState<string | null>(null)
 
   const downloads = useAppStore((state) => state.downloads)
   const history = useAppStore((state) => state.history)
   const speedUnit = useAppStore((state) => state.speedUnit)
   const interfaces = useAppStore((state) => state.interfaces)
   const openNewDownload = useAppStore((state) => state.openNewDownload)
+  const view = useAppStore((state) => state.view)
+  const setView = useAppStore((state) => state.setView)
   const networkVisual = useNetworkVisuals()
   const actions = useDownloadActions()
+
+  // Derive inspected download directly from either store view or local selection
+  const activeInspectedId = view.name === 'download' ? view.id : inspectedId
+  const inspectedDownload: DownloadState | FinishedDownload | null = activeInspectedId
+    ? (downloads[activeInspectedId] ?? history.find((h) => h.id === activeInspectedId) ?? null)
+    : null
+
+  const handleCloseInspector = (): void => {
+    setInspectedId(null)
+    if (view.name === 'download') {
+      setView({ name: 'list' })
+    }
+  }
 
   const activeList = Object.values(downloads)
 
@@ -205,7 +218,7 @@ export function PipelineStudioScreen(): React.JSX.Element {
               return (
                 <div
                   key={d.id}
-                  onClick={() => setInspectedDownload(d)}
+                  onClick={() => setInspectedId(d.id)}
                   className="rounded-2xl border border-[var(--border)] bg-[#0f1218] hover:border-cyan-500/40 p-4.5 transition-all duration-150 cursor-pointer shadow-lg group space-y-3"
                 >
                   <div className="flex items-start justify-between gap-4">
@@ -326,7 +339,7 @@ export function PipelineStudioScreen(): React.JSX.Element {
             {filteredHistory.map((h) => (
               <div
                 key={h.id}
-                onClick={() => setInspectedDownload(h)}
+                onClick={() => setInspectedId(h.id)}
                 className="rounded-2xl border border-[var(--border)] bg-[#0f1218]/70 hover:border-cyan-500/30 p-4 transition-all duration-150 cursor-pointer shadow-sm group flex items-center justify-between gap-4"
               >
                 <div className="min-w-0 flex-1 flex items-center gap-3">
@@ -371,10 +384,7 @@ export function PipelineStudioScreen(): React.JSX.Element {
       </div>
 
       {/* Slide-out Inspector Drawer */}
-      <PipelineInspectorDrawer
-        download={inspectedDownload}
-        onClose={() => setInspectedDownload(null)}
-      />
+      <PipelineInspectorDrawer download={inspectedDownload} onClose={handleCloseInspector} />
     </div>
   )
 }

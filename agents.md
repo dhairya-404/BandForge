@@ -42,3 +42,4 @@
 - 2026-11-09 15:30: `main-agent`: Beginning execution of complete inside-out UI/UX overhaul: Tesso Cyber Studio design tokens, TessoNavigationDeck, TessoTitleBar, PipelineStudioScreen, PipelineInspectorDrawer, and NewPipelineModal.
 - 2026-11-09 15:33: `main-agent`: Replaced remaining legacy 'Plexo' brand references across TelegramDialog, FixLinkDialog, LimitsDialog, NewDownloadDialog, UpdateIndicator, UsenetServerDialog, DownloadingScreen, and backend error strings with Tesso.
 - 2026-11-09 15:58: `main-agent`: Built Windows NSIS setup installer (dist/tesso-1.0.0-setup.exe) and prepared official v1.0.0 GitHub release with companion extensions.
+- 2026-11-09 16:20: `main-agent`: Executed full inside-out UI/UX overhaul: purged dark mode Plexo tokens, modernized StatusBar into obsidian telemetry deck, decoupled detail routing in App.tsx with permanent deck visibility, and verified native builds.

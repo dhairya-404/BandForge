@@ -19,6 +19,21 @@
 
 ## Log
 
+### 2026-11-09: Complete inside-out UI/UX overhaul & true Obsidian Cyber Studio transformation
+
+- **Agent:** main-agent (Gemini 3.8 Flash)
+- **Branch:** main-agent/feat/tesso-platform
+- **What:** Completed the full execution of `TESSO_COMPLETE_UIUX_OVERHAUL_PLAN.md` to completely eradicate all remaining legacy upstream Plexo artifacts, layout structures, and dialogs.
+  1. Purged the `@media (prefers-color-scheme: dark)` graphite brown Plexo overrides (`#1b1e20`, `#d8a44c` amber) from `src/renderer/src/assets/main.css`. Configured true Obsidian Cyber Studio design tokens (`#08090c` void canvas, `#0f1218` luminous card, `#161b24` interactive surface, `#1f2633` hair-line borders, cyan/emerald energy conduits).
+  2. Overhauled `StatusBar.tsx` into a high-tech obsidian telemetry deck featuring active bonded conduit indicators, free disk space telemetry, queue counter, proxy status beacon, and cyber-pill speed unit toggles (`MB/s` / `Mbps`).
+  3. Decoupled and modernized detail routing in `App.tsx`: `TessoNavigationDeck` is permanently visible across all screens, with automatic reactive derivation for external transfer inspection into `PipelineStudioScreen` and `PipelineInspectorDrawer` without full-screen view disruptions.
+  4. Updated `theme.ts` to retire old "Plexo v2" amber/teal color palette annotations in favor of Tesso Cyber-Studio tokens.
+  5. Built and verified native standalone executable `dist/win-unpacked/tesso.exe` and NSIS setup installer `dist/tesso-1.0.0-setup.exe` (131.5 MB).
+- **Why:** User requested a complete inside-out UI/UX overhaul of the application to avoid any resemblance to the upstream open-source project and to fix the taskbar icon.
+- **Files:** `src/renderer/src/App.tsx`, `src/renderer/src/assets/main.css`, `src/renderer/src/components/StatusBar.tsx`, `src/renderer/src/screens/PipelineStudioScreen.tsx`, `src/renderer/src/theme.ts`, `progress.md`, `AGENTS.md`.
+- **Verified:** `npm run typecheck` passed (exit code 0 across node, web, e2e, extension), `npm run lint` passed (exit code 0), `npm run format:check` passed ("All matched files use Prettier code style!"), and both `dist/win-unpacked/tesso.exe` and `dist/tesso-1.0.0-setup.exe` built cleanly with zero errors.
+- **Open / follow-ups:** Commit and push changes to GitHub.
+
 ### 2026-11-09: Build Windows NSIS setup installer and publish GitHub v1.0.0 release
 
 - **Agent:** main-agent (Gemini 3.8 Flash)

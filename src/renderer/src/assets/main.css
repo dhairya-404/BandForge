@@ -19,21 +19,21 @@
 :root {
   color-scheme: dark;
 
-  /* BondForge Core Cyber-Slate Palette */
-  --bg: #090d16;
-  --bg-secondary: #0f1626;
-  --bg-tertiary: #162035;
-  --input-bg: #121a2d;
-  --track-bg: #1a253c;
+  /* Tesso Core Obsidian Cyber-Studio Palette */
+  --bg: #08090c;
+  --bg-secondary: #0f1218;
+  --bg-tertiary: #161b24;
+  --input-bg: #11151e;
+  --track-bg: #141923;
 
-  --text: #f8fafc;
+  --text: #f1f5f9;
   --text-secondary: #94a3b8;
   --text-tertiary: #64748b;
 
-  --border: rgba(56, 189, 248, 0.15);
-  --border-subtle: rgba(255, 255, 255, 0.07);
-  --border-strong: rgba(56, 189, 248, 0.35);
-  --footer-border: rgba(56, 189, 248, 0.15);
+  --border: #1f2633;
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --border-strong: #2d3748;
+  --footer-border: #1f2633;
 
   --icon-muted: #475569;
   --icon-muted-strong: #64748b;
@@ -42,8 +42,8 @@
   --checkbox-shadow: rgba(0, 0, 0, 0.6);
   --checkbox-inset-shadow: rgba(0, 0, 0, 0.4);
 
-  --hero-bg: radial-gradient(ellipse at 50% 0%, rgba(14, 165, 233, 0.15) 0%, #090d16 75%);
-  --hero-border: rgba(56, 189, 248, 0.25);
+  --hero-bg: radial-gradient(ellipse at 50% 0%, rgba(6, 182, 212, 0.12) 0%, #08090c 75%);
+  --hero-border: rgba(6, 182, 212, 0.25);
 
   /* Network Channels Palette */
   --color-wifi: #06b6d4;
@@ -52,11 +52,11 @@
   --color-wifi-text: #22d3ee;
   --color-wifi-onsolid: #082f49;
 
-  --color-usb: #f59e0b;
-  --color-usb-bg: rgba(245, 158, 11, 0.12);
-  --color-usb-border: rgba(245, 158, 11, 0.3);
-  --color-usb-text: #fbbf24;
-  --color-usb-onsolid: #451a03;
+  --color-usb: #10b981;
+  --color-usb-bg: rgba(16, 185, 129, 0.12);
+  --color-usb-border: rgba(16, 185, 129, 0.3);
+  --color-usb-text: #34d399;
+  --color-usb-onsolid: #064e3b;
 
   --color-ethernet: #3b82f6;
   --color-ethernet-bg: rgba(59, 130, 246, 0.12);
@@ -70,15 +70,15 @@
   --color-neutral-text: #94a3b8;
   --color-neutral-onsolid: #0f172a;
 
-  /* Accent & Forge Lighting */
-  --color-accent: #00f2fe;
-  --color-accent-onsolid: #02192e;
+  /* Accent & Studio Lighting */
+  --color-accent: #06b6d4;
+  --color-accent-onsolid: #082f49;
   --color-success: #10b981;
-  --color-danger: #ef4444;
-  --color-danger-bg: rgba(239, 68, 68, 0.12);
-  --color-danger-border: rgba(239, 68, 68, 0.3);
+  --color-danger: #f43f5e;
+  --color-danger-bg: rgba(244, 63, 94, 0.12);
+  --color-danger-border: rgba(244, 63, 94, 0.3);
 
-  --node-accent: #00f2fe;
+  --node-accent: #06b6d4;
   --radius: 10px;
 }
 
@@ -114,81 +114,64 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --hero-bg: linear-gradient(180deg, #202325 0%, #1b1e20 100%);
-    --hero-border: #2b2f33;
-    /* Graphite instrument-panel background — exact hex values from the "Plexo v2" design doc. */
-    --bg: #1b1e20;
-    --bg-secondary: #202325;
-    --bg-tertiary: #202325;
-    --input-bg: #242729;
-    --track-bg: #262a2d;
+    --hero-bg: radial-gradient(ellipse at 50% 0%, rgba(6, 182, 212, 0.12) 0%, #08090c 75%);
+    --hero-border: rgba(6, 182, 212, 0.25);
 
-    --text: #eae7e2;
-    --text-secondary: #a9adb2;
-    --text-tertiary: #8d9196;
+    --bg: #08090c;
+    --bg-secondary: #0f1218;
+    --bg-tertiary: #161b24;
+    --input-bg: #11151e;
+    --track-bg: #141923;
 
-    --border: #2b2f33;
-    --border-subtle: #23262a;
-    --border-strong: #33383c;
-    --footer-border: #2b2f33;
+    --text: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-tertiary: #64748b;
 
-    --icon-muted: #33383c;
-    --icon-muted-strong: #3a3f44;
-    --scrollbar-thumb: #3a3f44;
+    --border: #1f2633;
+    --border-subtle: rgba(255, 255, 255, 0.05);
+    --border-strong: #2d3748;
+    --footer-border: #1f2633;
 
-    --checkbox-shadow: rgba(0, 0, 0, 0.4);
-    --checkbox-inset-shadow: rgba(0, 0, 0, 0.3);
+    --icon-muted: #475569;
+    --icon-muted-strong: #64748b;
+    --scrollbar-thumb: #1e293b;
 
-    --color-wifi: #4ea89a;
-    --color-wifi-bg: #22312e;
-    --color-wifi-border: #3a5450;
-    --color-wifi-text: #7fc9bb;
-    --color-wifi-onsolid: #10201d;
+    --checkbox-shadow: rgba(0, 0, 0, 0.6);
+    --checkbox-inset-shadow: rgba(0, 0, 0, 0.4);
 
-    --color-usb: #d8a44c;
-    --color-usb-bg: #33291a;
-    --color-usb-border: #54421f;
-    --color-usb-text: #e8bb6d;
-    --color-usb-onsolid: #221806;
+    --color-wifi: #06b6d4;
+    --color-wifi-bg: rgba(6, 182, 212, 0.12);
+    --color-wifi-border: rgba(6, 182, 212, 0.3);
+    --color-wifi-text: #22d3ee;
+    --color-wifi-onsolid: #082f49;
 
-    --color-ethernet: #7e93bd;
-    --color-ethernet-bg: #232a38;
-    --color-ethernet-border: #3a4660;
-    --color-ethernet-text: #a7b8db;
-    --color-ethernet-onsolid: #141a26;
+    --color-usb: #10b981;
+    --color-usb-bg: rgba(16, 185, 129, 0.12);
+    --color-usb-border: rgba(16, 185, 129, 0.3);
+    --color-usb-text: #34d399;
+    --color-usb-onsolid: #064e3b;
 
-    --color-neutral: #8d9196;
-    --color-neutral-bg: #26292c;
-    --color-neutral-border: #3a3f44;
-    --color-neutral-text: #a9adb2;
-    --color-neutral-onsolid: #16181a;
+    --color-ethernet: #3b82f6;
+    --color-ethernet-bg: rgba(59, 130, 246, 0.12);
+    --color-ethernet-border: rgba(59, 130, 246, 0.3);
+    --color-ethernet-text: #60a5fa;
+    --color-ethernet-onsolid: #172554;
 
-    --swatch-teal: #4ea89a;
-    --swatch-teal-onsolid: #10201d;
-    --swatch-amber: #d8a44c;
-    --swatch-amber-onsolid: #221806;
-    --swatch-steel: #7e93bd;
-    --swatch-steel-onsolid: #141a26;
-    --swatch-rose: #c97b7b;
-    --swatch-rose-onsolid: #210f0f;
-    --swatch-violet: #9c8fd6;
-    --swatch-violet-onsolid: #17131f;
-    --swatch-lime: #a3c66a;
-    --swatch-lime-onsolid: #161f0d;
-    --swatch-cyan: #6db8c9;
-    --swatch-cyan-onsolid: #0d1a1e;
-    --swatch-coral: #d99168;
-    --swatch-coral-onsolid: #241209;
+    --color-neutral: #64748b;
+    --color-neutral-bg: rgba(100, 116, 139, 0.12);
+    --color-neutral-border: rgba(100, 116, 139, 0.25);
+    --color-neutral-text: #94a3b8;
+    --color-neutral-onsolid: #0f172a;
 
-    --color-accent: #d8a44c;
-    --color-accent-onsolid: #1b1408;
-    --color-success: #4ea89a;
+    --color-accent: #06b6d4;
+    --color-accent-onsolid: #082f49;
+    --color-success: #10b981;
 
-    --color-danger: #eda3a3;
-    --color-danger-bg: #2c1c1c;
-    --color-danger-border: #4a2a2a;
+    --color-danger: #f43f5e;
+    --color-danger-bg: rgba(244, 63, 94, 0.12);
+    --color-danger-border: rgba(244, 63, 94, 0.3);
 
-    --node-accent: #f7f4ef;
+    --node-accent: #06b6d4;
   }
 }
 
@@ -232,13 +215,13 @@
   }
 }
 
-@keyframes plexo-dash {
+@keyframes tesso-dash {
   to {
     stroke-dashoffset: -60;
   }
 }
 
-@keyframes plexo-glow {
+@keyframes tesso-glow {
   0%,
   100% {
     opacity: 0.45;
@@ -248,7 +231,7 @@
   }
 }
 
-@keyframes plexo-popover-in {
+@keyframes tesso-popover-in {
   from {
     opacity: 0;
     transform: translateY(-4px) scale(0.97);
