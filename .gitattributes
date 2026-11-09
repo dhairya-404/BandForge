@@ -1,0 +1,15 @@
+# Auto detect text files and perform LF normalization on commit
+* text=auto eol=lf
+
+# Explicit binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.zip binary
+*.crx binary
+*.bin binary
+*.exe binary

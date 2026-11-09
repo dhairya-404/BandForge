@@ -19,6 +19,16 @@
 
 ## Log
 
+### 2026-11-09: Fix GitHub Actions CI #17 formatting failure with .gitattributes LF normalization and auto endOfLine
+
+- **Agent:** main-agent (Gemini 3.8 Flash)
+- **Branch:** main-agent/feat/tesso-platform
+- **What:** Fixed GitHub Actions CI failure on job `ci` step `Check formatting` by setting `endOfLine: 'auto'` in `.prettierrc.yaml` and adding `.gitattributes` to enforce LF normalization on all text files and declare binary types for `.crx`, `.zip`, `.png`, and `.exe`. Formatted all modified files with Prettier.
+- **Why:** GitHub Actions CI run #17 failed on branch main due to line ending mismatches between Windows git checkouts and Linux runners during Prettier formatting check.
+- **Files:** `.prettierrc.yaml`, `.gitattributes`, `progress.md`, `AGENTS.md`.
+- **Verified:** `npm run format:check` passed ("All matched files use Prettier code style!", exit code 0), `npm run lint` passed (exit code 0), `npm run typecheck` passed (exit code 0).
+- **Open / follow-ups:** none.
+
 ### 2026-11-09: Add pre-packaged CRX release and distribution guide to GitHub
 
 - **Agent:** main-agent (Gemini 3.8 Flash)

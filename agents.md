@@ -35,3 +35,4 @@
 - 2026-11-09 10:48: `main-agent`: Implemented Option A & Option B: Embedded Multi-WAN forward proxy & PAC server, Chrome Companion Extension, and Browser Web Flow Studio UI.
 - 2026-11-09 14:10: `main-agent`: Fixed main process titleBarOverlay uncaught exception, rebuilt dist/win-unpacked/tesso.exe, packaged chrome & firefox extension zips, and documented permanent extension deployment.
 - 2026-11-09 14:28: `main-agent`: Uploaded and committed releases/tesso.crx and releases/tesso-chrome-extension.zip with drag-and-drop distribution guide to GitHub.
+- 2026-11-09 15:04: `main-agent`: Fixed GitHub Actions CI #17 formatting failure with .gitattributes LF normalization and auto endOfLine.
