@@ -3,6 +3,7 @@
 declare global {
   interface Window {
     bondforge?: import('../../preload').PlexoApi
+    tesso?: import('../../preload').PlexoApi
   }
 }
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import { ShieldCheck, Activity } from 'lucide-react'
-import { BondForgeLogo } from './BondForgeLogo'
+import { TessoLogo } from './TessoLogo'
 import { useAppStore } from '../store/useAppStore'
 import { formatSpeed } from '../utils/format'
 
@@ -21,8 +21,8 @@ export function TitleBar(): React.JSX.Element {
     <div className="h-10 shrink-0 flex items-center justify-between px-4 border-b border-[var(--border)] bg-[#070b13] [-webkit-app-region:drag] select-none text-[12px]">
       {/* Left: Brand Badge */}
       <div className="flex items-center gap-2.5 [-webkit-app-region:no-drag]">
-        <BondForgeLogo size={20} />
-        <span className="font-bold text-white tracking-tight">BondForge</span>
+        <TessoLogo size={20} />
+        <span className="font-bold text-white tracking-tight">Tesso</span>
         <span className="text-[10px] text-slate-400 bg-slate-800/80 px-1.5 py-0.5 rounded border border-slate-700/60 font-mono">
           v1.0
         </span>

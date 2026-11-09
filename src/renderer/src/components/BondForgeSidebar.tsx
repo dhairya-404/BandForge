@@ -1,6 +1,6 @@
 import React from 'react'
 import { Plus, ArrowDownToLine, Network, Settings, HardDrive, Activity } from 'lucide-react'
-import { BondForgeLogo } from './BondForgeLogo'
+import { TessoLogo } from './TessoLogo'
 import { formatBytes } from '../utils/format'
 import { useFreeSpace } from '../hooks/useFreeSpace'
 import { useAppStore } from '../store/useAppStore'
@@ -33,16 +33,16 @@ export function BondForgeSidebar({
     <aside className="hidden min-[860px]:flex w-64 flex-col border-r border-[var(--border)] bg-[#0c121e] select-none shrink-0">
       {/* Brand Header */}
       <div className="h-16 flex items-center gap-3 px-5 border-b border-[var(--border)]">
-        <BondForgeLogo size={32} />
+        <TessoLogo size={32} />
         <div className="flex flex-col min-w-0">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-[15px] text-white tracking-tight">BondForge</span>
+            <span className="font-bold text-[15px] text-white tracking-tight">Tesso</span>
             <span className="text-[10px] font-mono font-medium text-sky-400 bg-sky-500/10 border border-sky-500/20 px-1.5 py-0.2 rounded">
               v1.0
             </span>
           </div>
           <span className="text-[11px] text-slate-400 truncate font-sans">
-            Multi-Network Aggregator
+            Multi-Network Engine
           </span>
         </div>
       </div>

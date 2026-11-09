@@ -60,7 +60,7 @@ export function initBrowserShim(): void {
   if (typeof window === 'undefined') return
 
   if (!window.plexo) {
-    console.info('[BondForge] Initializing dynamic multi-network browser engine shim.')
+    console.info('[Tesso] Initializing dynamic multi-network browser engine shim.')
     const totalBytes = 1024 * 1024 * 1024 * 1.5
 
     const baseShim: Record<string, unknown> = {
@@ -357,10 +357,11 @@ export function initBrowserShim(): void {
     }) as unknown as typeof window.plexo
     window.plexo = proxy
     window.bondforge = proxy
+    window.tesso = proxy
   }
 }
 
-// Auto-run immediately upon file load so window.plexo and window.bondforge are set before other modules run
+// Auto-run immediately upon file load so window.plexo, window.bondforge, and window.tesso are set before other modules run
 if (typeof window !== 'undefined') {
   initBrowserShim()
 }

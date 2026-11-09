@@ -1,5 +1,5 @@
-appId: com.bondforge.app
-productName: BondForge
+appId: com.tesso.app
+productName: Tesso
 # Shown in the macOS About window and Finder's Get Info, and in the Windows file properties.
 copyright: Copyright © 2026 Dhairya
 afterPack: scripts/check-torrent-package.mjs
@@ -26,7 +26,7 @@ win:
   # No protocols or fileAssociations: the NSIS installer would register Plexo as *the* handler for
   # magnet links and .torrent files, taking them from a torrent client the user already has.
   # A .torrent can still be opened with Plexo through "Open with".
-  executableName: bondforge
+  executableName: tesso
   target:
     - target: nsis
       arch: [x64, arm64]

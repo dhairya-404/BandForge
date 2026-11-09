@@ -15,7 +15,7 @@ import {
   Network,
   HardDrive
 } from 'lucide-react'
-import { BondForgeLogo } from '../components/BondForgeLogo'
+import { TessoLogo } from '../components/TessoLogo'
 import { useAppStore } from '../store/useAppStore'
 import { formatBytes, formatSpeed } from '../utils/format'
 
@@ -84,7 +84,7 @@ export function ForgeDashboardScreen({
               </span>
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
-              <span>BondForge Control Console</span>
+              <span>Tesso Engine Console</span>
             </h1>
             <p className="text-[13px] text-slate-400 max-w-xl leading-relaxed">
               Aggregating throughput across all physical hardware adapters ({interfaces.length}{' '}
@@ -194,7 +194,7 @@ export function ForgeDashboardScreen({
       <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-5 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <BondForgeLogo size={20} />
+            <TessoLogo size={20} />
             <h2 className="text-[14px] font-bold text-white tracking-wide">
               Interface Convergence Deck
             </h2>

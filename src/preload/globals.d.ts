@@ -4,5 +4,6 @@ declare global {
   interface Window {
     plexo: PlexoApi
     bondforge?: PlexoApi
+    tesso?: PlexoApi
   }
 }

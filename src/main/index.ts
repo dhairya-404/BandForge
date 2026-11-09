@@ -22,7 +22,7 @@ import type { DownloadManager } from './download/downloadManager'
 // In dev mode the app runs as the raw `electron` binary, which otherwise shows "Electron" in
 // the Dock tooltip/menu bar — must be set before the app is ready. Packaged builds already get
 // this from electron-builder's productName, but setting it here keeps dev and packaged in sync.
-app.setName('BondForge')
+app.setName('Tesso')
 
 // Each e2e test runs against its own throwaway userData folder (downloads, manifests, settings).
 if (testKnobs.userDataDir) app.setPath('userData', testKnobs.userDataDir)
@@ -41,15 +41,15 @@ let hasShownTrayNotification = false
 function ensureTray(): Tray {
   if (tray && !tray.isDestroyed()) return tray
   tray = new Tray(nativeImage.createFromPath(icon).resize({ width: 16, height: 16 }))
-  tray.setToolTip('BondForge')
+  tray.setToolTip('Tesso')
   tray.on('click', () => bringForward(ensureWindow()))
   tray.on('double-click', () => bringForward(ensureWindow()))
   tray.setContextMenu(
     Menu.buildFromTemplate([
-      { label: 'Open BondForge', click: () => bringForward(ensureWindow()) },
+      { label: 'Open Tesso', click: () => bringForward(ensureWindow()) },
       { type: 'separator' },
       {
-        label: 'Quit BondForge',
+        label: 'Quit Tesso',
         click: () => {
           isQuitting = true
           app.quit()
@@ -114,7 +114,7 @@ function createWindow(): void {
     center: true,
     show: false,
     autoHideMenuBar: true,
-    title: 'BondForge',
+    title: 'Tesso',
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#1c1c1e' : '#ffffff',
     ...(process.platform !== 'darwin' ? { icon } : {}),
     titleBarStyle: 'hidden',
@@ -136,7 +136,7 @@ function createWindow(): void {
   })
 
   mainWindow.webContents.on('did-fail-load', (_event, errorCode, errorDescription) => {
-    console.error('[BondForge] Failed to load renderer:', errorCode, errorDescription)
+    console.error('[Tesso] Failed to load renderer:', errorCode, errorDescription)
   })
 
   mainWindow.on('session-end', () => {
@@ -160,8 +160,8 @@ function createWindow(): void {
         hasShownTrayNotification = true
         if (!testKnobs.userDataDir && Notification.isSupported()) {
           new Notification({
-            title: 'BondForge is still downloading',
-            body: 'Downloads will continue in the background. Open BondForge again, or use its tray icon, to quit.'
+            title: 'Tesso is still downloading',
+            body: 'Downloads will continue in the background. Open Tesso again, or use its tray icon, to quit.'
           }).show()
         }
       }
@@ -205,7 +205,7 @@ function createWindow(): void {
 }
 
 app.whenReady().then(async () => {
-  electronApp.setAppUserModelId('com.bondforge.app')
+  electronApp.setAppUserModelId('com.tesso.app')
 
   // A failed move keeps the old file, to retry next launch — it must never stop the window opening.
   await migrateLegacyNetworkPreferences().catch((error) =>
@@ -239,7 +239,7 @@ app.whenReady().then(async () => {
       mainWindow?.setBackgroundColor(nativeTheme.shouldUseDarkColors ? '#1c1c1e' : '#ffffff')
       if (process.platform !== 'darwin') mainWindow?.setTitleBarOverlay(titleBarOverlay())
     } catch (error) {
-      console.warn('[BondForge] nativeTheme updated handler error:', error)
+      console.warn('[Tesso] nativeTheme updated handler error:', error)
     }
   })
 

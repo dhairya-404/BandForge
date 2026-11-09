@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="build/icon.png" width="128" alt="BondForge icon">
+  <img src="build/icon.png" width="128" alt="Tesso icon">
 </p>
 
-<h1 align="center">BondForge</h1>
+<h1 align="center">Tesso</h1>
 
 <p align="center">
-  <strong>Next-Gen Multi-WAN Download & Bandwidth Aggregation Engine</strong><br>
-  BondForge dynamically aggregates Wi-Fi, Ethernet, and Mobile 4G/5G USB tethering to accelerate download speeds with zero remote server costs.
+  <strong>Next-Gen Multi-WAN Aggregation & Network Platform</strong><br>
+  Tesso dynamically aggregates Wi-Fi, Ethernet, and Mobile 4G/5G USB tethering to accelerate download speeds, web browsing, and data streams with zero remote server costs.
 </p>
 
 <p align="center">
@@ -24,8 +24,8 @@
 ## ⚡ Features
 
 - **Multi-Network Aggregation ($0 Server Cost):** Combines Wi-Fi, Ethernet, and 4G/5G mobile tethering on your local machine using raw C FFI socket binding (`koffi`) and Windows source routing.
-- **Dynamic Range Chunking:** Automatically segments large downloads into parallel byte ranges across participating interfaces.
-- **The Forge Matrix Visualizer:** Real-time stream telemetry showing individual throughput per adapter converging into the unified forged stream.
+- **Dynamic Range Chunking:** Automatically segments large transfers into parallel byte ranges across participating interfaces.
+- **The Tesso Matrix Visualizer:** Real-time stream telemetry showing individual throughput per adapter converging into the unified woven stream.
 - **Multi-Route Auto-Hedging & Failover:** Seamlessly balances connections across adapters, auto-retrying and reassigning chunks if one connection suffers latency spikes or disconnects.
 - **Per-Network Controls:** Configure individual traffic weights, toggle interfaces mid-download, and set custom data limits.
 - **Studio UI:** Cyber-slate dark console with real-time throughput metrics, chunk visualizer strips, and hardware adapter health decks.
@@ -34,9 +34,9 @@
 
 ## 🛠️ How It Works
 
-Traditional download managers route all outgoing TCP traffic through the operating system's single default routing table entry. Even if your computer is plugged into Ethernet, connected to 5GHz Wi-Fi, and tethered to a 5G phone simultaneously, normal apps only use one interface at a time.
+Traditional applications route all outgoing TCP traffic through the operating system's single default routing table entry. Even if your computer is plugged into Ethernet, connected to 5GHz Wi-Fi, and tethered to a 5G phone simultaneously, normal apps only use one interface at a time.
 
-**BondForge** bypasses this limitation purely on the client side without needing a remote cloud VPS or paid proxy relay:
+**Tesso** bypasses this limitation purely on the client side without needing a remote cloud VPS or paid proxy relay:
 
 1. **Adapter Discovery:** Interrogates network hardware (Wi-Fi, USB NDIS cellular tether, Ethernet) via native Windows Network APIs.
 2. **Socket Binding (C FFI):** Binds each parallel socket directly to specific local interface IP addresses using native C FFI (`koffi`) socket calls (`bind()` and `IP_UNICAST_IF` / `SO_BINDTODEVICE`).
@@ -47,12 +47,12 @@ Traditional download managers route all outgoing TCP traffic through the operati
 
 ## 🏗️ Architecture
 
-BondForge is engineered with a modular, high-throughput pipeline that separates the reactive studio UI from the low-level native networking engine:
+Tesso is engineered with a modular, high-throughput pipeline that separates the reactive studio UI from the low-level native networking engine:
 
 ```mermaid
 flowchart TD
     subgraph UI ["Studio UI Layer (React 19 + Tailwind v4)"]
-        UI_Dash["Forge Dashboard & Convergence Matrix"]
+        UI_Dash["Tesso Dashboard & Convergence Matrix"]
         UI_Deck["Hardware Deck & Interface Toggles"]
         UI_Store["Zustand App Store & IPC Bridge"]
     end
@@ -111,7 +111,7 @@ flowchart TD
 
 | Layer                    | Technologies                               | Responsibilities                                                                                                          |
 | ------------------------ | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
-| **Presentation (UI)**    | React 19, Tailwind CSS v4, Lucide, Zustand | Studio dark theme, dynamic Forge Convergence Matrix, 60Hz aggregated throughput gauges, hardware adapter health monitors. |
+| **Presentation (UI)**    | React 19, Tailwind CSS v4, Lucide, Zustand | Studio dark theme, dynamic Tesso Convergence Matrix, 60Hz aggregated throughput gauges, hardware adapter health monitors. |
 | **Desktop Shell**        | Electron 44, ContextBridge, Vite HMR       | Secure sandboxed IPC boundary, window lifecycle, native dialogs, global keyboard shortcuts.                               |
 | **Engine Orchestrator**  | Node.js, TypeScript                        | Dynamic range chunk calculator, work-stealing task queue, slow connection auto-hedging, retry policies.                   |
 | **Native Socket Engine** | C FFI (`koffi`), WinSock2                  | Direct low-level OS socket binding to interface IP addresses, bypassing the default gateway routing table.                |
@@ -121,7 +121,7 @@ flowchart TD
 
 ## 🔄 Data Flow
 
-1. **Ingestion & Capability Probe:** When a download URL is entered or intercepted, BondForge sends a lightweight `HEAD` / probe request to verify `Accept-Ranges: bytes` and determine file size.
+1. **Ingestion & Capability Probe:** When a download URL is entered or intercepted, Tesso sends a lightweight `HEAD` / probe request to verify `Accept-Ranges: bytes` and determine file size.
 2. **Dynamic Chunk Partitioning:** The total payload is divided into optimized chunk blocks (typically 10MB to 50MB depending on total size).
 3. **Interface Sizing & Socket Creation:** For every active hardware interface, a dedicated socket is created and explicitly bound using low-level C FFI to that adapter's assigned local IP address.
 4. **Adaptive Work-Stealing:** Sockets request available chunks concurrently. Faster adapters (e.g., 5G tethering or gigabit fiber) complete chunks rapidly and immediately pull new chunks from the queue, preventing slower links from bottlenecking the overall job.
@@ -162,7 +162,7 @@ npm run typecheck
 npm run build:unpack
 ```
 
-The compiled standalone executable will be located in `dist/win-unpacked/bondforge.exe`.
+The compiled standalone executable will be located in `dist/win-unpacked/tesso.exe`.
 
 ---
 

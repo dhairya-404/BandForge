@@ -22,6 +22,18 @@
 
 ## Active tasks
 
+## T-006: Rebrand to Tesso & Full-Scale Multi-WAN Platform Architecture
+
+- **Assigned to:** `main-agent`
+- **Assigned by / date:** Dhairya on 2026-11-09
+- **Priority:** high
+- **Repeats:** once
+- **Files / area:** `package.json`, `electron-builder.yml`, `src/`, `README.md`, `TESSO_FULL_SCALE_BLUEPRINT.md`
+- **Branch:** `main-agent/feat/tesso-platform`
+- **Status:** IN PROGRESS
+- **Done when:** Application is completely rebranded to Tesso across all files, tests pass, and an extensive full-scale architecture plan for Chrome/system-wide multi-network acceleration is established.
+- **Notes:** Creating comprehensive scaling blueprint artifact and executing atomic rebrand.
+
 ## T-005: Remote Repository Setup & GitHub Push
 
 - **Assigned to:** `main-agent`

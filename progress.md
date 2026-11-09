@@ -19,6 +19,16 @@
 
 ## Log
 
+### 2026-11-09: Complete brand transformation to Tesso & multi-WAN Chrome/system platform blueprint
+
+- **Agent:** main-agent (Gemini 3.8 Flash)
+- **Branch:** main-agent/feat/tesso-platform
+- **What:** Completed full-scale rebranding from BondForge to Tesso across package metadata, application ID (`com.tesso.app`), executable name (`tesso.exe`), window titles, tray menus, error strings, and extension manifest. Created the bespoke vector `TessoLogo` (woven parallel stream monogram 'T' from Latin _tessere_) with backward-compatible aliases. Updated UI components (`TessoSidebar`, `TitleBar`, `ForgeDashboardScreen`, `DownloadsScreen`, `ErrorBoundary`). Drafted the comprehensive enterprise architectural blueprint (`TESSO_FULL_SCALE_BLUEPRINT.md`) outlining the expansion into a client-side transparent HTTP/SOCKS5 proxy, Chrome companion extension, HLS/DASH video stream pre-fetcher, and system-wide Wintun/TUN virtual adapter bonding.
+- **Why:** User requested a clean, non-AI-generated 1-word name like Plexo (selected Tesso) and requested a comprehensive architecture plan to scale the multi-network engine beyond a download manager to accelerate web browsing in Chrome and system-wide traffic.
+- **Files:** `package.json`, `electron-builder.yml`, `src/main/index.ts`, `src/renderer/index.html`, `src/preload/globals.d.ts`, `src/preload/index.ts`, `src/renderer/src/env.d.ts`, `src/renderer/src/browserShim.ts`, `src/renderer/src/components/TessoLogo.tsx`, `src/renderer/src/components/BondForgeLogo.tsx`, `src/renderer/src/components/BondForgeSidebar.tsx`, `src/renderer/src/components/TitleBar.tsx`, `src/renderer/src/screens/ForgeDashboardScreen.tsx`, `src/renderer/src/screens/DownloadsScreen.tsx`, `src/renderer/src/ErrorBoundary.tsx`, `src/shared/errors.ts`, `extension/manifest.json`, `README.md`, `tasks.md`, `AGENTS.md`, `progress.md`, `TESSO_FULL_SCALE_BLUEPRINT.md`.
+- **Verified:** `npm run typecheck` passed (exit code 0 across all 4 targets), `npm run lint` passed (0 errors), `npm run format:check` passed ("All matched files use Prettier code style!").
+- **Open / follow-ups:** Review blueprint with Dhairya and begin Phase 2: Embedded Multi-WAN HTTP/SOCKS5 local proxy daemon.
+
 ### 2026-11-08: Fix E2E smoke test 153 failure across window titleBarOverlay and relaunch dialog teardown
 
 - **Agent:** main-agent (Gemini 3.8 Flash)
