@@ -111,16 +111,15 @@ export function connectFrom(
     return connect({ host, port })
   }
 
+  const family = localAddress ? (localAddress.includes(':') ? 6 : 4) : undefined
   const device = deviceName ?? (libc && localAddress ? deviceFor(localAddress, host) : undefined)
   if (!libc || !device) {
-    return connect({ host, port, localAddress: localAddress || undefined })
+    return connect({ host, port, localAddress: localAddress || undefined, family })
   }
 
-  const isIpv6 = Boolean(localAddress?.includes(':') || host.includes(':'))
-  const family = isIpv6 ? 6 : 4
   let fd: number
   try {
-    fd = openOnDevice(libc, device, family)
+    fd = openOnDevice(libc, device, family ?? 4)
   } catch (error) {
     // The interface vanished since it was listed — surface it like any other connect error.
     const socket = new Socket()

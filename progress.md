@@ -19,6 +19,16 @@
 
 ## Log
 
+### 2026-11-09: Purge remaining legacy 'Plexo' branding across TelegramDialog and application strings
+
+- **Agent:** main-agent (Gemini 3.8 Flash)
+- **Branch:** main-agent/feat/tesso-platform
+- **What:** Completely purged legacy 'Plexo' references in `src/renderer/src/components/TelegramDialog.tsx` ("Plexo is an unofficial Telegram client" -> "Tesso is an unofficial Telegram client", "Plexo needs an api_id and api_hash..." -> "Tesso needs an api_id and api_hash...", "Use Plexo's api keys instead" -> "Use Tesso's api keys instead"). Also updated user-facing strings across `FixLinkDialog.tsx`, `LimitsDialog.tsx`, `NewDownloadDialog.tsx`, `UpdateIndicator.tsx`, `UsenetServerDialog.tsx`, `DownloadingScreen.tsx`, `extension/src/options.ts`, `docs/404.html`, `docs/landing.js`, and backend engine error and user-agent strings (`browserContext.ts`, `downloadManager.ts`, `nzbFile.ts`, `nzbTransfer.ts`, `metadata.ts`, `paths.ts`, `torrentDestination.ts`, `trashDownload.ts`, `proxyTunnel.ts`, `service.ts`, `updater.ts`).
+- **Why:** User reported that the Telegram Saved Messages auth dialog was still branded with 'Plexo'.
+- **Files:** `src/renderer/src/components/TelegramDialog.tsx`, `src/renderer/src/components/FixLinkDialog.tsx`, `src/renderer/src/components/LimitsDialog.tsx`, `src/renderer/src/components/NewDownloadDialog.tsx`, `src/renderer/src/components/UpdateIndicator.tsx`, `src/renderer/src/components/UsenetServerDialog.tsx`, `src/renderer/src/screens/DownloadingScreen.tsx`, `extension/src/options.ts`, `docs/404.html`, `docs/landing.js`, `src/main/download/browserContext.ts`, `src/main/download/downloadManager.ts`, `src/main/download/nzb/nzbFile.ts`, `src/main/download/nzb/nzbTransfer.ts`, `src/main/download/torrent/metadata.ts`, `src/main/download/torrent/paths.ts`, `src/main/download/torrent/torrentDestination.ts`, `src/main/download/trashDownload.ts`, `src/main/network/proxyTunnel.ts`, `src/main/telegram/service.ts`, `src/main/updater.ts`, `progress.md`, `AGENTS.md`.
+- **Verified:** `npm run typecheck` passed (exit 0 across node, web, e2e, extension), `npm run lint` passed (exit 0), `npm run format:check` passed ("All matched files use Prettier code style!"), and Playwright smoke tests (`format.spec.ts`, `downloadSearch.spec.ts`) passed cleanly.
+- **Open / follow-ups:** none.
+
 ### 2026-11-09: Fix Mermaid architecture diagram rendering on GitHub ("Unable to render rich display")
 
 - **Agent:** main-agent (Gemini 3.8 Flash)

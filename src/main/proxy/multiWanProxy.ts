@@ -107,33 +107,46 @@ export class MultiWanProxy {
   public async refreshInterfaces(): Promise<void> {
     try {
       const active = await listActiveInterfaces()
-      this.cachedInterfaces = active.filter((i) => i.addresses.some((a) => a.family === 4))
-      for (const iface of this.cachedInterfaces) {
-        if (!this.stats.has(iface.id)) {
-          this.stats.set(iface.id, {
-            id: iface.id,
-            name: iface.displayName || iface.device,
-            address: iface.addresses.find((a) => a.family === 4)?.address || '',
-            activeConnections: 0,
-            bytesReceived: 0,
-            bytesSent: 0
-          })
-        }
-      }
+      this.updateInterfaces(active)
     } catch (err) {
       console.warn('[Tesso] Error refreshing proxy interfaces:', err)
     }
   }
 
-  private pickNextInterface(): { iface: NetworkInterfaceInfo; address: string } | null {
-    if (this.cachedInterfaces.length === 0) return null
+  public updateInterfaces(active: NetworkInterfaceInfo[]): void {
+    this.cachedInterfaces = active.filter((i) => i.addresses.some((a) => a.family === 4))
+    for (const iface of this.cachedInterfaces) {
+      if (!this.stats.has(iface.id)) {
+        this.stats.set(iface.id, {
+          id: iface.id,
+          name: iface.displayName || iface.device,
+          address: iface.addresses.find((a) => a.family === 4)?.address || '',
+          activeConnections: 0,
+          bytesReceived: 0,
+          bytesSent: 0
+        })
+      }
+    }
+  }
 
-    // Weighted least-connections scheduling across bonded physical interfaces
-    const iface = this.cachedInterfaces[this.nextInterfaceIdx % this.cachedInterfaces.length]
+  private getInterfaceCandidates(): Array<{ iface?: NetworkInterfaceInfo; address?: string }> {
+    if (this.cachedInterfaces.length === 0) {
+      return [{}]
+    }
+
+    const startIdx = this.nextInterfaceIdx % this.cachedInterfaces.length
     this.nextInterfaceIdx++
 
-    const address = iface.addresses.find((a) => a.family === 4)?.address || ''
-    return { iface, address }
+    const candidates: Array<{ iface?: NetworkInterfaceInfo; address?: string }> = []
+    for (let i = 0; i < this.cachedInterfaces.length; i++) {
+      const iface = this.cachedInterfaces[(startIdx + i) % this.cachedInterfaces.length]
+      const address = iface.addresses.find((a) => a.family === 4)?.address
+      candidates.push({ iface, address })
+    }
+
+    // Unpinned fallback route as safety net
+    candidates.push({})
+    return candidates
   }
 
   private startPacServer(): Promise<void> {
@@ -205,63 +218,120 @@ export class MultiWanProxy {
     const host = parts[0]
     const port = parseInt(parts[1] || '443', 10)
 
-    const choice = this.pickNextInterface()
-    const chosenAddress = choice?.address
-    const ifaceId = choice?.iface.id
-
-    this.activeConnections++
-    const stat = ifaceId ? this.stats.get(ifaceId) : null
-    if (stat) stat.activeConnections++
-    this.emitStats()
-
+    const candidates = this.getInterfaceCandidates()
+    let candidateIndex = 0
     let remoteSocket: Socket | null = null
-    try {
-      remoteSocket = connectFrom(chosenAddress, host, port, choice?.iface.device)
-    } catch (err) {
-      console.warn(`[Tesso] Failed to initiate connection to ${host}:${port}:`, err)
-      clientSocket.destroy()
-      this.cleanupConnection(stat)
-      return
+    let activeStat: InterfaceProxyStats | null = null
+    let isConnected = false
+    let isClientClosed = false
+
+    const onClientClose = (): void => {
+      isClientClosed = true
+      if (remoteSocket) {
+        remoteSocket.destroy()
+      }
+      this.cleanupConnection(activeStat)
+      activeStat = null
     }
 
+    clientSocket.once('close', onClientClose)
     clientSocket.on('error', () => {
       remoteSocket?.destroy()
     })
 
-    remoteSocket.on('error', (err) => {
-      console.warn(
-        `[Tesso Proxy] Error connecting to ${host}:${port} on iface ${ifaceId}:`,
-        err.message
-      )
-      clientSocket.write('HTTP/1.1 502 Bad Gateway\r\n\r\n')
-      clientSocket.destroy()
-    })
+    const tryNextCandidate = (): void => {
+      if (isClientClosed || isConnected) return
 
-    remoteSocket.on('connect', () => {
-      clientSocket.write('HTTP/1.1 200 Connection Established\r\n\r\n')
-      if (head && head.length > 0) {
-        remoteSocket!.write(head)
+      if (remoteSocket) {
+        remoteSocket.removeAllListeners()
+        remoteSocket.destroy()
+        remoteSocket = null
+        this.cleanupConnection(activeStat)
+        activeStat = null
       }
 
-      // Bi-directional pipe with live byte counting
-      clientSocket.on('data', (chunk) => {
-        if (stat) stat.bytesSent += chunk.length
+      if (candidateIndex >= candidates.length) {
+        try {
+          clientSocket.write('HTTP/1.1 502 Bad Gateway\r\n\r\n')
+        } catch {
+          // Client might already be closed
+        }
+        clientSocket.destroy()
+        return
+      }
+
+      const candidate = candidates[candidateIndex++]
+      const chosenAddress = candidate.address
+      const ifaceId = candidate.iface?.id
+
+      this.activeConnections++
+      activeStat = ifaceId ? this.stats.get(ifaceId) || null : null
+      if (activeStat) activeStat.activeConnections++
+      this.emitStats()
+
+      let socket: Socket
+      try {
+        socket = connectFrom(chosenAddress, host, port, candidate.iface?.device)
+      } catch (err) {
+        console.warn(`[Tesso] Failed to create socket to ${host}:${port} on iface ${ifaceId}:`, err)
+        tryNextCandidate()
+        return
+      }
+
+      remoteSocket = socket
+      socket.setTimeout(5000)
+
+      socket.once('timeout', () => {
+        if (!isConnected) {
+          console.warn(
+            `[Tesso Proxy] Connection timeout to ${host}:${port} on iface ${ifaceId || 'default'}, falling back`
+          )
+          tryNextCandidate()
+        }
       })
 
-      remoteSocket!.on('data', (chunk) => {
-        if (stat) stat.bytesReceived += chunk.length
+      socket.once('error', (err) => {
+        if (!isConnected) {
+          console.warn(
+            `[Tesso Proxy] Error connecting to ${host}:${port} on iface ${ifaceId || 'default'}: ${err.message}, falling back`
+          )
+          tryNextCandidate()
+        }
       })
 
-      clientSocket.pipe(remoteSocket!)
-      remoteSocket!.pipe(clientSocket)
-    })
+      socket.once('connect', () => {
+        isConnected = true
+        socket.setTimeout(0)
 
-    const onFinish = (): void => {
-      this.cleanupConnection(stat)
+        try {
+          clientSocket.write('HTTP/1.1 200 Connection Established\r\n\r\n')
+          if (head && head.length > 0) {
+            socket.write(head)
+          }
+
+          clientSocket.on('data', (chunk) => {
+            if (activeStat) activeStat.bytesSent += chunk.length
+          })
+
+          socket.on('data', (chunk) => {
+            if (activeStat) activeStat.bytesReceived += chunk.length
+          })
+
+          clientSocket.pipe(socket)
+          socket.pipe(clientSocket)
+
+          socket.once('close', () => {
+            this.cleanupConnection(activeStat)
+            activeStat = null
+          })
+        } catch {
+          socket.destroy()
+          clientSocket.destroy()
+        }
+      })
     }
 
-    clientSocket.once('close', onFinish)
-    remoteSocket.once('close', onFinish)
+    tryNextCandidate()
   }
 
   private handleHttpRequest(req: IncomingMessage, res: ServerResponse): void {
@@ -272,25 +342,60 @@ export class MultiWanProxy {
       return
     }
 
-    // For standard HTTP requests via proxy, route via chosen interface
-    const choice = this.pickNextInterface()
-    const chosenAddress = choice?.address
-    const ifaceId = choice?.iface.id
-    const stat = ifaceId ? this.stats.get(ifaceId) : null
-
+    let parsed: URL
     try {
-      const parsed = new URL(req.url || '', `http://${req.headers.host || 'localhost'}`)
-      const host = parsed.hostname
-      const port = parseInt(parsed.port || '80', 10)
+      parsed = new URL(req.url || '', `http://${req.headers.host || 'localhost'}`)
+    } catch {
+      res.writeHead(400, { 'Content-Type': 'text/plain' })
+      res.end('Bad Request')
+      return
+    }
 
-      const socket = connectFrom(chosenAddress, host, port, choice?.iface.device)
+    const host = parsed.hostname
+    const port = parseInt(parsed.port || '80', 10)
+    const candidates = this.getInterfaceCandidates()
+    let candidateIndex = 0
 
-      socket.on('error', () => {
-        res.writeHead(502, { 'Content-Type': 'text/plain' })
-        res.end('Bad Gateway')
+    const tryNextHttp = (): void => {
+      if (candidateIndex >= candidates.length) {
+        if (!res.headersSent) {
+          res.writeHead(502, { 'Content-Type': 'text/plain' })
+          res.end('Bad Gateway')
+        }
+        return
+      }
+
+      const candidate = candidates[candidateIndex++]
+      const chosenAddress = candidate.address
+      const ifaceId = candidate.iface?.id
+      const stat = ifaceId ? this.stats.get(ifaceId) || null : null
+
+      let socket: Socket
+      try {
+        socket = connectFrom(chosenAddress, host, port, candidate.iface?.device)
+      } catch {
+        tryNextHttp()
+        return
+      }
+
+      let isConnected = false
+      socket.setTimeout(5000)
+      socket.once('timeout', () => {
+        if (!isConnected) {
+          socket.destroy()
+          tryNextHttp()
+        }
       })
 
-      socket.on('connect', () => {
+      socket.once('error', () => {
+        if (!isConnected) {
+          tryNextHttp()
+        }
+      })
+
+      socket.once('connect', () => {
+        isConnected = true
+        socket.setTimeout(0)
         socket.write(`${req.method} ${parsed.pathname}${parsed.search} HTTP/1.1\r\n`)
         for (const [key, val] of Object.entries(req.headers)) {
           if (Array.isArray(val)) {
@@ -312,10 +417,9 @@ export class MultiWanProxy {
 
         socket.pipe(res)
       })
-    } catch {
-      res.writeHead(400, { 'Content-Type': 'text/plain' })
-      res.end('Bad Request')
     }
+
+    tryNextHttp()
   }
 
   private cleanupConnection(stat: InterfaceProxyStats | null | undefined): void {

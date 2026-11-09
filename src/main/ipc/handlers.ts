@@ -85,6 +85,7 @@ export function registerIpcHandlers(getWindow: () => BrowserWindow | null): Down
   // The main process keeps the network list, for downloads and the window alike.
   const networks = new NetworkMonitor((list) => {
     manager.networksChanged()
+    globalProxy.updateInterfaces(list)
     const window = getWindow()
     if (window && !window.isDestroyed()) window.webContents.send(IpcChannels.networksChanged, list)
   })

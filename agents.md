@@ -40,3 +40,4 @@
 - 2026-11-09 15:12: `main-agent`: Added explicit HTML anchor tags to README.md headings to fix GitHub in-page anchor jumping.
 - 2026-11-09 15:23: `main-agent`: Fixed Mermaid architecture diagram syntax in README.md to restore rich display rendering on GitHub.
 - 2026-11-09 15:30: `main-agent`: Beginning execution of complete inside-out UI/UX overhaul: Tesso Cyber Studio design tokens, TessoNavigationDeck, TessoTitleBar, PipelineStudioScreen, PipelineInspectorDrawer, and NewPipelineModal.
+- 2026-11-09 15:33: `main-agent`: Replaced remaining legacy 'Plexo' brand references across TelegramDialog, FixLinkDialog, LimitsDialog, NewDownloadDialog, UpdateIndicator, UsenetServerDialog, DownloadingScreen, and backend error strings with Tesso.
