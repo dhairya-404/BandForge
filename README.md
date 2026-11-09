@@ -12,10 +12,11 @@
 <p align="center">
   <a href="#features">Features</a> •
   <a href="#how-it-works">How It Works</a> •
+  <a href="#browser-multi-wan">Browser Multi-WAN</a> •
   <a href="#architecture">Architecture</a> •
   <a href="#data-flow">Data Flow</a> •
+  <a href="#faq">FAQ</a> •
   <a href="#quick-start">Quick Start</a> •
-  <a href="#build-from-source">Build</a> •
   <a href="#license">License</a>
 </p>
 
@@ -42,6 +43,20 @@ Traditional applications route all outgoing TCP traffic through the operating sy
 2. **Socket Binding (C FFI):** Binds each parallel socket directly to specific local interface IP addresses using native C FFI (`koffi`) socket calls (`bind()` and `IP_UNICAST_IF` / `SO_BINDTODEVICE`).
 3. **HTTP Range Chunking:** Requests specific byte ranges (`bytes=start-end`) concurrently over each bonded interface.
 4. **Direct Stream Assembler:** Writes arriving chunks directly into pre-allocated sparse files on disk with zero memory overhead.
+
+---
+
+## 🌐 Browser Multi-WAN Acceleration (Chrome & Edge)
+
+Beyond file downloads, Tesso accelerates general web browsing and video streaming across all connected networks via an embedded local forward proxy and automatic configuration server:
+
+- **Local Forward Proxy (`127.0.0.1:9090`)**: Dispatches outbound HTTP requests and HTTPS `CONNECT` tunnels across your physical adapters using least-connections round-robin scheduling.
+- **PAC Auto-Config Server (`http://127.0.0.1:9091/proxy.pac`)**: Serves a dynamic Proxy Auto-Configuration (PAC) script directly to browsers. Local and intranet domains are routed `DIRECT`, while public internet streams are multiplexed across your bonded adapters.
+- **Chrome Companion Extension (`extension/dist/chrome`)**: Provides a 1-click toolbar toggle to activate or deactivate browser multi-network acceleration instantly without altering your OS network settings.
+- **Direct CLI Launch (No Extension Needed)**: Launch Chrome with multi-WAN acceleration from terminal:
+  ```powershell
+  chrome.exe --proxy-pac-url=http://127.0.0.1:9091/proxy.pac
+  ```
 
 ---
 
@@ -130,6 +145,58 @@ flowchart TD
 
 ---
 
+## ❓ Frequently Asked Questions (FAQ)
+
+### 1. What is Tesso in simple terms?
+
+Most computers have multiple network interfaces connected at the same time—such as home Wi-Fi, Ethernet, and a smartphone connected over USB tethering. Standard operating systems only use **one** connection at a time, leaving the rest completely idle. **Tesso** is a client-side engine that aggregates all active networks into a unified pipe to accelerate file transfers, streaming, and Google Chrome web browsing without requiring any paid cloud proxy.
+
+### 2. How does Tesso combine networks with zero server fees ($0)?
+
+Traditional bonding tools (like Speedify) require expensive cloud VPN servers to split and reassemble packets. Tesso operates **100% locally on your machine**:
+
+- **For Downloads:** Tesso splits files into byte ranges (`bytes=start-end`) and requests separate chunks over separate network adapters using native socket binding (`IP_UNICAST_IF`). The pieces are written directly to disk at their exact file offsets.
+- **For Browsing:** Tesso runs a local forward proxy daemon on `127.0.0.1:9090` that dispatches outgoing TCP connections across active physical interfaces using dynamic least-connections round-robin scheduling.
+
+### 3. How does Tesso compare to Speedify?
+
+| Feature                   | **Tesso**                                     | **Speedify**                               | **Standard Download Managers** |
+| :------------------------ | :-------------------------------------------- | :----------------------------------------- | :----------------------------- |
+| **Monthly Subscription**  | **$0 / Free & Open Source**                   | \$10 to \$15 / month                       | Free                           |
+| **Server Infrastructure** | **Zero remote servers**                       | Requires proprietary VPN servers           | Zero servers                   |
+| **Data Privacy**          | **100% Direct to destination** (no middleman) | Traffic inspected/routed via 3rd-party VPN | Direct                         |
+| **Scope**                 | **File Downloads + Chrome / Web Browsing**    | All system traffic                         | Downloads only                 |
+| **Stall Hedging**         | **Automatic packet stall detection**          | Server-side retransmit                     | Manual restart on failure      |
+| **Hardware Control**      | **Per-interface toggles & live metrics**      | High-level interface sliders               | None                           |
+
+### 4. What kinds of network connections can I bond together?
+
+Any network connection recognized by your operating system can be bonded:
+
+- **Wi-Fi** (2.4 GHz, 5 GHz, Wi-Fi 6/6E/7)
+- **4G / 5G Mobile Hotspot** via USB Cable Tethering (NDIS)
+- **Gigabit Ethernet / Fiber LAN**
+- **Secondary Wi-Fi** (via a USB Wi-Fi dongle)
+- **Bluetooth PAN Tethering**
+
+### 5. What happens if one connection (e.g. mobile hotspot) disconnects mid-download?
+
+Tesso features **dynamic auto-hedging and failover**. If one connection experiences packet loss, latency spikes, or drops off entirely:
+
+1. The engine marks the stalled block as abandoned.
+2. The remaining healthy connections immediately pick up the abandoned byte range and finish it.
+3. The transfer finishes without errors, without restarting, and without corrupting the file on disk.
+
+### 6. Is the telemetry on the dashboard real or simulated?
+
+**100% real dynamic telemetry.** When no downloads or proxy streams are active, Tesso shows `0 B/s (Standby)` and `1.0x` baseline multiplier. When transfers run, the gauges and Convergence Matrix show the actual live bytes per second flowing through each physical network card.
+
+### 7. Does Tesso require administrator / root privileges?
+
+No. Standard user privileges are sufficient. Tesso uses standard operating system socket binding APIs (`bind()` with `localAddress` on Node.js / Electron), which do not require kernel driver installation or elevated administrator permissions.
+
+---
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -142,8 +209,8 @@ flowchart TD
 
 ```bash
 # Clone the repository
-git clone https://github.com/dhairya-404/BandForge.git
-cd BandForge
+git clone https://github.com/dhairya-404/Tesso.git
+cd Tesso
 
 # Install dependencies
 npm install
