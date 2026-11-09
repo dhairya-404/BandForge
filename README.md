@@ -22,7 +22,7 @@
 
 ---
 
-## ⚡ Features
+## <a id="features" name="features"></a>⚡ Features
 
 - **Multi-Network Aggregation ($0 Server Cost):** Combines Wi-Fi, Ethernet, and 4G/5G mobile tethering on your local machine using raw C FFI socket binding (`koffi`) and Windows source routing.
 - **Dynamic Range Chunking:** Automatically segments large transfers into parallel byte ranges across participating interfaces.
@@ -33,7 +33,7 @@
 
 ---
 
-## 🛠️ How It Works
+## <a id="how-it-works" name="how-it-works"></a>🛠️ How It Works
 
 Traditional applications route all outgoing TCP traffic through the operating system's single default routing table entry. Even if your computer is plugged into Ethernet, connected to 5GHz Wi-Fi, and tethered to a 5G phone simultaneously, normal apps only use one interface at a time.
 
@@ -46,7 +46,7 @@ Traditional applications route all outgoing TCP traffic through the operating sy
 
 ---
 
-## 🌐 Browser Multi-WAN Acceleration (Chrome, Edge & System)
+## <a id="browser-multi-wan" name="browser-multi-wan"></a>🌐 Browser Multi-WAN Acceleration (Chrome, Edge & System)
 
 Beyond file downloads, Tesso accelerates general web browsing and video streaming across all connected networks via an embedded local forward proxy and automatic configuration server:
 
@@ -106,7 +106,7 @@ Route all browsers (Chrome, Edge, Brave, Firefox, Arc) through Tesso without com
 
 ---
 
-## 🏗️ Architecture
+## <a id="architecture" name="architecture"></a>🏗️ Architecture
 
 Tesso is engineered with a modular, high-throughput pipeline that separates the reactive studio UI from the low-level native networking engine:
 
@@ -180,7 +180,7 @@ flowchart TD
 
 ---
 
-## 🔄 Data Flow
+## <a id="data-flow" name="data-flow"></a>🔄 Data Flow
 
 1. **Ingestion & Capability Probe:** When a download URL is entered or intercepted, Tesso sends a lightweight `HEAD` / probe request to verify `Accept-Ranges: bytes` and determine file size.
 2. **Dynamic Chunk Partitioning:** The total payload is divided into optimized chunk blocks (typically 10MB to 50MB depending on total size).
@@ -191,7 +191,7 @@ flowchart TD
 
 ---
 
-## ❓ Frequently Asked Questions (FAQ)
+## <a id="faq" name="faq"></a>❓ Frequently Asked Questions (FAQ)
 
 ### 1. What is Tesso in simple terms?
 
@@ -250,7 +250,7 @@ Yes. There are two permanent installation methods:
 
 ---
 
-## 🚀 Quick Start
+## <a id="quick-start" name="quick-start"></a>🚀 Quick Start
 
 ### Prerequisites
 
@@ -289,6 +289,6 @@ The compiled standalone executable will be located in `dist/win-unpacked/tesso.e
 
 ---
 
-## 📄 License
+## <a id="license" name="license"></a>📄 License
 
 MIT License. Copyright (c) 2026 Dhairya. All rights reserved.

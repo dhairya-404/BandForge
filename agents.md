@@ -36,3 +36,4 @@
 - 2026-11-09 14:10: `main-agent`: Fixed main process titleBarOverlay uncaught exception, rebuilt dist/win-unpacked/tesso.exe, packaged chrome & firefox extension zips, and documented permanent extension deployment.
 - 2026-11-09 14:28: `main-agent`: Uploaded and committed releases/tesso.crx and releases/tesso-chrome-extension.zip with drag-and-drop distribution guide to GitHub.
 - 2026-11-09 15:04: `main-agent`: Fixed GitHub Actions CI #17 formatting failure with .gitattributes LF normalization and auto endOfLine.
+- 2026-11-09 15:12: `main-agent`: Added explicit HTML anchor tags to README.md headings to fix GitHub in-page anchor jumping.

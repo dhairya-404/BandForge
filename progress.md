@@ -19,6 +19,16 @@
 
 ## Log
 
+### 2026-11-09: Fix broken navigation anchor links in README for GitHub and external viewports
+
+- **Agent:** main-agent (Gemini 3.8 Flash)
+- **Branch:** main-agent/feat/tesso-platform
+- **What:** Injected explicit `<a id="..." name="..."></a>` HTML anchor elements directly into all 8 primary section headings in `README.md` (`features`, `how-it-works`, `browser-multi-wan`, `architecture`, `data-flow`, `faq`, `quick-start`, and `license`). This fixes in-page anchor navigation on GitHub (`#architecture`, `#features`, etc.) which was broken due to GitHub Flavored Markdown's heading slugifier treating leading emojis and Unicode variation selectors (`\uFE0F`) as hyphens and invalid slugs.
+- **Why:** Clicking on navigation links in the README navbar (e.g., `#architecture` as shown in user screenshot) failed to jump to the intended sections on GitHub.
+- **Files:** `README.md`, `progress.md`, `AGENTS.md`.
+- **Verified:** Tested via GitHub's Markdown API (`https://api.github.com/markdown`) confirming that every target generates both `id="user-content-<name>"` and `name="user-content-<name>"`. Verified `npm run format:check` passes with zero formatting errors.
+- **Open / follow-ups:** Push commits to GitHub `origin/main-agent/feat/tesso-platform`, `origin/staging`, and `origin/main`.
+
 ### 2026-11-09: Fix GitHub Actions CI #17 formatting failure with .gitattributes LF normalization and auto endOfLine
 
 - **Agent:** main-agent (Gemini 3.8 Flash)
