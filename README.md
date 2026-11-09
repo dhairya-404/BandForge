@@ -80,21 +80,16 @@ If `chrome.exe` is not in your system environment PATH, launch via Chrome's defa
 
 Zero terminal commands needed:
 
-1. **Local Permanent Install (Chrome & Brave):**
-   - In Google Chrome (`chrome://extensions`) or Brave (`brave://extensions`), toggle on **Developer mode** in the top-right corner.
-   - Click **Load unpacked** and select the folder:
-     ```
-     extension/dist/chrome
-     ```
-   - _Permanence Note:_ Unpacked extensions remain **permanently installed** across browser restarts and PC reboots. (Brave runs unpacked extensions completely silently without startup prompts).
-2. **Universal 1-Click Install Everywhere (Chrome Web Store):**
-   - Run `npm run build:extension` to generate the production-ready upload package:
-     ```
-     extension/dist/tesso-chrome-extension.zip
-     ```
-   - Upload this package to the [Chrome Developer Dashboard](https://chrome.google.com/webstore/devconsole) (publish as _Public_ or _Unlisted_).
-   - Once published, users on **Chrome, Brave, Edge, Arc, and Opera** can install Tesso permanently with a single click ("Add to Chrome"), requiring zero developer mode switches.
-3. Click the **Tesso** icon in your browser toolbar and toggle **Accelerate Browser (Multi-WAN)**.
+1. **Direct Drag-and-Drop Install (`.crx`) — 100% Free ($0):**
+   - Download [`releases/tesso.crx`](https://github.com/dhairya-404/Tesso/raw/main/releases/tesso.crx).
+   - In Brave (`brave://extensions`) or Chrome (`chrome://extensions`), toggle on **Developer mode** in the top-right corner.
+   - Drag and drop `tesso.crx` into your browser window and click **Add extension**. It is permanently installed!
+2. **Local Unpacked Install:**
+   - In `chrome://extensions` or `brave://extensions`, click **Load unpacked** and select `extension/dist/chrome`.
+   - _Permanence Note:_ Unpacked extensions remain **permanently installed** across browser restarts and PC reboots. (Brave runs them silently with zero popups).
+3. **Store 1-Click Distribution:**
+   - Use [`releases/tesso-chrome-extension.zip`](https://github.com/dhairya-404/Tesso/raw/main/releases/tesso-chrome-extension.zip) to publish to Microsoft Edge Partner Center ($0 Free) or Google Chrome Web Store.
+4. Click the **Tesso** icon in your browser toolbar and toggle **Accelerate Browser (Multi-WAN)**.
 
 #### Option 4: System-Wide Windows Proxy (Accelerates All Browsers)
 

@@ -19,6 +19,16 @@
 
 ## Log
 
+### 2026-11-09: Add pre-packaged CRX release and distribution guide to GitHub
+
+- **Agent:** main-agent (Gemini 3.8 Flash)
+- **Branch:** main-agent/feat/tesso-platform
+- **What:** Published `releases/tesso.crx`, `releases/tesso-chrome-extension.zip`, `releases/tesso-extension-key.pem`, and `releases/README.md` directly into the repository. Updated `README.md` Option 3 with 1-click drag-and-drop installation instructions for Brave & Chrome ($0 free, permanent without Web Store account).
+- **Why:** User generated the `.crx` file and requested uploading and pushing it to GitHub.
+- **Files:** `releases/tesso.crx`, `releases/tesso-chrome-extension.zip`, `releases/tesso-extension-key.pem`, `releases/README.md`, `README.md`, `progress.md`, `AGENTS.md`.
+- **Verified:** Packaged binary verified on disk, file sizes confirmed, git commit and push completed.
+- **Open / follow-ups:** none.
+
 ### 2026-11-09: Fix titlebar overlay crash in main process & package standalone Tesso executable and store-ready extensions
 
 - **Agent:** main-agent (Gemini 3.8 Flash)
