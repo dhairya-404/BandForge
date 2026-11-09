@@ -16,25 +16,35 @@
   src: url('./fonts/RobotoMono-Variable.woff2') format('woff2');
 }
 
-:root {
+/* ==========================================================================
+   Tesso Design Tokens: Dark Theme (Default)
+   ========================================================================== */
+:root,
+.dark,
+[data-theme='dark'] {
   color-scheme: dark;
 
-  /* Tesso Core Obsidian Cyber-Studio Palette */
+  /* Obsidian Canvas & Surfaces */
   --bg: #08090c;
   --bg-secondary: #0f1218;
   --bg-tertiary: #161b24;
+  --bg-card: #0f1218;
+  --bg-hover: #161b24;
   --input-bg: #11151e;
   --track-bg: #141923;
 
+  /* Typography */
   --text: #f1f5f9;
   --text-secondary: #94a3b8;
   --text-tertiary: #64748b;
 
+  /* Borders & Dividers */
   --border: #1f2633;
   --border-subtle: rgba(255, 255, 255, 0.05);
   --border-strong: #2d3748;
   --footer-border: #1f2633;
 
+  /* Controls & Chrome */
   --icon-muted: #475569;
   --icon-muted-strong: #64748b;
   --scrollbar-thumb: #1e293b;
@@ -45,7 +55,7 @@
   --hero-bg: radial-gradient(ellipse at 50% 0%, rgba(6, 182, 212, 0.12) 0%, #08090c 75%);
   --hero-border: rgba(6, 182, 212, 0.25);
 
-  /* Network Channels Palette */
+  /* Hardware Conduit Accents */
   --color-wifi: #06b6d4;
   --color-wifi-bg: rgba(6, 182, 212, 0.12);
   --color-wifi-border: rgba(6, 182, 212, 0.3);
@@ -70,7 +80,7 @@
   --color-neutral-text: #94a3b8;
   --color-neutral-onsolid: #0f172a;
 
-  /* Accent & Studio Lighting */
+  /* Accent & Lighting */
   --color-accent: #06b6d4;
   --color-accent-onsolid: #082f49;
   --color-success: #10b981;
@@ -82,14 +92,89 @@
   --radius: 10px;
 }
 
-/* Maps shadcn/Base UI's expected semantic tokens onto BondForge's palette */
+/* ==========================================================================
+   Tesso Design Tokens: Light Theme (Studio Titanium)
+   ========================================================================== */
+.light,
+[data-theme='light'] {
+  color-scheme: light;
+
+  /* Titanium Canvas & Surfaces */
+  --bg: #f4f6fa;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #edf2f7;
+  --bg-card: #ffffff;
+  --bg-hover: #f1f5f9;
+  --input-bg: #f8fafc;
+  --track-bg: #e2e8f0;
+
+  /* Typography */
+  --text: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #94a3b8;
+
+  /* Borders & Dividers */
+  --border: #e2e8f0;
+  --border-subtle: rgba(0, 0, 0, 0.05);
+  --border-strong: #cbd5e1;
+  --footer-border: #e2e8f0;
+
+  /* Controls & Chrome */
+  --icon-muted: #94a3b8;
+  --icon-muted-strong: #64748b;
+  --scrollbar-thumb: #cbd5e1;
+
+  --checkbox-shadow: rgba(0, 0, 0, 0.08);
+  --checkbox-inset-shadow: rgba(0, 0, 0, 0.04);
+
+  --hero-bg: radial-gradient(ellipse at 50% 0%, rgba(8, 145, 178, 0.08) 0%, #f4f6fa 75%);
+  --hero-border: rgba(8, 145, 178, 0.2);
+
+  /* Hardware Conduit Accents */
+  --color-wifi: #0891b2;
+  --color-wifi-bg: rgba(8, 145, 178, 0.08);
+  --color-wifi-border: rgba(8, 145, 178, 0.25);
+  --color-wifi-text: #0e7490;
+  --color-wifi-onsolid: #ffffff;
+
+  --color-usb: #059669;
+  --color-usb-bg: rgba(5, 150, 105, 0.08);
+  --color-usb-border: rgba(5, 150, 105, 0.25);
+  --color-usb-text: #047857;
+  --color-usb-onsolid: #ffffff;
+
+  --color-ethernet: #2563eb;
+  --color-ethernet-bg: rgba(37, 99, 235, 0.08);
+  --color-ethernet-border: rgba(37, 99, 235, 0.25);
+  --color-ethernet-text: #1d4ed8;
+  --color-ethernet-onsolid: #ffffff;
+
+  --color-neutral: #64748b;
+  --color-neutral-bg: rgba(100, 116, 139, 0.08);
+  --color-neutral-border: rgba(100, 116, 139, 0.2);
+  --color-neutral-text: #475569;
+  --color-neutral-onsolid: #ffffff;
+
+  /* Accent & Lighting */
+  --color-accent: #0891b2;
+  --color-accent-onsolid: #ffffff;
+  --color-success: #059669;
+  --color-danger: #e11d48;
+  --color-danger-bg: rgba(225, 29, 72, 0.08);
+  --color-danger-border: rgba(225, 29, 72, 0.25);
+
+  --node-accent: #0891b2;
+  --radius: 10px;
+}
+
+/* Maps semantic Tailwind tokens dynamically */
 @theme inline {
   --font-sans: 'Manrope', -apple-system, 'SF Pro Text', 'Helvetica Neue', Helvetica, sans-serif;
   --font-mono: 'Roboto Mono', 'SF Mono', ui-monospace, Menlo, monospace;
 
   --color-background: var(--bg);
   --color-foreground: var(--text);
-  --color-card: var(--bg-secondary);
+  --color-card: var(--bg-card);
   --color-card-foreground: var(--text);
   --color-popover: var(--bg-secondary);
   --color-popover-foreground: var(--text);
@@ -101,8 +186,6 @@
   --color-muted-foreground: var(--text-tertiary);
   --color-destructive: var(--color-danger);
   --color-border: var(--border);
-  /* Not --input-bg: that's a fill color (white in light mode), invisible as a stroke.
-     border-input needs an actual visible border tone. */
   --color-input: var(--border-strong);
   --color-ring: var(--color-accent);
 
@@ -112,76 +195,6 @@
   --radius-xl: calc(var(--radius) * 1.4);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --hero-bg: radial-gradient(ellipse at 50% 0%, rgba(6, 182, 212, 0.12) 0%, #08090c 75%);
-    --hero-border: rgba(6, 182, 212, 0.25);
-
-    --bg: #08090c;
-    --bg-secondary: #0f1218;
-    --bg-tertiary: #161b24;
-    --input-bg: #11151e;
-    --track-bg: #141923;
-
-    --text: #f1f5f9;
-    --text-secondary: #94a3b8;
-    --text-tertiary: #64748b;
-
-    --border: #1f2633;
-    --border-subtle: rgba(255, 255, 255, 0.05);
-    --border-strong: #2d3748;
-    --footer-border: #1f2633;
-
-    --icon-muted: #475569;
-    --icon-muted-strong: #64748b;
-    --scrollbar-thumb: #1e293b;
-
-    --checkbox-shadow: rgba(0, 0, 0, 0.6);
-    --checkbox-inset-shadow: rgba(0, 0, 0, 0.4);
-
-    --color-wifi: #06b6d4;
-    --color-wifi-bg: rgba(6, 182, 212, 0.12);
-    --color-wifi-border: rgba(6, 182, 212, 0.3);
-    --color-wifi-text: #22d3ee;
-    --color-wifi-onsolid: #082f49;
-
-    --color-usb: #10b981;
-    --color-usb-bg: rgba(16, 185, 129, 0.12);
-    --color-usb-border: rgba(16, 185, 129, 0.3);
-    --color-usb-text: #34d399;
-    --color-usb-onsolid: #064e3b;
-
-    --color-ethernet: #3b82f6;
-    --color-ethernet-bg: rgba(59, 130, 246, 0.12);
-    --color-ethernet-border: rgba(59, 130, 246, 0.3);
-    --color-ethernet-text: #60a5fa;
-    --color-ethernet-onsolid: #172554;
-
-    --color-neutral: #64748b;
-    --color-neutral-bg: rgba(100, 116, 139, 0.12);
-    --color-neutral-border: rgba(100, 116, 139, 0.25);
-    --color-neutral-text: #94a3b8;
-    --color-neutral-onsolid: #0f172a;
-
-    --color-accent: #06b6d4;
-    --color-accent-onsolid: #082f49;
-    --color-success: #10b981;
-
-    --color-danger: #f43f5e;
-    --color-danger-bg: rgba(244, 63, 94, 0.12);
-    --color-danger-border: rgba(244, 63, 94, 0.3);
-
-    --node-accent: #06b6d4;
-  }
-}
-
-/* Layered, not plain global CSS, so Tailwind utility classes still win over these resets.
-   Tailwind puts its own utilities in a later layer than base styles, and unlayered CSS beats
-   every layer regardless of specificity, so an unlayered button font reset here previously
-   overrode every text and font utility on every button in the app. box-sizing, margin and
-   padding resets, and the default font family, are already handled by Tailwind Preflight, so
-   they are not repeated here. Body, html and root element sizing now live as utility classes
-   in index.html instead. */
 @layer base {
   input,
   [contenteditable] {
@@ -192,7 +205,6 @@
     font: inherit;
   }
 
-  /* A desktop app: controls keep the arrow, as native ones do; no pointing hand anywhere. */
   a,
   button,
   [role='button'],
@@ -200,9 +212,9 @@
     cursor: default;
   }
 
-  /* No core Tailwind utility for scrollbar pseudo-elements. */
   ::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
+    height: 8px;
   }
 
   ::-webkit-scrollbar-track {
@@ -228,6 +240,21 @@
   }
   50% {
     opacity: 1;
+  }
+}
+
+@keyframes tesso-pulse-ring {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0.8;
   }
 }
 

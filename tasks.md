@@ -22,6 +22,20 @@
 
 ## Active tasks
 
+## T-009: Dual-Theme Engine, High-Resolution Animated NSIS Installer & PAC Auto-Ignition
+
+- **Assigned to:** `main-agent`
+- **Assigned by / date:** Dhairya on 2026-11-09
+- **Priority:** high
+- **Repeats:** once
+- **Files / area:** `src/renderer/`, `scripts/generate-installer-assets.mjs`, `build/installer.nsh`, `electron-builder.yml`, `e2e/`
+- **Branch:** `main-agent/feat/tesso-platform`
+- **Status:** DONE
+- **Done when:** Dual-theme engine (Obsidian Cyber Dark & Studio Titanium Light) fully implemented with 1-click switcher in NavigationDeck and TitleBar, zero hardcoded dark styling across all screens and modals, Proxy PAC auto-ignited on test probe, NSIS installer enhanced with high-res BMPs (164x314 and 150x57) and smooth DPI-aware visual styles, and CI smoke test issues resolved.
+- **Notes:** Full end-to-end verification passed: 4/4 typecheck targets (0 errors), ESLint (0 errors), Prettier format check (0 errors), Playwright smoke tests passed (19 passed), and `dist/tesso-1.0.0-setup.exe` (118.1 MB) generated with high-res assets.
+
+## Done
+
 ## T-008: Complete Inside-Out UI/UX Overhaul & Obsidian Cyber Studio
 
 - **Assigned to:** `main-agent`

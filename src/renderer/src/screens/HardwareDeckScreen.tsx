@@ -29,15 +29,17 @@ export function HardwareDeckScreen(): React.JSX.Element {
   }))
 
   return (
-    <div className="flex-1 overflow-y-auto p-6 space-y-6 select-none">
+    <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-7 select-none text-[var(--text)] transition-colors">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <Network className="size-5 text-sky-400" />
-            <h1 className="text-xl font-bold text-white tracking-tight">Hardware Adapter Matrix</h1>
+            <Network className="size-5 text-cyan-400" />
+            <h1 className="text-xl md:text-2xl font-bold tracking-tight">
+              Hardware Adapter Matrix
+            </h1>
           </div>
-          <p className="text-[13px] text-slate-400 mt-1">
+          <p className="text-[13px] text-[var(--text-secondary)] mt-1">
             Physical network cards bonded into client-side socket pool ({rawList.length} adapter
             {rawList.length === 1 ? '' : 's'} detected).
           </p>
@@ -45,28 +47,26 @@ export function HardwareDeckScreen(): React.JSX.Element {
 
         <button
           onClick={() => void loadInterfaces()}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white text-[12px] font-mono transition-colors cursor-pointer"
+          className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] border border-[var(--border)] text-[var(--text)] text-[12px] font-mono font-medium transition-colors cursor-pointer shrink-0"
         >
-          <RefreshCw className="size-3.5 text-sky-400" />
+          <RefreshCw className="size-3.5 text-cyan-400" />
           <span>Rescan Adapters</span>
         </button>
       </div>
 
       {rawList.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-slate-800 p-12 text-center bg-[#0a0f1d] max-w-lg mx-auto">
-          <div className="size-12 rounded-xl bg-sky-500/10 text-sky-400 flex items-center justify-center mx-auto mb-3">
+        <div className="rounded-2xl border border-dashed border-[var(--border)] p-12 text-center bg-[var(--bg-secondary)] max-w-lg mx-auto">
+          <div className="size-12 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mx-auto mb-3 border border-cyan-500/20">
             <Network className="size-6" />
           </div>
-          <h3 className="text-[16px] font-semibold text-white">
-            No active network adapters detected
-          </h3>
-          <p className="text-[13px] text-slate-400 mt-1.5 leading-relaxed">
+          <h3 className="text-[16px] font-bold">No active network adapters detected</h3>
+          <p className="text-[13px] text-[var(--text-secondary)] mt-1.5 leading-relaxed">
             Connect your device to Wi-Fi, plug in an Ethernet cable, or enable USB/Mobile 5G
             tethering to begin multi-network aggregation.
           </p>
           <button
             onClick={() => void loadInterfaces()}
-            className="mt-4 px-4 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-medium text-[13px] transition-colors cursor-pointer inline-flex items-center gap-2"
+            className="mt-4 px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-[13px] transition-all cursor-pointer inline-flex items-center gap-2 active:scale-95 shadow-sm"
           >
             <RefreshCw className="size-3.5" />
             <span>Detect Adapters</span>
@@ -89,33 +89,31 @@ export function HardwareDeckScreen(): React.JSX.Element {
 
             const accentColor =
               item.kind === 'wifi'
-                ? 'text-sky-400 border-sky-500/30 bg-sky-950/20'
+                ? 'text-cyan-400 border-cyan-500/30 bg-cyan-500/10'
                 : item.kind === 'usb'
-                  ? 'text-amber-400 border-amber-500/30 bg-amber-950/20'
-                  : 'text-indigo-400 border-indigo-500/30 bg-indigo-950/20'
+                  ? 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10'
+                  : 'text-blue-400 border-blue-500/30 bg-blue-500/10'
 
             return (
               <div
                 key={item.id}
-                className={`rounded-xl border p-5 flex flex-col justify-between space-y-4 transition-all ${
+                className={`rounded-2xl border p-5 flex flex-col justify-between space-y-4 transition-all shadow-sm ${
                   isOff
-                    ? 'border-slate-800 bg-slate-900/30 opacity-60'
-                    : 'border-[var(--border)] bg-[var(--bg-secondary)] hover:border-sky-500/30 shadow-lg'
+                    ? 'border-[var(--border)] bg-[var(--bg-secondary)] opacity-50'
+                    : 'border-[var(--border)] bg-[var(--bg-secondary)] hover:border-cyan-500/40'
                 }`}
               >
                 {/* Card Header */}
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3 min-w-0">
                     <div
-                      className={`size-10 rounded-lg flex items-center justify-center border shrink-0 ${accentColor}`}
+                      className={`size-10 rounded-xl flex items-center justify-center border shrink-0 ${accentColor}`}
                     >
                       <Icon className="size-5" />
                     </div>
                     <div className="min-w-0">
-                      <h3 className="font-semibold text-[13.5px] text-white truncate">
-                        {customName}
-                      </h3>
-                      <span className="font-mono text-[11px] text-slate-500 uppercase">
+                      <h3 className="font-bold text-[14px] truncate">{customName}</h3>
+                      <span className="font-mono text-[11px] text-[var(--text-secondary)] uppercase">
                         {item.device} • {item.kind}
                       </span>
                     </div>
@@ -128,7 +126,7 @@ export function HardwareDeckScreen(): React.JSX.Element {
                     }
                     className={`size-6 rounded-full flex items-center justify-center transition-colors cursor-pointer shrink-0 ${
                       isOff
-                        ? 'bg-slate-700 text-slate-400'
+                        ? 'bg-[var(--bg-tertiary)] text-[var(--text-secondary)]'
                         : 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20'
                     }`}
                     title={isOff ? 'Enable for Bonding' : 'Disable from Bonding'}
@@ -138,36 +136,40 @@ export function HardwareDeckScreen(): React.JSX.Element {
                 </div>
 
                 {/* Hardware Telemetry Specs */}
-                <div className="space-y-2 rounded-lg bg-[#070b13] p-3 border border-slate-800/80 font-mono text-[11.5px]">
-                  <div className="flex justify-between items-center text-slate-400">
+                <div className="space-y-2 rounded-xl bg-[var(--bg-tertiary)] p-3.5 border border-[var(--border)] font-mono text-[11.5px]">
+                  <div className="flex justify-between items-center text-[var(--text-secondary)]">
                     <span>IPv4 Address:</span>
-                    <span className="text-white font-medium">{item.ip}</span>
+                    <span className="text-[var(--text)] font-semibold">{item.ip}</span>
                   </div>
-                  <div className="flex justify-between items-center text-slate-400">
+                  <div className="flex justify-between items-center text-[var(--text-secondary)]">
                     <span>Hardware Binding:</span>
-                    <span className="text-slate-400">{item.mac}</span>
+                    <span>{item.mac}</span>
                   </div>
-                  <div className="flex justify-between items-center text-slate-400">
+                  <div className="flex justify-between items-center text-[var(--text-secondary)]">
                     <span>Status:</span>
                     <span className="text-emerald-400 font-medium">{item.ping}</span>
                   </div>
-                  <div className="flex justify-between items-center text-slate-400">
+                  <div className="flex justify-between items-center text-[var(--text-secondary)]">
                     <span>Throughput:</span>
-                    <span className={ifaceSpeed > 0 ? 'text-sky-300 font-bold' : 'text-slate-400'}>
+                    <span
+                      className={
+                        ifaceSpeed > 0 ? 'text-cyan-400 font-bold' : 'text-[var(--text-secondary)]'
+                      }
+                    >
                       {ifaceSpeed > 0 ? formatSpeed(ifaceSpeed, speedUnit) : '0 B/s (Standby)'}
                     </span>
                   </div>
                 </div>
 
                 {/* Status Badge */}
-                <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 pt-1 border-t border-slate-800/60">
+                <div className="flex items-center justify-between text-[11px] font-mono text-[var(--text-secondary)] pt-1 border-t border-[var(--border)]">
                   <span className="flex items-center gap-1.5">
                     <span
-                      className={`size-1.5 rounded-full ${isOff ? 'bg-slate-500' : 'bg-emerald-400'}`}
+                      className={`size-1.5 rounded-full ${isOff ? 'bg-slate-400' : 'bg-emerald-400'}`}
                     />
                     {isOff ? 'Disabled' : 'Armed & Bonded'}
                   </span>
-                  <span className="text-slate-500">Auto-hedging ready</span>
+                  <span>Auto-hedging ready</span>
                 </div>
               </div>
             )

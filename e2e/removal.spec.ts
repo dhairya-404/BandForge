@@ -141,7 +141,7 @@ test.describe('removal during completion @smoke', () => {
   })
 })
 
-test('failed torrent cancellation stays visible across restart and can be retried @smoke', async ({
+test('failed torrent cancellation stays visible across restart and can be retried', async ({
   plexo,
   dirs
 }) => {
@@ -200,7 +200,7 @@ test('failed torrent cancellation stays visible across restart and can be retrie
   }
 })
 
-test('cleanup failure keeps an active HTTP download visible and blocks resume during cancellation @smoke', async ({
+test('cleanup failure keeps an active HTTP download visible and blocks resume during cancellation', async ({
   plexo,
   serve,
   dirs

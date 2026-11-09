@@ -93,7 +93,7 @@ test.describe('release artifact selection @smoke', () => {
         `## What's new\n\n- **Fixed: Fixes.** What changed in ${version}.\n\n## Downloads`
       )
       for (const file of expected) {
-        const url = `https://github.com/dhairya-404/BandForge/releases/download/v${version}/${file}`
+        const url = `https://github.com/dhairya-404/Tesso/releases/download/v${version}/${file}`
         expect(notes.stdout.split(url + ')')).toHaveLength(2)
       }
       for (const file of [...otherBuilds, ...noise, ...updateFiles(version), ...channelFiles]) {

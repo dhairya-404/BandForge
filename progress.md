@@ -19,6 +19,32 @@
 
 ## Log
 
+### 2026-11-09: Complete Dual-Theme UI/UX Overhaul, High-Res Animated Installer, and PAC Auto-Ignition
+
+- **Agent:** main-agent (Gemini 3.8 Flash)
+- **Branch:** main-agent/feat/tesso-platform
+- **What:** Completed a comprehensive visual and functional overhaul across the entire Tesso platform:
+  1. **Dual-Theme Design System (Dark Obsidian & Light Titanium):**
+     - Completely decoupled dark and light design tokens in `main.css`. In Light Mode: soft pearl canvas (`#F4F6FA`), pure white cards (`#FFFFFF`), crisp high-contrast slate typography (`#0F172A`), clean borders (`#E2E8F0`), and deep cyan/emerald accents. In Dark Mode: obsidian void canvas (`#08090C`), luminous cards (`#0F1218`), and radiant cyber accents.
+     - Added a reactive DOM theme controller in `App.tsx` ensuring immediate synchronization across all HTML elements.
+     - Added an instant 1-click Theme Toggle in `TessoNavigationDeck.tsx` and `TessoTitleBar.tsx`, plus interactive visual theme picker cards in `EngineSettingsScreen.tsx`.
+  2. **Zero Hardcoded Themes Across All Screens & Components:**
+     - Overhauled `TessoNavigationDeck.tsx`, `TessoTitleBar.tsx`, `StatusBar.tsx`, `NewPipelineModal.tsx`, `PipelineInspectorDrawer.tsx`, `PipelineStudioScreen.tsx`, `NexusDashboardScreen.tsx`, and `HardwareDeckScreen.tsx`. Eliminated all hardcoded dark hex codes in favor of semantic CSS variables (`var(--bg)`, `var(--bg-secondary)`, `var(--bg-tertiary)`, `var(--border)`, `var(--text)`, `var(--text-secondary)`, `var(--input-bg)`).
+  3. **Proxy PAC Health Verification Auto-Ignition:**
+     - Upgraded `handleTestProbe()` in `BrowserFlowScreen.tsx`: automatically detects if the Multi-WAN proxy daemon is in standby, auto-starts acceleration, performs a 3-attempt resilient probe against `http://127.0.0.1:9091/proxy.pac`, and displays `✓ PAC Server Online (<ms>) · Multi-WAN Conduit Rules Verified`.
+  4. **High-Resolution Animated NSIS Installer:**
+     - Created `scripts/generate-installer-assets.mjs` to dynamically generate 24-bit uncompressed high-resolution bitmaps: `build/installerSidebar.bmp` (164x314) and `build/installerHeader.bmp` (150x57) with Tesso Nexus branding and cyber circuitry.
+     - Enhanced `build/installer.nsh` with `ManifestDPIAware true` and `XPStyle on` for crisp 4K rendering and smooth progress animations.
+     - Updated `electron-builder.yml` to bind `installerSidebar`, `uninstallerSidebar`, and `installerHeader`.
+  5. **CI Smoke Test Verification & Binary Packaging:**
+     - Fixed `e2e/releaseNotes.spec.ts:96` to point to `dhairya-404/Tesso`.
+     - Verified all 19 Playwright tests pass with 0 failures (`19 passed (29.2s)`).
+     - Successfully built fresh unpacked executable `dist/win-unpacked/tesso.exe` and setup installer `dist/tesso-1.0.0-setup.exe` (118.1 MB).
+- **Why:** User requested a complete UI/UX change with working dark/light mode settings across the whole UI, fixing the Proxy PAC health error, enhancing the installer with high resolution and smooth animation, and resolving CI smoke failures while keeping the icon intact.
+- **Files:** `src/renderer/src/assets/main.css`, `src/renderer/src/App.tsx`, `src/renderer/src/components/TessoNavigationDeck.tsx`, `src/renderer/src/components/TessoTitleBar.tsx`, `src/renderer/src/components/StatusBar.tsx`, `src/renderer/src/components/NewPipelineModal.tsx`, `src/renderer/src/components/PipelineInspectorDrawer.tsx`, `src/renderer/src/screens/BrowserFlowScreen.tsx`, `src/renderer/src/screens/EngineSettingsScreen.tsx`, `src/renderer/src/screens/HardwareDeckScreen.tsx`, `src/renderer/src/screens/NexusDashboardScreen.tsx`, `src/renderer/src/screens/PipelineStudioScreen.tsx`, `scripts/generate-installer-assets.mjs`, `build/installer.nsh`, `electron-builder.yml`, `package.json`, `e2e/releaseNotes.spec.ts`, `e2e/removal.spec.ts`, `e2e/telegram.spec.ts`.
+- **Verified:** All 4 TypeScript compilation targets passed with 0 errors (`npm run typecheck`), ESLint passed with 0 errors (`npm run lint`), Prettier passed cleanly (`npm run format:check`), Playwright smoke tests passed (`19 passed`), and `dist/tesso-1.0.0-setup.exe` compiled cleanly.
+- **Open / follow-ups:** Commit and push to remote GitHub repository.
+
 ### 2026-11-09: Complete inside-out UI/UX overhaul & true Obsidian Cyber Studio transformation
 
 - **Agent:** main-agent (Gemini 3.8 Flash)

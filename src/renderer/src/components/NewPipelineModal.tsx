@@ -193,25 +193,27 @@ export function NewPipelineModal(): React.JSX.Element | null {
       : '1.0x'
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-150 select-none">
-      <div className="relative w-full max-w-xl rounded-2xl border border-[var(--border)] bg-[#0c1017] shadow-2xl overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 dark:bg-black/80 backdrop-blur-md animate-in fade-in duration-150 select-none">
+      <div className="relative w-full max-w-xl rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] text-[var(--text)] shadow-2xl overflow-hidden flex flex-col transition-colors">
         {/* Modal Header */}
-        <div className="h-14 px-5 border-b border-[var(--border)] flex items-center justify-between shrink-0 bg-[#08090c]/80">
+        <div className="h-14 px-5 border-b border-[var(--border)] flex items-center justify-between shrink-0 bg-[var(--bg-secondary)]">
           <div className="flex items-center gap-2.5">
             <div className="size-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
-              <Zap className="size-4 text-cyan-400" />
+              <Zap className="size-4 text-cyan-500 dark:text-cyan-400" />
             </div>
             <div>
-              <h2 className="text-[14px] font-bold text-white tracking-tight">
+              <h2 className="text-[14px] font-bold text-[var(--text)] tracking-tight">
                 New Accelerated Pipeline
               </h2>
-              <p className="text-[11px] text-slate-400 font-mono">Multi-Conduit Ingestion Engine</p>
+              <p className="text-[11px] text-[var(--text-secondary)] font-mono">
+                Multi-Conduit Ingestion Engine
+              </p>
             </div>
           </div>
 
           <button
             onClick={close}
-            className="size-7 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#161b24] transition-colors cursor-pointer"
+            className="size-7 rounded-lg flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--text)] hover:bg-[var(--bg-hover)] transition-colors cursor-pointer"
           >
             <X className="size-4" />
           </button>
@@ -222,11 +224,11 @@ export function NewPipelineModal(): React.JSX.Element | null {
           {/* Target URL / Path Input */}
           <div className="space-y-1.5">
             <div className="flex justify-between items-center text-[12px]">
-              <span className="font-semibold text-slate-200">Source Link / File</span>
+              <span className="font-semibold text-[var(--text)]">Source Link / File</span>
               <button
                 type="button"
                 onClick={() => void handleBrowseFile()}
-                className="text-[11px] text-cyan-400 hover:underline cursor-pointer flex items-center gap-1 font-mono"
+                className="text-[11px] text-cyan-600 dark:text-cyan-400 hover:underline cursor-pointer flex items-center gap-1 font-mono"
               >
                 <span>Select .torrent file</span>
               </button>
@@ -242,12 +244,12 @@ export function NewPipelineModal(): React.JSX.Element | null {
                   void triggerProbe(e.target.value)
                 }}
                 placeholder="Paste HTTP, HTTPS, Magnet, or Torrent link..."
-                className="w-full pl-3 pr-20 py-2.5 rounded-xl bg-[#08090c] border border-[var(--border)] text-[12.5px] text-white placeholder-slate-500 focus:outline-hidden focus:border-cyan-500/50 font-mono transition-colors"
+                className="w-full pl-3 pr-20 py-2.5 rounded-xl bg-[var(--input-bg)] border border-[var(--border)] text-[12.5px] text-[var(--text)] placeholder-[var(--text-tertiary)] focus:outline-hidden focus:border-cyan-500/50 font-mono transition-colors"
               />
               <button
                 type="button"
                 onClick={() => void triggerProbe(inputUrl)}
-                className="absolute right-2 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-[#161b24] hover:bg-[#1f2633] text-cyan-300 text-[11px] font-mono font-bold transition-colors cursor-pointer"
+                className="absolute right-2 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-[var(--bg-tertiary)] hover:bg-[var(--bg-hover)] text-cyan-600 dark:text-cyan-300 border border-[var(--border)] text-[11px] font-mono font-bold transition-colors cursor-pointer"
               >
                 {probe.status === 'probing' ? 'Checking...' : 'Probe'}
               </button>
@@ -256,18 +258,18 @@ export function NewPipelineModal(): React.JSX.Element | null {
 
           {/* Probe Result / Capabilities Card */}
           {probe.status === 'ready' && (
-            <div className="p-3.5 rounded-xl bg-[#0f141f] border border-cyan-500/30 space-y-2.5 animate-in fade-in duration-200">
+            <div className="p-3.5 rounded-xl bg-[var(--bg-tertiary)] border border-cyan-500/30 space-y-2.5 animate-in fade-in duration-200">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <span className="text-[9.5px] font-mono uppercase px-1.5 py-0.5 rounded font-bold bg-cyan-500/15 text-cyan-300">
+                  <span className="text-[9.5px] font-mono uppercase px-1.5 py-0.5 rounded font-bold bg-cyan-500/15 text-cyan-600 dark:text-cyan-300">
                     {probe.result.kind}
                   </span>
-                  <h4 className="font-bold text-[13.5px] text-white truncate mt-1">
+                  <h4 className="font-bold text-[13.5px] text-[var(--text)] truncate mt-1">
                     {probe.result.suggestedFileName}
                   </h4>
                 </div>
                 <div className="text-right shrink-0">
-                  <span className="font-mono text-[13px] font-bold text-white block">
+                  <span className="font-mono text-[13px] font-bold text-[var(--text)] block">
                     {formatBytes(probe.result.totalBytes ?? 0)}
                   </span>
                 </div>
@@ -275,13 +277,13 @@ export function NewPipelineModal(): React.JSX.Element | null {
 
               {/* Bonding Capability Pill */}
               <div className="flex items-center justify-between text-[11px] pt-1 border-t border-[var(--border)] font-mono">
-                <div className="flex items-center gap-1.5 text-emerald-400">
+                <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
                   <CheckCircle2 className="size-3.5" />
                   <span>
                     {isRanges ? 'Parallel HTTP Range Chunking Supported' : 'Standard Stream'}
                   </span>
                 </div>
-                <div className="text-cyan-300 font-bold">
+                <div className="text-cyan-600 dark:text-cyan-300 font-bold">
                   {isRanges
                     ? `Estimated ${predictedMultiplier} Acceleration`
                     : '1.0x (Single Stream)'}
@@ -291,7 +293,7 @@ export function NewPipelineModal(): React.JSX.Element | null {
           )}
 
           {probe.status === 'error' && (
-            <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-[12px] flex items-center gap-2">
+            <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-300 text-[12px] flex items-center gap-2">
               <AlertCircle className="size-4 shrink-0" />
               <span>{probe.message}</span>
             </div>
@@ -300,8 +302,8 @@ export function NewPipelineModal(): React.JSX.Element | null {
           {/* Hardware Conduits Selection */}
           <div className="space-y-2">
             <div className="flex justify-between items-center text-[12px]">
-              <span className="font-semibold text-slate-200">Hardware Bonding Conduits</span>
-              <span className="font-mono text-[11px] text-cyan-400">
+              <span className="font-semibold text-[var(--text)]">Hardware Bonding Conduits</span>
+              <span className="font-mono text-[11px] text-cyan-600 dark:text-cyan-400">
                 {selectedInterfaceIds.length} of {interfaces.length} selected
               </span>
             </div>
@@ -318,28 +320,30 @@ export function NewPipelineModal(): React.JSX.Element | null {
                     onClick={() => toggleInterface(iface.id)}
                     className={`p-2.5 rounded-xl border text-left flex items-center justify-between transition-all cursor-pointer ${
                       isSelected
-                        ? 'bg-cyan-500/10 border-cyan-500/40 text-white'
-                        : 'bg-[#08090c] border-[var(--border)] text-slate-400 opacity-60'
+                        ? 'bg-cyan-500/10 border-cyan-500/40 text-[var(--text)]'
+                        : 'bg-[var(--bg-tertiary)] border-[var(--border)] text-[var(--text-tertiary)] opacity-70'
                     }`}
                   >
                     <div className="flex items-center gap-2 min-w-0">
                       <span
                         className={`size-2 rounded-full ${
-                          isSelected ? 'bg-cyan-400' : 'bg-slate-600'
+                          isSelected ? 'bg-cyan-400' : 'bg-slate-400 dark:bg-slate-600'
                         }`}
                       />
                       <div className="min-w-0">
-                        <span className="font-semibold text-[12px] block truncate">
+                        <span className="font-semibold text-[12px] block truncate text-[var(--text)]">
                           {visual.name}
                         </span>
-                        <span className="text-[10px] font-mono text-slate-400 uppercase">
+                        <span className="text-[10px] font-mono text-[var(--text-secondary)] uppercase">
                           {iface.kind}
                         </span>
                       </div>
                     </div>
                     <span
                       className={`text-[10px] font-mono px-1.5 py-0.5 rounded font-bold ${
-                        isSelected ? 'bg-cyan-500/20 text-cyan-300' : 'bg-slate-800 text-slate-500'
+                        isSelected
+                          ? 'bg-cyan-500/20 text-cyan-600 dark:text-cyan-300'
+                          : 'bg-[var(--bg-hover)] text-[var(--text-tertiary)]'
                       }`}
                     >
                       {isSelected ? 'BOUND' : 'OFF'}
@@ -353,10 +357,10 @@ export function NewPipelineModal(): React.JSX.Element | null {
           {/* Destination Path Selector */}
           <div className="space-y-1.5">
             <div className="flex justify-between items-center text-[12px]">
-              <span className="font-semibold text-slate-200">Destination Folder</span>
+              <span className="font-semibold text-[var(--text)]">Destination Folder</span>
               {freeSpace !== null && (
-                <span className="font-mono text-[11px] text-slate-400">
-                  Free: <span className="text-slate-200">{formatBytes(freeSpace)}</span>
+                <span className="font-mono text-[11px] text-[var(--text-secondary)]">
+                  Free: <span className="text-[var(--text)]">{formatBytes(freeSpace)}</span>
                 </span>
               )}
             </div>
@@ -366,12 +370,12 @@ export function NewPipelineModal(): React.JSX.Element | null {
                 type="text"
                 readOnly
                 value={destinationDir || 'Choose destination...'}
-                className="flex-1 px-3 py-2 rounded-xl bg-[#08090c] border border-[var(--border)] text-[12px] text-slate-300 font-mono"
+                className="flex-1 px-3 py-2 rounded-xl bg-[var(--input-bg)] border border-[var(--border)] text-[12px] text-[var(--text)] font-mono"
               />
               <button
                 type="button"
                 onClick={() => void handleBrowseFolder()}
-                className="px-3 py-2 rounded-xl bg-[#161b24] hover:bg-[#1f2633] border border-[var(--border)] text-slate-200 text-[12px] font-medium transition-colors cursor-pointer flex items-center gap-1.5"
+                className="px-3 py-2 rounded-xl bg-[var(--bg-tertiary)] hover:bg-[var(--bg-hover)] border border-[var(--border)] text-[var(--text)] text-[12px] font-medium transition-colors cursor-pointer flex items-center gap-1.5"
               >
                 <FolderOpen className="size-3.5" />
                 <span>Browse</span>
@@ -380,18 +384,18 @@ export function NewPipelineModal(): React.JSX.Element | null {
           </div>
 
           {submitError && (
-            <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-[12px]">
+            <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-300 text-[12px]">
               {submitError}
             </div>
           )}
         </div>
 
         {/* Modal Action Footer */}
-        <div className="h-16 px-5 border-t border-[var(--border)] bg-[#08090c] flex items-center justify-between shrink-0">
+        <div className="h-16 px-5 border-t border-[var(--border)] bg-[var(--bg-secondary)] flex items-center justify-between shrink-0">
           <button
             type="button"
             onClick={close}
-            className="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-[#161b24] text-[12.5px] font-medium transition-colors cursor-pointer"
+            className="px-4 py-2 rounded-xl text-[var(--text-secondary)] hover:text-[var(--text)] hover:bg-[var(--bg-hover)] text-[12.5px] font-medium transition-colors cursor-pointer"
           >
             Cancel
           </button>
@@ -403,7 +407,7 @@ export function NewPipelineModal(): React.JSX.Element | null {
             className={`px-5 py-2.5 rounded-xl text-[12.5px] font-bold transition-all flex items-center gap-2 cursor-pointer ${
               isReady && !submitting && selectedInterfaceIds.length > 0
                 ? 'bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 text-slate-950 shadow-md shadow-cyan-500/25 active:scale-95'
-                : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+                : 'bg-[var(--bg-tertiary)] text-[var(--text-tertiary)] cursor-not-allowed border border-[var(--border)]'
             }`}
           >
             {submitting ? (

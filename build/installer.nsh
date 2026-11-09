@@ -1,5 +1,9 @@
 # Custom NSIS hooks, picked up automatically by electron-builder from build/installer.nsh.
 
+# High-resolution DPI awareness and smooth native visual styling
+ManifestDPIAware true
+XPStyle on
+
 # Replaces electron-builder's default finish page (assistedInstaller.nsh) to add a
 # "Create a desktop shortcut" checkbox, checked by default. The install step has already created
 # the shortcut (createDesktopShortcut in electron-builder.yml), so the checkbox only decides whether

@@ -1,35 +1,19 @@
 import React, { useState } from 'react'
-import {
-  Globe,
-  Wifi,
-  Cable,
-  Smartphone,
-  Network,
-  Copy,
-  Check,
-  Zap,
-  ShieldCheck,
-  RefreshCw,
-  Terminal,
-  Layers
-} from 'lucide-react'
+import { Copy, Check, Zap, RefreshCw, Terminal, Activity } from 'lucide-react'
 import { useProxyStatus } from '../hooks/useProxyStatus'
-import { useAppStore } from '../store/useAppStore'
 import { formatBytes } from '../utils/format'
 
 export function BrowserFlowScreen(): React.JSX.Element {
-  const { status, toggleProxy, loading, refresh } = useProxyStatus()
-  const interfaces = useAppStore((state) => state.interfaces)
+  const { status, toggleProxy, loading } = useProxyStatus()
   const [copiedPac, setCopiedPac] = useState(false)
   const [copiedProxy, setCopiedProxy] = useState(false)
-  const [copiedCli, setCopiedCli] = useState(false)
+  const [copiedBrowser, setCopiedBrowser] = useState<string | null>(null)
   const [probeResult, setProbeResult] = useState<string | null>(null)
   const [probing, setProbing] = useState(false)
 
   const isProxyActive = status?.enabled ?? false
   const pacUrl = status?.pacUrl || 'http://127.0.0.1:9091/proxy.pac'
   const proxyEndpoint = `127.0.0.1:${status?.port || 9090}`
-  const cliCommand = `start chrome --proxy-pac-url=${pacUrl}`
 
   const copyToClipboard = async (
     text: string,
@@ -49,34 +33,35 @@ export function BrowserFlowScreen(): React.JSX.Element {
     setProbeResult(null)
     const start = performance.now()
     try {
-      const res = await fetch(pacUrl, { method: 'GET' })
+      if (!isProxyActive) {
+        setProbeResult('Starting local PAC daemon...')
+        await toggleProxy(true)
+        await new Promise((r) => setTimeout(r, 400))
+      }
+      let res: Response | null = null
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          res = await fetch(pacUrl, { method: 'GET' })
+          if (res.ok) break
+        } catch {
+          await new Promise((r) => setTimeout(r, 250))
+        }
+      }
+
       const elapsed = Math.round(performance.now() - start)
-      if (res.ok) {
+      if (res && res.ok) {
         const text = await res.text()
         const hasProxy = text.includes('PROXY 127.0.0.1')
         setProbeResult(
-          `PAC script verified (${elapsed}ms) · ${hasProxy ? 'Multi-WAN rule verified' : 'Active'}`
+          `✓ PAC Server Online (${elapsed}ms) · ${hasProxy ? 'Multi-WAN Conduit Rules Verified' : 'Online'}`
         )
       } else {
-        setProbeResult(`Error: HTTP ${res.status}`)
+        setProbeResult(res ? `PAC responded with HTTP ${res.status}` : 'PAC daemon initializing...')
       }
     } catch {
-      setProbeResult('Proxy PAC server is offline. Toggle acceleration ON.')
+      setProbeResult('Unable to reach PAC server. Verify local port 9091.')
     } finally {
       setProbing(false)
-    }
-  }
-
-  const getInterfaceIcon = (kind: string | undefined): React.JSX.Element => {
-    switch (kind) {
-      case 'wifi':
-        return <Wifi className="size-4" />
-      case 'ethernet':
-        return <Cable className="size-4" />
-      case 'usb':
-        return <Smartphone className="size-4" />
-      default:
-        return <Network className="size-4" />
     }
   }
 
@@ -87,363 +72,239 @@ export function BrowserFlowScreen(): React.JSX.Element {
   const totalBrowserData = totalReceived + totalSent
 
   return (
-    <div className="flex-1 overflow-y-auto p-6 space-y-6 select-none max-w-6xl">
-      {/* Header Banner */}
-      <div className="relative overflow-hidden rounded-xl border border-[var(--border)] bg-gradient-to-r from-[#0a1220] via-[#0e172a] to-[#08101d] p-6 shadow-xl">
-        <div className="absolute -right-20 -top-20 size-60 rounded-full bg-sky-500/10 blur-3xl pointer-events-none" />
-        <div className="absolute -left-20 -bottom-20 size-60 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
-
+    <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-7 max-w-6xl select-none text-[var(--text)]">
+      {/* Header Banner & Master Toggle */}
+      <div className="relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] p-6 md:p-8 shadow-sm transition-colors">
         <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2.5">
               <span
-                className={`size-2.5 rounded-full ${
-                  isProxyActive ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'
+                className={`size-3 rounded-full ${
+                  isProxyActive
+                    ? 'bg-emerald-400 shadow-md shadow-emerald-400/50 animate-pulse'
+                    : 'bg-amber-400'
                 }`}
               />
-              <span
-                className={`font-mono text-[11px] font-semibold uppercase tracking-wider ${
-                  isProxyActive ? 'text-emerald-400' : 'text-slate-400'
-                }`}
-              >
-                {isProxyActive ? 'Browser Multi-WAN Proxy Active' : 'Proxy Standby'}
-              </span>
+              <h1 className="text-xl md:text-2xl font-bold tracking-tight">
+                Browser Multi-WAN Acceleration Station
+              </h1>
             </div>
-            <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
-              <Globe className="size-6 text-sky-400" />
-              <span>Browser Multi-WAN Acceleration</span>
-            </h1>
-            <p className="text-[13px] text-slate-400 max-w-xl leading-relaxed">
-              Distribute Google Chrome, Microsoft Edge, and web browsing sessions across all{' '}
-              {interfaces.length} bonded physical network adapters simultaneously. Zero cloud server
-              fees.
+            <p className="text-[13px] text-[var(--text-secondary)] max-w-2xl leading-relaxed">
+              Transparently aggregate browser web flows (video streams, cloud downloads, heavy web
+              apps) across Wi-Fi, Ethernet, and Mobile Hotspot simultaneously using local 802.3ad
+              PAC routing.
             </p>
           </div>
 
-          {/* Master Toggle */}
           <div className="flex items-center gap-3 shrink-0">
             <button
               onClick={() => void toggleProxy(!isProxyActive)}
               disabled={loading}
-              className={`flex items-center gap-2.5 px-5 py-3 rounded-xl font-semibold text-[13.5px] shadow-lg transition-all cursor-pointer ${
+              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-mono text-[13px] font-bold transition-all cursor-pointer shadow-md ${
                 isProxyActive
-                  ? 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/25 active:scale-95'
-                  : 'bg-sky-600 hover:bg-sky-500 text-white shadow-sky-600/25 active:scale-95'
-              } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  ? 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/20 active:scale-95'
+                  : 'bg-[var(--bg-tertiary)] hover:bg-cyan-500 hover:text-slate-950 text-[var(--text)] border border-[var(--border)]'
+              }`}
             >
-              <Zap className="size-4" />
-              <span>{isProxyActive ? 'Acceleration Enabled' : 'Enable Browser Acceleration'}</span>
+              <Zap className={`size-4 ${isProxyActive ? 'fill-current' : ''}`} />
+              <span>{isProxyActive ? 'ACCELERATION: ON' : 'START ACCELERATION'}</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Top Telemetry Metric Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Metric 1: Active Browser Connections */}
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-4 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-[11.5px] font-mono text-slate-400">
-            <span>ACTIVE BROWSER SOCKETS</span>
-            <Network className={`size-4 ${isProxyActive ? 'text-sky-400' : 'text-slate-500'}`} />
+      {/* Quick PAC Endpoints & Health Check */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {/* Endpoint 1: PAC URL */}
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] p-5 space-y-3 shadow-sm transition-colors">
+          <div className="flex items-center justify-between">
+            <span className="text-[12px] font-mono text-cyan-400 font-bold uppercase tracking-wider">
+              Automatic PAC Script URL
+            </span>
+            <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-bold">
+              Port :9091
+            </span>
           </div>
-          <div className="my-2">
-            <div
-              className={`font-mono text-3xl font-bold ${
-                isProxyActive ? 'text-sky-300' : 'text-slate-300'
+
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              readOnly
+              value={pacUrl}
+              className="flex-1 px-3 py-2 rounded-xl bg-[var(--input-bg)] border border-[var(--border)] font-mono text-[12.5px] text-[var(--text)] outline-none"
+            />
+            <button
+              onClick={() => void copyToClipboard(pacUrl, setCopiedPac)}
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[var(--bg-tertiary)] hover:bg-cyan-500 hover:text-slate-950 text-[var(--text)] border border-[var(--border)] text-[12px] font-semibold transition-all cursor-pointer"
+            >
+              {copiedPac ? (
+                <Check className="size-3.5 text-emerald-400" />
+              ) : (
+                <Copy className="size-3.5" />
+              )}
+              <span>{copiedPac ? 'Copied' : 'Copy'}</span>
+            </button>
+          </div>
+          <p className="text-[11.5px] text-[var(--text-secondary)]">
+            Used by Chrome, Brave, Edge, and Windows Network Settings to route browser connections.
+          </p>
+        </div>
+
+        {/* Endpoint 2: Local HTTP/HTTPS Proxy */}
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] p-5 space-y-3 shadow-sm transition-colors">
+          <div className="flex items-center justify-between">
+            <span className="text-[12px] font-mono text-emerald-400 font-bold uppercase tracking-wider">
+              Direct Multi-WAN Forward Proxy
+            </span>
+            <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">
+              Port :9090
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              readOnly
+              value={proxyEndpoint}
+              className="flex-1 px-3 py-2 rounded-xl bg-[var(--input-bg)] border border-[var(--border)] font-mono text-[12.5px] text-[var(--text)] outline-none"
+            />
+            <button
+              onClick={() => void copyToClipboard(proxyEndpoint, setCopiedProxy)}
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[var(--bg-tertiary)] hover:bg-emerald-500 hover:text-slate-950 text-[var(--text)] border border-[var(--border)] text-[12px] font-semibold transition-all cursor-pointer"
+            >
+              {copiedProxy ? (
+                <Check className="size-3.5 text-emerald-400" />
+              ) : (
+                <Copy className="size-3.5" />
+              )}
+              <span>{copiedProxy ? 'Copied' : 'Copy'}</span>
+            </button>
+          </div>
+          <p className="text-[11.5px] text-[var(--text-secondary)]">
+            Accepts HTTP CONNECT tunnels and routes sockets round-robin through physical NICs.
+          </p>
+        </div>
+      </div>
+
+      {/* Interactive Verification Console */}
+      <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm transition-colors">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => void handleTestProbe()}
+            disabled={probing}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-400 text-[12.5px] font-bold font-mono transition-colors cursor-pointer"
+          >
+            <RefreshCw className={`size-3.5 ${probing ? 'animate-spin' : ''}`} />
+            <span>Verify Proxy PAC Health</span>
+          </button>
+
+          {probeResult && (
+            <span
+              className={`text-[12px] font-mono font-medium ${
+                probeResult.includes('✓') ? 'text-emerald-400' : 'text-amber-400'
               }`}
             >
-              {status?.activeConnections || 0}
-            </div>
-            <span className="text-[11px] text-slate-500 font-mono">
-              Concurrent browser TCP flows
+              {probeResult}
             </span>
-          </div>
-          <div className="w-full h-1 rounded-full bg-slate-800 overflow-hidden">
-            <div
-              className={`h-full bg-sky-500 transition-all duration-300 ${
-                isProxyActive && (status?.activeConnections || 0) > 0 ? 'w-[70%]' : 'w-0'
-              }`}
-            />
-          </div>
+          )}
         </div>
 
-        {/* Metric 2: Accelerated Data */}
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-4 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-[11.5px] font-mono text-slate-400">
-            <span>BROWSER DATA PROCESSED</span>
-            <Layers className={`size-4 ${isProxyActive ? 'text-emerald-400' : 'text-slate-500'}`} />
-          </div>
-          <div className="my-2">
-            <div className="font-mono text-3xl font-bold text-emerald-300">
-              {formatBytes(totalBrowserData)}
-            </div>
-            <span className="text-[11px] text-slate-500 font-mono">
-              Down: {formatBytes(totalReceived)} · Up: {formatBytes(totalSent)}
-            </span>
-          </div>
-          <div className="w-full h-1 rounded-full bg-slate-800 overflow-hidden">
-            <div className="h-full bg-emerald-400 w-full" />
-          </div>
-        </div>
-
-        {/* Metric 3: Multi-WAN Routing Strategy */}
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-4 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-[11.5px] font-mono text-slate-400">
-            <span>SCHEDULING STRATEGY</span>
-            <ShieldCheck className="size-4 text-amber-400" />
-          </div>
-          <div className="my-2">
-            <div className="font-mono text-2xl font-bold text-white">Least-Load</div>
-            <span className="text-[11px] text-amber-300 font-mono">
-              Dynamic interface round-robin
-            </span>
-          </div>
-          <div className="w-full h-1 rounded-full bg-slate-800 overflow-hidden">
-            <div className="h-full bg-amber-400 w-full" />
-          </div>
-        </div>
-
-        {/* Metric 4: Hardware Adapters Armed */}
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-4 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-[11.5px] font-mono text-slate-400">
-            <span>BONDED ADAPTERS</span>
-            <Globe className="size-4 text-sky-400" />
-          </div>
-          <div className="my-2">
-            <div className="font-mono text-3xl font-bold text-white">
-              {interfaces.length} Adapters
-            </div>
-            <span className="text-[11px] text-slate-500 font-mono">
-              Zero cloud latency · Direct kernel bind
-            </span>
-          </div>
-          <div className="w-full h-1 rounded-full bg-slate-800 overflow-hidden">
-            <div className="h-full bg-sky-400 w-full" />
-          </div>
+        <div className="flex items-center gap-2 text-[12px] font-mono text-[var(--text-secondary)]">
+          <Activity className="size-3.5 text-cyan-400" />
+          <span>Total Browser Data: {formatBytes(totalBrowserData)}</span>
         </div>
       </div>
 
-      {/* Network Interface Traffic Matrix */}
-      <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-5 space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Network className="size-4 text-sky-400" />
-            <h2 className="text-[14px] font-bold text-white tracking-wide">
-              Interface Browser Allocation Matrix
-            </h2>
-          </div>
-          <button
-            onClick={() => void refresh()}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-[11px] transition-colors cursor-pointer"
-          >
-            <RefreshCw className="size-3 text-sky-400" />
-            <span>Refresh Telemetry</span>
-          </button>
-        </div>
+      {/* Browser Quick-Launch Command Deck */}
+      <div className="space-y-4">
+        <h3 className="font-bold text-[16px] tracking-tight flex items-center gap-2">
+          <Terminal className="size-4.5 text-cyan-400" />
+          <span>Launch Accelerated Browsers</span>
+        </h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {interfaces.map((iface) => {
-            const ifaceStat = status?.interfaces?.[iface.id]
-            const activeConn = ifaceStat?.activeConnections || 0
-            const recv = ifaceStat?.bytesReceived || 0
-            const sent = ifaceStat?.bytesSent || 0
-            const ip = iface.addresses?.[0]?.address || 'Auto DHCP'
-            const ifaceTotal = recv + sent
-            const share =
-              totalBrowserData > 0 ? Math.round((ifaceTotal / totalBrowserData) * 100) : 0
-
-            return (
-              <div
-                key={iface.id}
-                className="rounded-lg border border-slate-800 bg-[#0c1322] p-4 space-y-3 hover:border-slate-700 transition-colors"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="size-8 rounded-md bg-slate-800/80 flex items-center justify-center text-sky-400 shrink-0">
-                      {getInterfaceIcon(iface.kind)}
-                    </div>
-                    <div className="min-w-0">
-                      <div className="text-[13px] font-semibold text-white truncate">
-                        {iface.displayName || iface.device}
-                      </div>
-                      <div className="font-mono text-[11px] text-slate-400 truncate">{ip}</div>
-                    </div>
-                  </div>
-                  <span className="font-mono text-[11px] px-2 py-0.5 rounded bg-sky-500/10 text-sky-400 border border-sky-500/20 shrink-0">
-                    {activeConn} socket{activeConn === 1 ? '' : 's'}
-                  </span>
-                </div>
-
-                <div className="space-y-1.5 pt-2 border-t border-slate-800/60 font-mono text-[11px]">
-                  <div className="flex justify-between text-slate-400">
-                    <span>Transferred:</span>
-                    <span className="text-slate-200 font-semibold">{formatBytes(ifaceTotal)}</span>
-                  </div>
-                  <div className="flex justify-between text-slate-500 text-[10px]">
-                    <span>Down: {formatBytes(recv)}</span>
-                    <span>Up: {formatBytes(sent)}</span>
-                  </div>
-                  <div className="w-full h-1 rounded-full bg-slate-800 overflow-hidden">
-                    <div
-                      className="h-full bg-sky-400 transition-all duration-300"
-                      style={{ width: `${Math.max(4, share)}%` }}
-                    />
-                  </div>
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      </div>
-
-      {/* Connection Endpoints & Option B: Chrome Integration */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        {/* Connection Endpoints Card */}
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-5 space-y-4">
-          <div className="flex items-center gap-2">
-            <Zap className="size-4 text-emerald-400" />
-            <h2 className="text-[14px] font-bold text-white">Local Proxy Endpoints</h2>
-          </div>
-
-          <div className="space-y-3">
-            {/* PAC URL */}
-            <div className="p-3.5 rounded-lg bg-[#070b13] border border-slate-800 space-y-2">
-              <div className="flex items-center justify-between text-[12px]">
-                <span className="font-medium text-slate-300">
-                  PAC Script (Automatic Proxy Configuration)
-                </span>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">
-                  RECOMMENDED
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <code className="flex-1 font-mono text-[12px] text-sky-300 truncate bg-black/40 px-2.5 py-1.5 rounded border border-slate-800">
-                  {pacUrl}
-                </code>
-                <button
-                  onClick={() => void copyToClipboard(pacUrl, setCopiedPac)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-[12px] font-medium transition-colors cursor-pointer shrink-0"
-                >
-                  {copiedPac ? (
-                    <Check className="size-3.5 text-emerald-400" />
-                  ) : (
-                    <Copy className="size-3.5" />
-                  )}
-                  <span>{copiedPac ? 'Copied' : 'Copy'}</span>
-                </button>
-              </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Chrome Card */}
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] p-5 space-y-3 shadow-sm hover:border-cyan-500/30 transition-all">
+            <div className="flex items-center justify-between">
+              <span className="font-bold text-[14px]">Google Chrome</span>
+              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                RECOMMENDED
+              </span>
             </div>
-
-            {/* Direct Proxy */}
-            <div className="p-3.5 rounded-lg bg-[#070b13] border border-slate-800 space-y-2">
-              <div className="flex items-center justify-between text-[12px]">
-                <span className="font-medium text-slate-300">HTTP / HTTPS Forward Proxy</span>
-                <span className="text-[10px] font-mono text-slate-500">
-                  PORT {status?.port || 9090}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <code className="flex-1 font-mono text-[12px] text-slate-300 truncate bg-black/40 px-2.5 py-1.5 rounded border border-slate-800">
-                  {proxyEndpoint}
-                </code>
-                <button
-                  onClick={() => void copyToClipboard(proxyEndpoint, setCopiedProxy)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-[12px] font-medium transition-colors cursor-pointer shrink-0"
-                >
-                  {copiedProxy ? (
-                    <Check className="size-3.5 text-emerald-400" />
-                  ) : (
-                    <Copy className="size-3.5" />
-                  )}
-                  <span>{copiedProxy ? 'Copied' : 'Copy'}</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Live Health Probe */}
-            <div className="pt-2 flex items-center justify-between">
-              <button
-                onClick={() => void handleTestProbe()}
-                disabled={probing}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 border border-sky-500/30 text-sky-300 text-[12px] font-medium transition-colors cursor-pointer"
-              >
-                <RefreshCw className={`size-3.5 ${probing ? 'animate-spin' : ''}`} />
-                <span>Verify Proxy PAC Health</span>
-              </button>
-              {probeResult && (
-                <span className="font-mono text-[11px] text-emerald-400">{probeResult}</span>
+            <p className="text-[12px] text-[var(--text-secondary)]">
+              Launch Chrome connected directly to Tesso multi-network auto-config.
+            </p>
+            <button
+              onClick={() => {
+                void navigator.clipboard.writeText(`start chrome --proxy-pac-url=${pacUrl}`)
+                setCopiedBrowser('chrome')
+                setTimeout(() => setCopiedBrowser(null), 2000)
+              }}
+              className="w-full py-2 px-3 rounded-xl bg-[var(--bg-tertiary)] hover:bg-cyan-500 hover:text-slate-950 border border-[var(--border)] text-[11.5px] font-mono font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+            >
+              {copiedBrowser === 'chrome' ? (
+                <Check className="size-3 text-emerald-400" />
+              ) : (
+                <Copy className="size-3" />
               )}
-            </div>
-          </div>
-        </div>
-
-        {/* Chrome Companion & 1-Click Launch Card */}
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-5 space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Terminal className="size-4 text-sky-400" />
-              <h2 className="text-[14px] font-bold text-white">Google Chrome Integration</h2>
-            </div>
-            <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 border border-sky-500/25">
-              OPTION A & B
-            </span>
+              <span>{copiedBrowser === 'chrome' ? 'Command Copied' : 'Copy Launch Command'}</span>
+            </button>
           </div>
 
-          <div className="space-y-3 text-[12.5px]">
-            {/* Path 1: Chrome Extension */}
-            <div className="p-3.5 rounded-lg bg-[#070b13] border border-slate-800 space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="font-semibold text-white flex items-center gap-1.5">
-                  <span>Method 1: Tesso Chrome Extension</span>
-                  <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300">
-                    1-Click
-                  </span>
-                </span>
-              </div>
-              <p className="text-slate-400 text-[12px] leading-relaxed">
-                Load the built companion extension in Google Chrome to toggle Multi-WAN acceleration
-                directly from your browser toolbar.
-              </p>
-              <div className="bg-black/30 p-2.5 rounded font-mono text-[11px] text-slate-300 space-y-1">
-                <div>
-                  1. In Chrome, navigate to:{' '}
-                  <span className="text-sky-300">chrome://extensions</span>
-                </div>
-                <div>
-                  2. Turn on <span className="text-amber-300">Developer mode</span> (top right).
-                </div>
-                <div>
-                  3. Click <span className="text-sky-300">Load unpacked</span> and choose:{' '}
-                  <span className="text-emerald-300">extension/dist/chrome</span>
-                </div>
-              </div>
+          {/* Brave Card */}
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] p-5 space-y-3 shadow-sm hover:border-cyan-500/30 transition-all">
+            <div className="flex items-center justify-between">
+              <span className="font-bold text-[14px]">Brave Browser</span>
+              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                TESTED
+              </span>
             </div>
+            <p className="text-[12px] text-[var(--text-secondary)]">
+              Aggregated web streams with built-in Brave ad-blocking.
+            </p>
+            <button
+              onClick={() => {
+                void navigator.clipboard.writeText(`start brave --proxy-pac-url=${pacUrl}`)
+                setCopiedBrowser('brave')
+                setTimeout(() => setCopiedBrowser(null), 2000)
+              }}
+              className="w-full py-2 px-3 rounded-xl bg-[var(--bg-tertiary)] hover:bg-emerald-500 hover:text-slate-950 border border-[var(--border)] text-[11.5px] font-mono font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+            >
+              {copiedBrowser === 'brave' ? (
+                <Check className="size-3 text-emerald-400" />
+              ) : (
+                <Copy className="size-3" />
+              )}
+              <span>{copiedBrowser === 'brave' ? 'Command Copied' : 'Copy Launch Command'}</span>
+            </button>
+          </div>
 
-            {/* Path 2: Direct CLI Flag */}
-            <div className="p-3.5 rounded-lg bg-[#070b13] border border-slate-800 space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="font-semibold text-white">
-                  Method 2: Launch Chrome with Multi-WAN
-                </span>
-                <span className="text-[10px] font-mono text-slate-500">Zero Extension</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <code className="flex-1 font-mono text-[11px] text-slate-300 truncate bg-black/40 px-2.5 py-1.5 rounded border border-slate-800">
-                  {cliCommand}
-                </code>
-                <button
-                  onClick={() => void copyToClipboard(cliCommand, setCopiedCli)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-[12px] font-medium transition-colors cursor-pointer shrink-0"
-                >
-                  {copiedCli ? (
-                    <Check className="size-3.5 text-emerald-400" />
-                  ) : (
-                    <Copy className="size-3.5" />
-                  )}
-                  <span>{copiedCli ? 'Copied' : 'Copy'}</span>
-                </button>
-              </div>
+          {/* Edge Card */}
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] p-5 space-y-3 shadow-sm hover:border-cyan-500/30 transition-all">
+            <div className="flex items-center justify-between">
+              <span className="font-bold text-[14px]">Microsoft Edge</span>
+              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-sky-500/10 text-sky-400 border border-sky-500/20">
+                NATIVE
+              </span>
             </div>
+            <p className="text-[12px] text-[var(--text-secondary)]">
+              Windows native Chromium browser bonded across adapters.
+            </p>
+            <button
+              onClick={() => {
+                void navigator.clipboard.writeText(`start msedge --proxy-pac-url=${pacUrl}`)
+                setCopiedBrowser('edge')
+                setTimeout(() => setCopiedBrowser(null), 2000)
+              }}
+              className="w-full py-2 px-3 rounded-xl bg-[var(--bg-tertiary)] hover:bg-sky-500 hover:text-slate-950 border border-[var(--border)] text-[11.5px] font-mono font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+            >
+              {copiedBrowser === 'edge' ? (
+                <Check className="size-3 text-emerald-400" />
+              ) : (
+                <Copy className="size-3" />
+              )}
+              <span>{copiedBrowser === 'edge' ? 'Command Copied' : 'Copy Launch Command'}</span>
+            </button>
           </div>
         </div>
       </div>

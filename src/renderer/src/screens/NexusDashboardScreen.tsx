@@ -3,14 +3,14 @@ import {
   Wifi,
   Cable,
   Smartphone,
-  Gauge,
-  Layers,
   ArrowRight,
   Plus,
   Network,
   HardDrive,
   Globe,
-  Radio
+  Zap,
+  Activity,
+  TrendingUp
 } from 'lucide-react'
 import { useAppStore } from '../store/useAppStore'
 import { formatBytes, formatSpeed } from '../utils/format'
@@ -18,7 +18,8 @@ import { useProxyStatus } from '../hooks/useProxyStatus'
 
 export function NexusDashboardScreen({
   onOpenNewDownload,
-  onNavigateBrowserFlow
+  onNavigateBrowserFlow,
+  onNavigateTransfers
 }: {
   onOpenNewDownload: () => void
   onNavigateBrowserFlow?: () => void
@@ -57,266 +58,261 @@ export function NexusDashboardScreen({
   const getInterfaceIcon = (kind: string | undefined): React.JSX.Element => {
     switch (kind) {
       case 'wifi':
-        return <Wifi className="size-4 text-cyan-400" />
+        return <Wifi className="size-4.5 text-cyan-400" />
       case 'ethernet':
-        return <Cable className="size-4 text-blue-400" />
+        return <Cable className="size-4.5 text-blue-400" />
       case 'usb':
-        return <Smartphone className="size-4 text-amber-400" />
+        return <Smartphone className="size-4.5 text-emerald-400" />
       default:
-        return <Network className="size-4 text-slate-400" />
+        return <Network className="size-4.5 text-slate-400" />
     }
   }
 
   const isProxyActive = Boolean(proxyStatus?.enabled)
 
   return (
-    <div className="flex-1 overflow-y-auto p-6 space-y-6 select-none bg-[#08090c]">
-      {/* Top Banner / Nexus Command Deck */}
-      <div className="relative overflow-hidden rounded-2xl border border-[var(--border)] bg-gradient-to-r from-[#0d131f] via-[#0f1726] to-[#0a0e17] p-6 shadow-2xl">
-        <div className="absolute -right-24 -top-24 size-72 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none" />
-        <div className="absolute -left-20 -bottom-20 size-60 rounded-full bg-blue-600/10 blur-3xl pointer-events-none" />
-
+    <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-7 select-none text-[var(--text)] transition-colors">
+      {/* Top Hero Command Deck */}
+      <div className="relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] p-6 md:p-8 shadow-sm transition-colors">
         <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
               <span
-                className={`size-2 rounded-full ${
+                className={`size-2.5 rounded-full ${
                   isLive
-                    ? 'bg-cyan-400 shadow-sm shadow-cyan-400/80 animate-ping'
+                    ? 'bg-cyan-400 shadow-md shadow-cyan-400/80 animate-ping'
                     : 'bg-emerald-400'
                 }`}
               />
-              <span className="font-mono text-[11px] font-semibold text-cyan-400 uppercase tracking-wider">
-                {isLive ? 'Multi-Network Bonding Active' : 'Nexus Aggregation Engine Ready'}
+              <span className="font-mono text-[11px] font-bold text-cyan-400 uppercase tracking-wider">
+                {isLive ? 'Multi-Network Aggregation Active' : 'Nexus Bonding Engine Ready'}
               </span>
             </div>
-            <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
-              <span>Tesso Nexus Command</span>
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
+              Tesso Nexus Command Center
             </h1>
-            <p className="text-[13px] text-slate-400 max-w-xl leading-relaxed">
-              Combining throughput across all active physical network adapters ({interfaces.length}{' '}
-              hardware links detected) with parallel range chunking and zero remote proxy overhead.
+            <p className="text-[13px] text-[var(--text-secondary)] max-w-xl leading-relaxed">
+              Combining bandwidth across all active physical network adapters ({interfaces.length}{' '}
+              hardware conduit{interfaces.length === 1 ? '' : 's'} detected) with parallel range
+              chunking and zero remote proxy overhead.
             </p>
           </div>
 
-          <div className="flex items-center gap-2.5 shrink-0">
+          <div className="flex items-center gap-3 shrink-0">
             <button
               onClick={onOpenNewDownload}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 text-slate-950 font-bold text-[13px] shadow-lg shadow-cyan-500/20 active:scale-95 transition-all cursor-pointer"
+              className="flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-[13px] text-slate-950 bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 shadow-md shadow-cyan-500/20 active:scale-95 transition-all cursor-pointer"
             >
               <Plus className="size-4 stroke-[2.5]" />
-              <span>New Pipeline</span>
-              <ArrowRight className="size-4" />
+              <span>Ingest Link / File</span>
             </button>
+
+            {onNavigateTransfers && (
+              <button
+                onClick={onNavigateTransfers}
+                className="flex items-center gap-2 px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--bg-tertiary)] hover:bg-[var(--bg-hover)] text-[var(--text)] font-medium text-[13px] transition-all cursor-pointer"
+              >
+                <span>Transfers</span>
+                <ArrowRight className="size-4 text-cyan-400" />
+              </button>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Hero Telemetry Metrics */}
+      {/* 4 Core Telemetry Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Metric 1: Aggregated Speed */}
-        <div className="rounded-xl border border-[var(--border)] bg-[#0f1218] p-4 flex flex-col justify-between hover:border-cyan-500/30 transition-colors">
-          <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
-            <span>AGGREGATED SPEED</span>
-            <Gauge className={`size-4 ${isLive ? 'text-cyan-400' : 'text-slate-500'}`} />
+        {/* Metric 1: Aggregated Speed Gauge */}
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] p-5 space-y-2 shadow-sm transition-colors">
+          <div className="flex items-center justify-between text-[11px] font-mono text-[var(--text-secondary)]">
+            <span className="uppercase tracking-wider font-semibold">Aggregated Throughput</span>
+            <Activity
+              className={`size-3.5 ${isLive ? 'text-cyan-400 animate-pulse' : 'text-slate-400'}`}
+            />
           </div>
-          <div className="my-2">
-            <div
-              className={`font-mono text-3xl font-bold tracking-tight ${
-                isLive ? 'text-cyan-300' : 'text-slate-200'
-              }`}
-            >
-              {formatSpeed(totalSpeed, speedUnit)}
-            </div>
-            <span className="text-[11px] text-slate-500 font-mono">
-              {isLive ? 'Live parallel byte streams' : 'Standby · No active streams'}
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-3xl font-bold font-mono tracking-tight text-cyan-400">
+              {isLive ? formatSpeed(totalSpeed, speedUnit) : '0 B/s'}
             </span>
           </div>
-          <div className="w-full h-1 rounded-full bg-[#18202d] overflow-hidden">
-            <div
-              className={`h-full bg-gradient-to-r from-cyan-400 to-sky-400 transition-all duration-300 ${
-                isLive ? 'w-[75%]' : 'w-0'
-              }`}
-            />
+          <div className="text-[11px] font-mono text-[var(--text-secondary)]">
+            {isLive ? 'Full hardware convergence active' : 'Awaiting transfer ingress'}
           </div>
         </div>
 
-        {/* Metric 2: Speedup Multiplier */}
-        <div className="rounded-xl border border-[var(--border)] bg-[#0f1218] p-4 flex flex-col justify-between hover:border-amber-500/30 transition-colors">
-          <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
-            <span>BOND MULTIPLIER</span>
-            <Layers className={`size-4 ${isLive ? 'text-amber-400' : 'text-slate-500'}`} />
+        {/* Metric 2: Bonding Velocity Multiplier */}
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] p-5 space-y-2 shadow-sm transition-colors">
+          <div className="flex items-center justify-between text-[11px] font-mono text-[var(--text-secondary)]">
+            <span className="uppercase tracking-wider font-semibold">Bonding Velocity</span>
+            <TrendingUp className="size-3.5 text-emerald-400" />
           </div>
-          <div className="my-2">
-            <div
-              className={`font-mono text-3xl font-bold tracking-tight ${
-                isLive ? 'text-amber-300' : 'text-slate-200'
-              }`}
-            >
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-3xl font-bold font-mono tracking-tight text-emerald-400">
               {getMultiplier()}
-            </div>
-            <span className="text-[11px] text-slate-500 font-mono">
-              {isLive ? 'Estimated speedup vs single link' : 'Baseline single connection'}
             </span>
           </div>
-          <div className="w-full h-1 rounded-full bg-[#18202d] overflow-hidden">
-            <div
-              className={`h-full bg-amber-400 transition-all duration-300 ${isLive ? 'w-[80%]' : 'w-0'}`}
-            />
+          <div className="text-[11px] font-mono text-[var(--text-secondary)]">
+            {interfaces.length > 1
+              ? `Calculated across ${interfaces.length} conduits`
+              : 'Connect 2nd adapter for boost'}
           </div>
         </div>
 
         {/* Metric 3: Active Interfaces */}
-        <div className="rounded-xl border border-[var(--border)] bg-[#0f1218] p-4 flex flex-col justify-between hover:border-emerald-500/30 transition-colors">
-          <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
-            <span>HARDWARE CONDUITS</span>
-            <Network className="size-4 text-emerald-400" />
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] p-5 space-y-2 shadow-sm transition-colors">
+          <div className="flex items-center justify-between text-[11px] font-mono text-[var(--text-secondary)]">
+            <span className="uppercase tracking-wider font-semibold">Hardware Conduits</span>
+            <Network className="size-3.5 text-blue-400" />
           </div>
-          <div className="my-2">
-            <div className="font-mono text-3xl font-bold text-emerald-300 tracking-tight">
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-3xl font-bold font-mono tracking-tight text-[var(--text)]">
               {interfaces.length}
-            </div>
-            <span className="text-[11px] text-slate-500 font-mono">
-              {interfaces.length > 1
-                ? `${interfaces.length} physical adapters bound`
-                : '1 hardware interface detected'}
             </span>
+            <span className="text-[12px] font-mono text-[var(--text-secondary)]">NICs</span>
           </div>
-          <div className="w-full h-1 rounded-full bg-[#18202d] overflow-hidden">
-            <div
-              className="h-full bg-emerald-400 transition-all duration-300"
-              style={{ width: `${Math.min(100, interfaces.length * 50)}%` }}
-            />
+          <div className="text-[11px] font-mono text-[var(--text-secondary)]">
+            {interfaces.map((i) => i.kind.toUpperCase()).join(' · ') || 'DHCP Pool'}
           </div>
         </div>
 
-        {/* Metric 4: Total Delivered Data */}
-        <div className="rounded-xl border border-[var(--border)] bg-[#0f1218] p-4 flex flex-col justify-between hover:border-indigo-500/30 transition-colors">
-          <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
-            <span>DELIVERED DATA</span>
-            <HardDrive className="size-4 text-indigo-400" />
+        {/* Metric 4: Lifetime Processed Data */}
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] p-5 space-y-2 shadow-sm transition-colors">
+          <div className="flex items-center justify-between text-[11px] font-mono text-[var(--text-secondary)]">
+            <span className="uppercase tracking-wider font-semibold">Ingested Volume</span>
+            <HardDrive className="size-3.5 text-purple-400" />
           </div>
-          <div className="my-2">
-            <div className="font-mono text-3xl font-bold text-indigo-300 tracking-tight">
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-3xl font-bold font-mono tracking-tight text-[var(--text)]">
               {formatBytes(totalHistoryBytes)}
-            </div>
-            <span className="text-[11px] text-slate-500 font-mono">
-              {history.length} completed {history.length === 1 ? 'file' : 'files'}
             </span>
           </div>
-          <div className="w-full h-1 rounded-full bg-[#18202d] overflow-hidden">
-            <div className="h-full bg-indigo-400 w-full" />
+          <div className="text-[11px] font-mono text-[var(--text-secondary)]">
+            {history.length} completed transfer{history.length === 1 ? '' : 's'}
           </div>
         </div>
       </div>
 
-      {/* Hardware Interface Aggregation Deck */}
-      <div className="rounded-2xl border border-[var(--border)] bg-[#0f1218] p-5">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <Radio className="size-4 text-cyan-400" />
-            <h2 className="text-[14px] font-bold text-white tracking-tight">
-              Hardware Interfaces & Metric Weights
-            </h2>
+      {/* Main Grid: Hardware Matrix & Browser Flow Hub */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left 2 Cols: Hardware Adapter Matrix */}
+        <div className="lg:col-span-2 rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] p-6 space-y-4 shadow-sm transition-colors">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Network className="size-4.5 text-cyan-400" />
+              <h3 className="font-bold text-[15px] tracking-tight">
+                Active Hardware Conduit Matrix
+              </h3>
+            </div>
+            <span className="text-[11px] font-mono text-[var(--text-secondary)] font-medium">
+              Real-time Socket Distribution
+            </span>
           </div>
-          <span className="text-[11px] font-mono text-slate-400">
-            Automatic round-robin weighted dispatch
-          </span>
-        </div>
 
-        {interfaces.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-[var(--border)] p-6 text-center text-slate-500 text-[13px]">
-            No physical network interfaces detected. Check hardware connections.
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {interfaces.map((iface, index) => {
-              const ipv4 = iface.addresses.find((a) => a.family === 4)?.address || 'DHCP'
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            {interfaces.map((item) => {
+              const liveIfaceSpeed = activeDownloads.reduce((sum, dl) => {
+                const matched = dl.networks?.find((n) => n.id === item.id)
+                return sum + (matched?.speedBytesPerSec || 0)
+              }, 0)
+
+              const ip = item.addresses.find((a) => a.family === 4)?.address || 'DHCP Assigned'
+
               return (
                 <div
-                  key={iface.id || index}
-                  className="rounded-xl border border-[var(--border)] bg-[#12161f] p-3.5 flex items-center justify-between hover:border-cyan-500/30 transition-colors"
+                  key={item.id}
+                  className="rounded-xl border border-[var(--border)] bg-[var(--bg-tertiary)] p-4 space-y-3 hover:border-cyan-500/40 transition-all shadow-sm"
                 >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="size-9 rounded-lg bg-[#18202d] flex items-center justify-center shrink-0">
-                      {getInterfaceIcon(iface.kind)}
-                    </div>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold text-[13px] text-white truncate">
-                          {iface.displayName || iface.id}
-                        </span>
-                        <span className="text-[9px] font-mono uppercase px-1 py-0.2 rounded bg-cyan-500/15 text-cyan-300 font-bold">
-                          {iface.kind}
-                        </span>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <div className="size-8 rounded-lg bg-[var(--bg-secondary)] flex items-center justify-center border border-[var(--border)]">
+                        {getInterfaceIcon(item.kind)}
                       </div>
-                      <span className="text-[11px] font-mono text-slate-400 block truncate">
-                        {ipv4}
-                      </span>
+                      <div>
+                        <div className="font-bold text-[13px] text-[var(--text)] truncate max-w-[150px]">
+                          {item.displayName || item.device}
+                        </div>
+                        <div className="text-[10.5px] font-mono text-[var(--text-secondary)] uppercase">
+                          {item.kind} Conduit
+                        </div>
+                      </div>
                     </div>
+
+                    <span className="size-2 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400/50" />
                   </div>
 
-                  <div className="text-right shrink-0 pl-2">
-                    <span className="text-[10px] font-mono text-emerald-400 font-bold px-1.5 py-0.5 rounded bg-emerald-500/10">
-                      ONLINE
+                  <div className="flex items-center justify-between text-[11px] font-mono pt-1 border-t border-[var(--border)] text-[var(--text-secondary)]">
+                    <span>IP: {ip}</span>
+                    <span className="font-bold text-cyan-400">
+                      {liveIfaceSpeed > 0 ? formatSpeed(liveIfaceSpeed, speedUnit) : 'Ready'}
                     </span>
-                    <span className="text-[10px] text-slate-500 font-mono block mt-1">W: 1.0</span>
                   </div>
                 </div>
               )
             })}
           </div>
-        )}
-      </div>
+        </div>
 
-      {/* Multi-WAN Chrome Browser Flow Card */}
-      <div className="rounded-2xl border border-[var(--border)] bg-[#0f1218] p-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="size-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0">
-              <Globe className="size-5 text-cyan-400" />
-            </div>
-            <div>
+        {/* Right Col: Browser Multi-WAN Flow Station */}
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] p-6 space-y-4 shadow-sm flex flex-col justify-between transition-colors">
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <h3 className="font-bold text-[14px] text-white tracking-tight">
-                  Browser Multi-WAN Acceleration Bridge
-                </h3>
-                <span
-                  className={`text-[9.5px] font-mono font-bold px-1.5 py-0.5 rounded ${
-                    isProxyActive
-                      ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
-                      : 'bg-slate-800 text-slate-400 border border-slate-700'
-                  }`}
-                >
-                  {isProxyActive ? 'PROXY ACTIVE' : 'STANDBY'}
+                <Globe className="size-4.5 text-cyan-400" />
+                <h3 className="font-bold text-[15px] tracking-tight">Browser Multi-WAN</h3>
+              </div>
+              <span
+                className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
+                  isProxyActive
+                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                    : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                }`}
+              >
+                {isProxyActive ? 'ONLINE' : 'OFFLINE'}
+              </span>
+            </div>
+
+            <p className="text-[12.5px] text-[var(--text-secondary)] leading-relaxed">
+              Auto-PAC forward proxy distributes Chrome, Brave, and Edge browser sessions across all
+              bonded interfaces.
+            </p>
+
+            <div className="rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border)] p-3 space-y-1.5 font-mono text-[11px]">
+              <div className="flex justify-between text-[var(--text-secondary)]">
+                <span>PAC URL:</span>
+                <span className="text-cyan-400 font-semibold truncate max-w-[160px]">
+                  {proxyStatus?.pacUrl || 'http://127.0.0.1:9091/proxy.pac'}
                 </span>
               </div>
-              <p className="text-[12px] text-slate-400 mt-0.5">
-                Transparent multi-WAN failover for Chrome, Brave, and Edge via PAC script (
-                <span className="font-mono text-cyan-400">:9091</span>) and forward proxy tunnel (
-                <span className="font-mono text-cyan-400">:9090</span>).
-              </p>
+              <div className="flex justify-between text-[var(--text-secondary)]">
+                <span>Tunnel Port:</span>
+                <span className="text-[var(--text)] font-semibold">
+                  {proxyStatus?.port || 9090}
+                </span>
+              </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-2.5 shrink-0">
+          <div className="space-y-2 pt-2">
             <button
               onClick={() => void toggleProxy(!isProxyActive)}
               disabled={proxyLoading}
-              className={`px-3.5 py-1.5 rounded-lg text-[12px] font-bold font-mono transition-all cursor-pointer ${
+              className={`w-full py-2.5 px-3 rounded-xl font-mono text-[12px] font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                 isProxyActive
-                  ? 'bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30'
-                  : 'bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-sm shadow-cyan-500/30'
+                  ? 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-sm'
+                  : 'bg-[var(--bg-tertiary)] hover:bg-cyan-500 hover:text-slate-950 text-[var(--text)] border border-[var(--border)]'
               }`}
             >
-              {proxyLoading ? 'Updating...' : isProxyActive ? 'Stop Proxy' : 'Launch Proxy'}
+              <Zap className="size-3.5 fill-current" />
+              <span>{isProxyActive ? 'Deactivate Proxy' : 'Activate Proxy'}</span>
             </button>
+
             {onNavigateBrowserFlow && (
               <button
                 onClick={onNavigateBrowserFlow}
-                className="px-3 py-1.5 rounded-lg bg-[#161b24] hover:bg-[#1f2633] border border-[var(--border)] text-slate-300 text-[12px] font-medium transition-colors cursor-pointer"
+                className="w-full py-2 px-3 rounded-xl border border-[var(--border)] bg-transparent hover:bg-[var(--bg-tertiary)] text-[var(--text-secondary)] hover:text-[var(--text)] font-medium text-[11.5px] transition-colors cursor-pointer flex items-center justify-center gap-1"
               >
-                Configure
+                <span>Browser Flow Details</span>
+                <ArrowRight className="size-3" />
               </button>
             )}
           </div>
@@ -325,6 +321,3 @@ export function NexusDashboardScreen({
     </div>
   )
 }
-
-// Backward-compatible alias
-export { NexusDashboardScreen as ForgeDashboardScreen }

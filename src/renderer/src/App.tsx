@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { TessoNavigationDeck, StudioTab } from './components/TessoNavigationDeck'
 import { DownloadActionsProvider } from './components/DownloadActionsProvider'
 import { NetworkBindingDialog } from './components/NetworkBindingDialog'
@@ -56,6 +56,33 @@ function App(): React.JSX.Element {
   const openNewDownload = useAppStore((state) => state.openNewDownload)
   const view = useAppStore((state) => state.view)
   const setView = useAppStore((state) => state.setView)
+  const themeSource = useAppStore((state) => state.themeSource)
+
+  // Dynamic Theme Controller: Synchronize Dark / Light mode across document and DOM
+  useEffect(() => {
+    const root = document.documentElement
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+
+    const applyTheme = (): void => {
+      const isDark = themeSource === 'dark' || (!themeSource && mediaQuery.matches)
+
+      if (isDark) {
+        root.classList.add('dark')
+        root.classList.remove('light')
+        root.setAttribute('data-theme', 'dark')
+        root.style.colorScheme = 'dark'
+      } else {
+        root.classList.add('light')
+        root.classList.remove('dark')
+        root.setAttribute('data-theme', 'light')
+        root.style.colorScheme = 'light'
+      }
+    }
+
+    applyTheme()
+    mediaQuery.addEventListener('change', applyTheme)
+    return () => mediaQuery.removeEventListener('change', applyTheme)
+  }, [themeSource])
 
   // When an external item is opened in download view, derive effective tab directly
   const effectiveTab: StudioTab = view.name === 'download' ? 'transfers' : activeTab
@@ -70,7 +97,7 @@ function App(): React.JSX.Element {
   return (
     <TooltipProvider>
       <DownloadActionsProvider>
-        <div className="flex h-full flex-col bg-[#08090c] text-[var(--text)] overflow-hidden font-sans">
+        <div className="flex h-full flex-col bg-[var(--bg)] text-[var(--text)] overflow-hidden font-sans transition-colors duration-150">
           <TessoTitleBar />
           <div className="flex flex-1 min-h-0 overflow-hidden">
             <TessoNavigationDeck
@@ -78,7 +105,7 @@ function App(): React.JSX.Element {
               onSelectTab={handleSelectTab}
               onOpenNewDownload={() => openNewDownload()}
             />
-            <main className="flex-1 min-w-0 flex flex-col bg-[#08090c] overflow-hidden">
+            <main className="flex-1 min-w-0 flex flex-col bg-[var(--bg)] overflow-hidden transition-colors duration-150">
               <CurrentScreen activeTab={effectiveTab} onNavigateTab={handleSelectTab} />
             </main>
           </div>

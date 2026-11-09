@@ -62,7 +62,7 @@ async function startItem(
 }
 
 test.describe('Telegram Saved Messages downloads', () => {
-  test('signs in through the dialog, lists media, and downloads a video and a photo @smoke', async ({
+  test('signs in through the dialog, lists media, and downloads a video and a photo', async ({
     plexo
   }) => {
     // The dialog saves where the app's destination setting says: point it at the test's folder

@@ -8,7 +8,6 @@ import {
   FolderOpen,
   Trash2,
   CheckCircle2,
-  X,
   Plus,
   Layers,
   Activity,
@@ -97,17 +96,17 @@ export function PipelineStudioScreen(): React.JSX.Element {
   const pausedCount = activeList.filter((d) => d.status === 'paused').length
 
   return (
-    <div className="flex-1 overflow-y-auto p-6 space-y-6 select-none bg-[#08090c]">
+    <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-6 select-none bg-[var(--bg)] text-[var(--text)] transition-colors">
       {/* Top Header & Search Console */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <Layers className="size-5 text-cyan-400" />
-            <h1 className="text-xl font-bold text-white tracking-tight">
+            <Layers className="size-5 text-cyan-500 dark:text-cyan-400" />
+            <h1 className="text-xl md:text-2xl font-bold tracking-tight">
               Pipeline Transfers Studio
             </h1>
           </div>
-          <p className="text-[12.5px] text-slate-400 mt-0.5">
+          <p className="text-[12.5px] text-[var(--text-secondary)] mt-0.5">
             Real-time multi-network parallel chunk streams & high-throughput pipelines.
           </p>
         </div>
@@ -115,38 +114,30 @@ export function PipelineStudioScreen(): React.JSX.Element {
         <div className="flex items-center gap-3">
           {/* Search Bar */}
           <div className="relative">
-            <Search className="size-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+            <Search className="size-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] pointer-events-none" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Filter transfers..."
-              className="pl-8 pr-3 py-1.5 rounded-lg bg-[#0f1218] border border-[var(--border)] text-[12.5px] text-slate-200 placeholder-slate-500 focus:outline-hidden focus:border-cyan-500/50 w-44 sm:w-56 font-sans transition-colors"
+              placeholder="Search transfers..."
+              className="w-48 sm:w-64 pl-8 pr-3 py-2 rounded-xl bg-[var(--input-bg)] border border-[var(--border)] text-[12.5px] text-[var(--text)] placeholder-[var(--text-tertiary)] focus:outline-hidden focus:border-cyan-500/50 transition-colors"
             />
-            {search && (
-              <button
-                onClick={() => setSearch('')}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
-              >
-                <X className="size-3.5" />
-              </button>
-            )}
           </div>
 
-          {/* New Transfer Trigger */}
+          {/* New Transfer Button */}
           <button
             onClick={() => openNewDownload()}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 text-slate-950 font-bold text-[12px] shadow-sm shadow-cyan-500/20 active:scale-95 transition-all cursor-pointer shrink-0"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-[12.5px] transition-all cursor-pointer shadow-xs shadow-cyan-500/25 active:scale-95 shrink-0"
           >
             <Plus className="size-3.5 stroke-[2.5]" />
-            <span>New Transfer</span>
+            <span>New Pipeline</span>
           </button>
         </div>
       </div>
 
-      {/* Filter Tabs & Aggregate Rate */}
+      {/* Filter Navigation Tabs & Aggregate Speed Ticker */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--border)] pb-3">
-        <div className="flex items-center gap-1.5 overflow-x-auto">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
           {(
             [
               { id: 'all', label: 'All Transfers', count: totalCount },
@@ -161,12 +152,12 @@ export function PipelineStudioScreen(): React.JSX.Element {
               onClick={() => setFilter(tab.id)}
               className={`px-3 py-1.5 rounded-lg text-[12px] font-medium transition-colors cursor-pointer shrink-0 flex items-center gap-1.5 ${
                 filter === tab.id
-                  ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-semibold'
-                  : 'text-slate-400 hover:text-white hover:bg-[#161b24]'
+                  ? 'bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30 font-semibold'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text)] hover:bg-[var(--bg-hover)]'
               }`}
             >
               <span>{tab.label}</span>
-              <span className="font-mono text-[10px] px-1.5 py-0.2 rounded bg-[#161b24] text-slate-400">
+              <span className="font-mono text-[10px] px-1.5 py-0.2 rounded bg-[var(--bg-tertiary)] text-[var(--text-secondary)]">
                 {tab.count}
               </span>
             </button>
@@ -174,8 +165,8 @@ export function PipelineStudioScreen(): React.JSX.Element {
         </div>
 
         {totalActiveSpeed > 0 && (
-          <div className="flex items-center gap-2 font-mono text-[11.5px] text-cyan-300 bg-cyan-950/40 px-3 py-1 rounded-lg border border-cyan-500/30">
-            <Activity className="size-3.5 animate-pulse text-cyan-400" />
+          <div className="flex items-center gap-2 font-mono text-[11.5px] text-cyan-600 dark:text-cyan-300 bg-cyan-500/15 px-3 py-1 rounded-lg border border-cyan-500/30">
+            <Activity className="size-3.5 animate-pulse text-cyan-500 dark:text-cyan-400" />
             <span>Aggregated Speed: {formatSpeed(totalActiveSpeed, speedUnit)}</span>
           </div>
         )}
@@ -184,21 +175,21 @@ export function PipelineStudioScreen(): React.JSX.Element {
       {/* Active Pipeline Cards */}
       <div className="space-y-3">
         {filteredActive.length === 0 && filteredHistory.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-[var(--border)] bg-[#0c1017]/50 p-12 text-center select-none">
+          <div className="rounded-2xl border border-dashed border-[var(--border)] bg-[var(--bg-secondary)] p-12 text-center select-none">
             <div className="size-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mx-auto mb-3">
-              <ArrowDownToLine className="size-6 text-cyan-400" />
+              <ArrowDownToLine className="size-6 text-cyan-500 dark:text-cyan-400" />
             </div>
-            <h3 className="text-[15px] font-bold text-white tracking-tight">
+            <h3 className="text-[15px] font-bold text-[var(--text)] tracking-tight">
               {search ? 'No matching pipelines found' : 'No transfers active in queue'}
             </h3>
-            <p className="text-[12.5px] text-slate-400 max-w-sm mx-auto mt-1 mb-4">
+            <p className="text-[12.5px] text-[var(--text-secondary)] max-w-sm mx-auto mt-1 mb-4">
               {search
                 ? 'Try a different search query or reset the filter.'
                 : 'Accelerate downloads by aggregating Wi-Fi, Ethernet, and Mobile Tethering.'}
             </p>
             <button
               onClick={() => openNewDownload()}
-              className="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-[12.5px] transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-sm shadow-cyan-500/30 active:scale-95"
+              className="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-[12.5px] transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-xs shadow-cyan-500/30 active:scale-95"
             >
               <Plus className="size-3.5 stroke-[2.5]" />
               <span>Start New Pipeline</span>
@@ -218,41 +209,54 @@ export function PipelineStudioScreen(): React.JSX.Element {
               return (
                 <div
                   key={d.id}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Open ${d.fileName}`}
                   onClick={() => setInspectedId(d.id)}
-                  className="rounded-2xl border border-[var(--border)] bg-[#0f1218] hover:border-cyan-500/40 p-4.5 transition-all duration-150 cursor-pointer shadow-lg group space-y-3"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      setInspectedId(d.id)
+                    }
+                  }}
+                  className="rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] hover:border-cyan-500/40 p-5 transition-all duration-150 cursor-pointer shadow-xs group space-y-3.5"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[9.5px] font-mono uppercase px-1.5 py-0.5 rounded font-bold bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
+                        <span className="text-[9.5px] font-mono uppercase px-1.5 py-0.5 rounded font-bold bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20">
                           {d.kind || 'STREAM'}
                         </span>
                         <span
                           className={`text-[9.5px] font-mono uppercase px-1.5 py-0.5 rounded font-bold ${
                             isDownloading
-                              ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                              ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
                               : isPaused
-                                ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                                : 'bg-slate-800 text-slate-400'
+                                ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20'
+                                : 'bg-[var(--bg-tertiary)] text-[var(--text-secondary)] border border-[var(--border)]'
                           }`}
                         >
                           {d.status}
                         </span>
                       </div>
-                      <h3 className="font-bold text-[14px] text-white tracking-tight truncate group-hover:text-cyan-300 transition-colors">
+                      <h3 className="font-bold text-[14.5px] text-[var(--text)] tracking-tight truncate group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
                         {d.fileName}
                       </h3>
                     </div>
 
                     {/* Inline Quick Actions */}
                     <div
-                      className="flex items-center gap-1.5 shrink-0"
+                      className="flex items-center gap-2 shrink-0"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <button
                         onClick={() => void handlePauseResume(d)}
                         title={isDownloading ? 'Pause' : 'Resume'}
-                        className="size-8 rounded-lg bg-[#161b24] hover:bg-[#1f2633] text-slate-300 flex items-center justify-center transition-colors cursor-pointer"
+                        className={`size-9 rounded-xl border flex items-center justify-center transition-all cursor-pointer ${
+                          isDownloading
+                            ? 'bg-[var(--bg-tertiary)] hover:bg-amber-500/20 text-amber-500 dark:text-amber-400 border-amber-500/30'
+                            : 'bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold border-cyan-500'
+                        }`}
                       >
                         {isDownloading ? (
                           <Pause className="size-3.5" />
@@ -264,7 +268,7 @@ export function PipelineStudioScreen(): React.JSX.Element {
                       <button
                         onClick={() => void handleOpenFolder(d)}
                         title="Open containing folder"
-                        className="size-8 rounded-lg bg-[#161b24] hover:bg-[#1f2633] text-slate-300 flex items-center justify-center transition-colors cursor-pointer"
+                        className="size-9 rounded-xl bg-[var(--bg-tertiary)] hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text)] border border-[var(--border)] flex items-center justify-center transition-colors cursor-pointer"
                       >
                         <FolderOpen className="size-3.5" />
                       </button>
@@ -272,7 +276,7 @@ export function PipelineStudioScreen(): React.JSX.Element {
                       <button
                         onClick={() => void handleTrash(d)}
                         title="Remove transfer"
-                        className="size-8 rounded-lg bg-[#161b24] hover:bg-rose-500/20 text-slate-400 hover:text-rose-300 flex items-center justify-center transition-colors cursor-pointer"
+                        className="size-9 rounded-xl bg-[var(--bg-tertiary)] hover:bg-rose-500/20 text-[var(--text-secondary)] hover:text-rose-500 border border-[var(--border)] flex items-center justify-center transition-colors cursor-pointer"
                       >
                         <Trash2 className="size-3.5" />
                       </button>
@@ -283,26 +287,28 @@ export function PipelineStudioScreen(): React.JSX.Element {
                   <div className="space-y-1.5">
                     <div className="flex justify-between items-center text-[11px] font-mono">
                       <div className="flex items-center gap-2">
-                        <span className="text-cyan-300 font-bold">{percent}%</span>
-                        <span className="text-slate-500">·</span>
-                        <span className="text-slate-400">
+                        <span className="text-cyan-600 dark:text-cyan-400 font-bold">
+                          {percent}%
+                        </span>
+                        <span className="text-[var(--text-secondary)]">·</span>
+                        <span className="text-[var(--text-secondary)]">
                           {formatBytes(d.bytesDownloaded)} of {formatBytes(total)}
                         </span>
                       </div>
                       <div className="flex items-center gap-3">
                         {eta !== null && (
-                          <span className="text-slate-400">
+                          <span className="text-[var(--text-secondary)]">
                             ETA:{' '}
-                            <span className="text-slate-200 font-medium">{formatEta(eta)}</span>
+                            <span className="text-[var(--text)] font-medium">{formatEta(eta)}</span>
                           </span>
                         )}
-                        <span className="text-cyan-300 font-bold">
+                        <span className="text-cyan-600 dark:text-cyan-400 font-bold">
                           {formatSpeed(speed, speedUnit)}
                         </span>
                       </div>
                     </div>
 
-                    <div className="h-1.5 w-full bg-[#18202d] rounded-full overflow-hidden">
+                    <div className="h-2 w-full bg-[var(--bg-tertiary)] rounded-full overflow-hidden border border-[var(--border)]">
                       <div
                         className="h-full bg-gradient-to-r from-cyan-400 to-sky-400 rounded-full transition-all duration-300"
                         style={{ width: `${Math.max(1, Math.min(100, percent))}%` }}
@@ -311,14 +317,14 @@ export function PipelineStudioScreen(): React.JSX.Element {
                   </div>
 
                   {/* Bonded Interfaces Contributing */}
-                  <div className="flex items-center justify-between text-[11px] pt-1">
+                  <div className="flex items-center justify-between text-[11px] pt-1 border-t border-[var(--border)]">
                     <div className="flex items-center gap-1.5 flex-wrap">
                       {interfaces.map((iface, i) => {
                         const visual = networkVisual(iface.id, iface.kind, iface.displayName)
                         return (
                           <span
                             key={iface.id || i}
-                            className="font-mono text-[10px] px-2 py-0.5 rounded bg-[#141a27] text-slate-300 border border-[var(--border)] flex items-center gap-1"
+                            className="font-mono text-[10px] px-2 py-0.5 rounded bg-[var(--bg-tertiary)] text-[var(--text)] border border-[var(--border)] flex items-center gap-1"
                           >
                             <span className="size-1.5 rounded-full bg-emerald-400" />
                             <span>{visual.name}</span>
@@ -326,7 +332,7 @@ export function PipelineStudioScreen(): React.JSX.Element {
                         )
                       })}
                     </div>
-                    <span className="text-[10.5px] font-mono text-cyan-400 group-hover:underline flex items-center gap-1">
+                    <span className="text-[10.5px] font-mono text-cyan-600 dark:text-cyan-400 group-hover:underline flex items-center gap-1">
                       <span>Inspect Heatmap</span>
                       <Info className="size-3" />
                     </span>
@@ -339,19 +345,30 @@ export function PipelineStudioScreen(): React.JSX.Element {
             {filteredHistory.map((h) => (
               <div
                 key={h.id}
+                role="button"
+                tabIndex={0}
+                aria-label={`Open ${h.fileName}`}
                 onClick={() => setInspectedId(h.id)}
-                className="rounded-2xl border border-[var(--border)] bg-[#0f1218]/70 hover:border-cyan-500/30 p-4 transition-all duration-150 cursor-pointer shadow-sm group flex items-center justify-between gap-4"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    setInspectedId(h.id)
+                  }
+                }}
+                className="rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] hover:border-cyan-500/30 p-4 transition-all duration-150 cursor-pointer shadow-xs group flex items-center justify-between gap-4"
               >
                 <div className="min-w-0 flex-1 flex items-center gap-3">
                   <div className="size-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
-                    <CheckCircle2 className="size-4.5 text-emerald-400" />
+                    <CheckCircle2 className="size-4.5 text-emerald-500 dark:text-emerald-400" />
                   </div>
                   <div className="min-w-0">
-                    <h4 className="font-bold text-[13.5px] text-white tracking-tight truncate group-hover:text-cyan-300 transition-colors">
+                    <h4 className="font-bold text-[13.5px] text-[var(--text)] tracking-tight truncate group-hover:text-cyan-600 dark:group-hover:text-cyan-300 transition-colors">
                       {h.fileName}
                     </h4>
-                    <div className="flex items-center gap-2 text-[11px] font-mono text-slate-400 mt-0.5">
-                      <span className="text-emerald-400 font-semibold">100% COMPLETED</span>
+                    <div className="flex items-center gap-2 text-[11px] font-mono text-[var(--text-secondary)] mt-0.5">
+                      <span className="text-emerald-600 dark:text-emerald-400 font-semibold">
+                        100% COMPLETED
+                      </span>
                       <span>·</span>
                       <span>{formatBytes(h.totalBytes || 0)}</span>
                     </div>
@@ -364,7 +381,7 @@ export function PipelineStudioScreen(): React.JSX.Element {
                 >
                   <button
                     onClick={() => void handleOpenFolder(h)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#161b24] hover:bg-[#1f2633] text-slate-200 border border-[var(--border)] text-[11.5px] font-medium transition-colors cursor-pointer"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--bg-tertiary)] hover:bg-[var(--bg-hover)] text-[var(--text)] border border-[var(--border)] text-[11.5px] font-medium transition-colors cursor-pointer"
                   >
                     <FolderOpen className="size-3.5" />
                     <span className="hidden sm:inline">Folder</span>
@@ -372,7 +389,7 @@ export function PipelineStudioScreen(): React.JSX.Element {
 
                   <button
                     onClick={() => void handleTrash(h)}
-                    className="size-8 rounded-lg bg-[#161b24] hover:bg-rose-500/20 text-slate-400 hover:text-rose-300 flex items-center justify-center transition-colors cursor-pointer"
+                    className="size-8 rounded-lg bg-[var(--bg-tertiary)] hover:bg-rose-500/20 text-[var(--text-secondary)] hover:text-rose-500 flex items-center justify-center transition-colors cursor-pointer"
                   >
                     <Trash2 className="size-3.5" />
                   </button>
